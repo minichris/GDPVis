@@ -2,6 +2,13 @@ var svg = d3.select("svg"),
 	width = +svg.attr("width"),
 	height = +svg.attr("height");
 
+var root = svg.append("g");
+	
+svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
+	root.attr("transform", d3.event.transform);
+}));
+	
+
 var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
 
 var simulation = d3.forceSimulation()
@@ -13,7 +20,7 @@ var simulation = d3.forceSimulation()
 d3.json("nodes.json", function(error, graph) {
 	if (error) throw error; //error handling
 
-	var link = svg.append("g")
+	var link = root.append("g")
 		.attr("class", "links")
 		.selectAll("line")
 		.data(graph.links)
@@ -22,7 +29,7 @@ d3.json("nodes.json", function(error, graph) {
 			return Math.sqrt(d.value);
 		});
 
-	var node = svg.append("g")
+	var node = root.append("g")
 		.attr("class", "nodes")
 		.selectAll("circle")
 		.data(graph.nodes)
@@ -88,4 +95,8 @@ function dragended(d) { //when the user stops dragging the node with the mouse
 	if (!d3.event.active) simulation.alphaTarget(0);
 	d.fx = null;
 	d.fy = null;
+}
+
+function zoomed() {
+  root.attr("transform", d3.event.transform);
 }
