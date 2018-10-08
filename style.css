@@ -1,0 +1,63 @@
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+/*
+	#160F19 = Licorice (Dark Background)
+	#221A26 = Raisin Black (Lightest Background)
+	#4F0147 = Tyrian Purple (Strongest Accent)
+	#FFE2E2 = Misty Rose (Lightest Accent)
+	#FFF8F0 = Floral White (Text)
+	
+*/
+
+:root {
+	--bgColor: #160F19;
+	--bgColor2: #221A26;
+	--acColor: #4F0147;
+	--acColor2: #FFE2E2;
+	--textColor: #FFF8F0;
+}
+
+html {
+	color: var(--textColor);
+}
+
+body {
+	background: var(--bgColor);
+}
+
+header{
+	border-radius: 15px;
+	background: var(--bgColor2);
+	padding: 10px;
+}
+
+#Content{
+	margin-top: 10px;
+	background: var(--bgColor2);
+	padding: 10px;
+	border-radius: 15px;
+	display: flex;
+}
+
+#Graph{
+	background: var(--bgColor);
+	border-radius: 15px;
+	display: inline-block;
+}
+
+#DocumentViewer{
+	margin-left: 10px;
+	background: var(--bgColor);
+	border-radius: 15px;
+	display: inline-block;
+	flex: 1 1 auto;
+	padding: 10px;
+}
