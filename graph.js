@@ -9,7 +9,7 @@ svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the g
 }));
 	
 
-var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
+var color = d3.scaleOrdinal(d3.schemeCategory20b); //set the color scheme
 
 var simulation = d3.forceSimulation()
 	.force("link", d3.forceLink().id(function(d) { return d.id; })) //sets up the links to use the nodes ID, rather then its index in the list
