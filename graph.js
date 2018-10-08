@@ -48,18 +48,21 @@ d3.json("nodes.json", function(error, graph) {
 
 	node.append("title").text(function(d) { return d.id; }); //Set the nodes title text to be its ID
 	node.on("mouseover", function(d) {		
-            tooltip.transition()		
+            tooltip.transition() //add the tooltip when the user mouses over the node
                 .duration(200)		
                 .style("opacity", .9);		
-            tooltip.html(d.id)	
+            tooltip.html(d.id) //Set the nodes title text to be its ID
                 .style("left", (d3.event.pageX) + "px")		
                 .style("top", (d3.event.pageY - 28) + "px");	
             })					
-        .on("mouseout", function(d) {		
+        .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
             tooltip.transition()		
                 .duration(500)		
                 .style("opacity", 0);	
-        }); //Set the nodes title text to be its ID
+        })
+		.on("click", function(d) { //Click to open the relevent article
+			d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + d.id.replace(/ /g,'_'));
+		}); 
 
 	simulation.nodes(graph.nodes).on("tick", ticked); //Set the nodes tick function
 
@@ -111,8 +114,4 @@ function dragended(d) { //when the user stops dragging the node with the mouse
 	if (!d3.event.active) simulation.alphaTarget(0);
 	d.fx = null;
 	d.fy = null;
-}
-
-function zoomed() {
-  root.attr("transform", d3.event.transform);
 }
