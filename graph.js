@@ -16,6 +16,9 @@ var simulation = d3.forceSimulation()
 	.force("gravity", d3.forceManyBody().strength(50).distanceMin(200)) //stops nodes from being pushed all the way to the edge
 	.force("charge", d3.forceManyBody().strength(-50).distanceMax(150)) //stops nodes being stuck too close together
 	.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
+	
+
+var tooltip = d3.select("body").append("div").attr("id", "Tooltip").style("opacity", 0); //Define the div for the tooltip
 
 d3.json("nodes.json", function(error, graph) {
 	if (error) throw error; //error handling
@@ -44,6 +47,19 @@ d3.json("nodes.json", function(error, graph) {
 			.on("end", dragended));
 
 	node.append("title").text(function(d) { return d.id; }); //Set the nodes title text to be its ID
+	node.on("mouseover", function(d) {		
+            tooltip.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            tooltip.html(d.id)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
+            })					
+        .on("mouseout", function(d) {		
+            tooltip.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        }); //Set the nodes title text to be its ID
 
 	simulation.nodes(graph.nodes).on("tick", ticked); //Set the nodes tick function
 
