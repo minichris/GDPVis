@@ -51,6 +51,7 @@ header{
 	background: var(--bgColor);
 	border-radius: 15px;
 	display: inline-block;
+	padding: 5px;
 }
 
 #DocumentViewer{

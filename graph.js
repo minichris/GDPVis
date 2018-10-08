@@ -2,17 +2,16 @@ var svg = d3.select("svg"),
 	width = +svg.attr("width"),
 	height = +svg.attr("height");
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
 
 var simulation = d3.forceSimulation()
-	.force("link", d3.forceLink().id(function(d) {
-		return d.id;
-	}))
-	.force("charge", d3.forceManyBody())
-	.force("center", d3.forceCenter(width / 2, height / 2));
+	.force("link", d3.forceLink().id(function(d) { return d.id; })) //sets up the links to use the nodes ID, rather then its index in the list
+	.force("gravity", d3.forceManyBody().strength(50).distanceMin(200)) //stops nodes from being pushed all the way to the edge
+	.force("charge", d3.forceManyBody().strength(-50).distanceMax(150)) //stops nodes being stuck too close together
+	.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
 
 d3.json("nodes.json", function(error, graph) {
-	if (error) throw error;
+	if (error) throw error; //error handling
 
 	var link = svg.append("g")
 		.attr("class", "links")
@@ -37,17 +36,11 @@ d3.json("nodes.json", function(error, graph) {
 			.on("drag", dragged)
 			.on("end", dragended));
 
-	node.append("title")
-		.text(function(d) {
-			return d.id;
-		});
+	node.append("title").text(function(d) { return d.id; }); //Set the nodes title text to be its ID
 
-	simulation
-		.nodes(graph.nodes)
-		.on("tick", ticked);
+	simulation.nodes(graph.nodes).on("tick", ticked); //Set the nodes tick function
 
-	simulation.force("link")
-		.links(graph.links);
+	simulation.force("link").links(graph.links); //Start the simulation of the links
 
 	function ticked() {
 		link
@@ -66,26 +59,32 @@ d3.json("nodes.json", function(error, graph) {
 
 		node
 			.attr("cx", function(d) {
-				return d.x;
+				return validate(d.x, 0, width);
 			})
 			.attr("cy", function(d) {
-				return d.y;
+				return  validate(d.y, 0, height);
 			});
 	}
 });
 
-function dragstarted(d) {
+function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
+    if (x < a) x = a;
+    if (x > b) x = b;
+    return x;
+}
+
+function dragstarted(d) { //when the user start to drag the node with the mouse
 	if (!d3.event.active) simulation.alphaTarget(0.3).restart();
 	d.fx = d.x;
 	d.fy = d.y;
 }
 
-function dragged(d) {
+function dragged(d) { //when the user is dragging a node with the mouse
 	d.fx = d3.event.x;
 	d.fy = d3.event.y;
 }
 
-function dragended(d) {
+function dragended(d) { //when the user stops dragging the node with the mouse
 	if (!d3.event.active) simulation.alphaTarget(0);
 	d.fx = null;
 	d.fy = null;
