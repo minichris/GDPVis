@@ -46,7 +46,6 @@ d3.json("nodes.json", function(error, graph) {
 			.on("drag", dragged)
 			.on("end", dragended));
 
-	node.append("title").text(function(d) { return d.id; }); //Set the nodes title text to be its ID
 	node.on("mouseover", function(d) {		
             tooltip.transition() //add the tooltip when the user mouses over the node
                 .duration(200)		
