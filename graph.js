@@ -1,6 +1,6 @@
-var svg = d3.select("svg"),
-	width = +svg.attr("width"),
-	height = +svg.attr("height");
+var svg = d3.select("svg");
+var width = 500;
+var height = 500;
 
 var root = svg.append("g");
 	
