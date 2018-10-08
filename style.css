@@ -60,7 +60,8 @@ header{
 
 #DocumentViewer{
 	margin-left: 10px;
-	background: var(--bgColor);
+	background: #f6f6f6;
+	/*background: var(--bgColor);*/
 	border-radius: 15px;
 	display: inline-block;
 	flex: 1 1 auto;
