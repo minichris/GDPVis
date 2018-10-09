@@ -38,7 +38,7 @@ d3.json("nodes.json", function(error, graph) {
 		.enter().append("circle")
 		.attr("r", 5)
 		.attr("id", function(d) {
-			return "Node_" + d.id.replace(/ /g,'_');
+			return "Node_" + d.id.replace(/[\W_]/g,'_');
 		})
 		.attr("fill", function(d) {
 			return color(d.group);
@@ -145,7 +145,7 @@ function ChangeSelection(newSelectionID){
 	}
 	
 	//handle the highlighted node
-	var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/ /g,'_');
+	var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
 	$(".SelectedNode").removeClass('SelectedNode');
 	$(nodeIDToHighlight).addClass('SelectedNode');
 }
