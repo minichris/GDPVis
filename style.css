@@ -69,10 +69,30 @@ h1{
 	overflow: hidden;
 }
 
-#DocumentViewer{
-	background: #f6f6f6 !important;
+#Content > #DocumentViewer{
+	background: #f6f6f6;
 	min-height: 500px;
-	min-width: 525px;
+	flex: 3 1 auto;
+}
+
+#Content > #GraphLayout{
+	background: var(--bgColor2);
+	padding: 0px;
+}
+
+#Content > #GraphLayout > div{
+	border-radius: 15px;
+	padding: 10px;
+	background: var(--bgColor);
+}
+
+#Search{
+	margin-bottom: 10px;
+	padding: 0 !important;
+}
+
+.selectize-input{
+	border-radius: 15px !important;
 }
 
 #Info{

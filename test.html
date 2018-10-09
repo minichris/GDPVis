@@ -4,16 +4,24 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.default.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.11.0/js/standalone/selectize.js"></script>
 </head>
 <body>
 	<header>
 		<h1>VGTropes</h1>
 	</header>
 	<div id="Content">
-		<div id="Graph">
-			<svg width="100%" height="auto" viewBox="0 0 500 500"></svg>
-			<script src="https://d3js.org/d3.v4.min.js"></script>
-			<script src="./graph.js"></script>
+		<div id="GraphLayout">
+			<div id="Search">
+				<select id="SearchSelect" placeholder="Select a pattern..."></select>
+			</div>
+			<div id="Graph">
+				<svg width="100%" height="auto" viewBox="0 0 500 500"></svg>
+				<script src="https://d3js.org/d3.v4.min.js"></script>
+				<script src="./graph.js"></script>
+			</div>
 		</div>
 		<div id="DocumentViewer">
 			<iframe src="http://virt10.itu.chalmers.se/index.php/Main_Page"></iframe>

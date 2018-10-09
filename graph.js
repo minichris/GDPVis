@@ -19,7 +19,6 @@ var simulation = d3.forceSimulation()
 	
 
 var tooltip = d3.select("body").append("div").attr("id", "Tooltip").style("opacity", 0); //Define the div for the tooltip
-
 d3.json("nodes.json", function(error, graph) {
 	if (error) throw error; //error handling
 
@@ -90,6 +89,17 @@ d3.json("nodes.json", function(error, graph) {
 				return  validate(d.y, 0, height);
 			});
 	}
+	node.each(function(node){
+		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
+	});
+	$('#SearchSelect').selectize({
+		sortField: 'text',
+		searchField: 'item',
+		create: function(input) {
+			return { value: input, text: input }
+		}
+	});
+	
 });
 
 function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
