@@ -12,6 +12,11 @@
 	cursor: pointer;
 }
 
+.nodes .SelectedNode{
+	stroke-width: 2px;
+	stroke: var(--acColor2);
+}
+
 /*
 	#160F19 = Licorice (Dark Background)
 	#221A26 = Raisin Black (Lightest Background)

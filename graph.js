@@ -37,6 +37,9 @@ d3.json("nodes.json", function(error, graph) {
 		.data(graph.nodes)
 		.enter().append("circle")
 		.attr("r", 5)
+		.attr("id", function(d) {
+			return "Node_" + d.id.replace(/ /g,'_');
+		})
 		.attr("fill", function(d) {
 			return color(d.group);
 		})
@@ -46,27 +49,23 @@ d3.json("nodes.json", function(error, graph) {
 			.on("end", dragended));
 
 	node.on("mouseover", function(d) {		
-            tooltip.transition() //add the tooltip when the user mouses over the node
-                .duration(200)		
-                .style("opacity", .9);		
-            tooltip.html(d.id) //Set the nodes title text to be its ID
-                .style("left", (d3.event.pageX) + "px")		
-                .style("top", (d3.event.pageY - 28) + "px");	
-            })					
+		tooltip.transition() //add the tooltip when the user mouses over the node
+			.duration(200)		
+			.style("opacity", .9);		
+		tooltip.html(d.id) //Set the nodes title text to be its ID
+			.style("left", (d3.event.pageX) + "px")		
+			.style("top", (d3.event.pageY - 28) + "px");	
+		})					
         .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
             tooltip.transition()		
                 .duration(500)		
                 .style("opacity", 0);	
         })
 		.on("click", function(d) { //Click to open the relevent article
-			d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + d.id.replace(/ /g,'_'));
+			ChangeSelection(d.id);
 		}); 
 
-	simulation.nodes(graph.nodes).on("tick", ticked); //Set the nodes tick function
-
-	simulation.force("link").links(graph.links); //Start the simulation of the links
-
-	function ticked() {
+	simulation.nodes(graph.nodes).on("tick", function ticked() { //Set the nodes tick function
 		link
 			.attr("x1", function(d) {
 				return d.source.x;
@@ -88,13 +87,18 @@ d3.json("nodes.json", function(error, graph) {
 			.attr("cy", function(d) {
 				return  validate(d.y, 0, height);
 			});
-	}
+	});
+	
+	simulation.force("link").links(graph.links); //Start the simulation of the links
+	
 	node.each(function(node){
 		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
 	});
+	
 	$('#SearchSelect').selectize({
 		sortField: 'text',
 		searchField: 'item',
+		placeholder: "Select a pattern...",
 		create: function(input) {
 			return { value: input, text: input }
 		}
@@ -123,4 +127,30 @@ function dragended(d) { //when the user stops dragging the node with the mouse
 	if (!d3.event.active) simulation.alphaTarget(0);
 	d.fx = null;
 	d.fy = null;
+}
+
+$('#SearchSelect').change(function(){
+	if($('#SearchSelect').val() != undefined){
+		ChangeSelection($('#SearchSelect').val());
+	}
+});
+
+function ChangeSelection(newSelectionID){
+	//handle the document viewer
+	d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + newSelectionID.replace(/ /g,'_'));
+	
+	//handle the search box
+	if($('#SearchSelect').val() != newSelectionID){
+		$("#SearchSelect")[0].selectize.setValue(newSelectionID, false);
+	}
+	
+	//handle the highlighted node
+	var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/ /g,'_');
+	$(".SelectedNode").removeClass('SelectedNode');
+	$(nodeIDToHighlight).addClass('SelectedNode');
+}
+
+function ClearSelection(){
+	$("#SearchSelect")[0].selectize.setValue(undefined, false);
+	$(".SelectedNode").removeClass('SelectedNode');
 }
