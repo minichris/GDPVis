@@ -19,13 +19,11 @@ var simulation = d3.forceSimulation()
 	
 
 var tooltip = d3.select("body").append("div").attr("id", "Tooltip").style("opacity", 0); //Define the div for the tooltip
-d3.json("nodes.json", function(error, graph) {
-	if (error) throw error; //error handling
-
+function generateGraph(data) {
 	var link = root.append("g")
 		.attr("class", "links")
 		.selectAll("line")
-		.data(graph.links)
+		.data(data.links)
 		.enter().append("line")
 		.attr("stroke-width", function(d) {
 			return Math.sqrt(d.value);
@@ -34,7 +32,7 @@ d3.json("nodes.json", function(error, graph) {
 	var node = root.append("g")
 		.attr("class", "nodes")
 		.selectAll("circle")
-		.data(graph.nodes)
+		.data(data.nodes)
 		.enter().append("circle")
 		.attr("r", 5)
 		.attr("id", function(d) {
@@ -65,7 +63,7 @@ d3.json("nodes.json", function(error, graph) {
 			ChangeSelection(d.id);
 		}); 
 
-	simulation.nodes(graph.nodes).on("tick", function ticked() { //Set the nodes tick function
+	simulation.nodes(data.nodes).on("tick", function ticked() { //Set the nodes tick function
 		link
 			.attr("x1", function(d) {
 				return d.source.x;
@@ -89,7 +87,7 @@ d3.json("nodes.json", function(error, graph) {
 			});
 	});
 	
-	simulation.force("link").links(graph.links); //Start the simulation of the links
+	simulation.force("link").links(data.links); //Start the simulation of the links
 	
 	node.each(function(node){
 		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
@@ -104,7 +102,7 @@ d3.json("nodes.json", function(error, graph) {
 		}
 	});
 	
-});
+}
 
 function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
     if (x < a) x = a;
