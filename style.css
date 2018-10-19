@@ -40,6 +40,7 @@ html {
 
 body {
 	background: var(--bgColor);
+	margin: 8px;
 }
 
 header{
@@ -123,4 +124,21 @@ iframe{
 
 svg{
 	overflow: visible;
+}
+
+#FiltersList{
+	list-style-type: none;
+    padding: 0;
+}
+
+.FilterTypeSelect{
+	width: 30%;
+	display: inline-block;
+	padding: 5px;
+}
+
+.FilterValue{
+	width: 40%;
+	display: inline-block;
+	padding: 5px;
 }
