@@ -6,7 +6,8 @@ var GameCategories;
 $( document ).ready(function() {
 	loadPatterns().done(function() {
 		loadGames().done(function() {
-			//refreshGraph();
+			addExampleFilter();
+			refreshGraph();
 		});
 	});
 });
@@ -49,10 +50,14 @@ function loadGames(){
 	return request;
 }
 
-function gameCategoryFilter(inputPatterns, inputGameSubcategory){
+function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a list of patterns to only ones that link to games found in a game subcategory
 	var gamesOfCategory = Games.filter(game => game.categories.includes(inputGameSubcategory));
-	console.log("Found " + gamesOfCategory.length + " games in the category " + inputGameSubcategory);
 	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
+	return outputPatterns;
+}
+
+function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to only ones that link to a specific game
+	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == inputGame));
 	return outputPatterns;
 }
 
@@ -65,6 +70,10 @@ function userFilter(inputPatterns){
 			case "game_category":
 				outputPatterns = gameCategoryFilter(outputPatterns, filter.Value);
 				console.log("Filtering output to only pages which link to games in the subcategory: " + filter.Value);
+				break;
+			case "game":
+				outputPatterns = gameFilter(outputPatterns, filter.Value);
+				console.log("Filtering output to only pages which link to the game: " + filter.Value);
 				break;
 			case "count":
 				outputPatterns = outputPatterns.slice(0, filter.Value);

@@ -1,4 +1,4 @@
-$(function(){
+$(function(){ //Set up button bindings
 	$("#AddFilterButton").click(function(){
 		addFilter();
 	});
@@ -8,13 +8,21 @@ $(function(){
 	});
 });
 
+function addExampleFilter(){
+	var presetWoWFilter = addFilter();
+	presetWoWFilter.find(".FilterTypeSelect").val("game").trigger("change");
+	presetWoWFilter.find(".FilterValue").removeAttr('disabled');
+	Games.map(game => presetWoWFilter.find(".FilterValue").append(new Option(game.name, game.name)));
+	presetWoWFilter.find(".FilterValue").val("World of Warcraft");
+	presetWoWFilter.trigger("change");
+}
+
 function addFilter(){
 	var FilterTypes = [
 		{text: "Max Count", value: "count"}, 
-		{text: "Game Category", value: "game_category"}
-		];
-		/*{text: "Pattern Category", value: "pattern_category"}, 
-		{text: "Game", value: "game"}];*/
+		{text: "Game Category", value: "game_category"},
+		{text: "Game", value: "game"}];
+		/*{text: "Pattern Category", value: "pattern_category"}, */
 	var filter = $(`
 		<li>
 			<select class="FilterTypeSelect" placeholder="Select a filter type...">
@@ -43,6 +51,7 @@ function addFilter(){
 	
 	filter.find(".FilterTypeSelect").on('change', function(){
 		var currentValue = filter.find(".FilterTypeSelect").val();
+		filter.find(".FilterValue").empty();
 		switch(currentValue){
 			case "count":
 				filter.find(".FilterValue").removeAttr('disabled');
@@ -59,9 +68,14 @@ function addFilter(){
 				filter.find(".FilterValue").trigger("change");
 				break;
 			case "game":
+				filter.find(".FilterValue").removeAttr('disabled');
+				Games.map(game => filter.find(".FilterValue").append(new Option(game.name, game.name)));
+				filter.find(".FilterValue").trigger("change");
 				break;
 		}
 	});
+	
+	return filter;
 }
 
 function getFilters(){

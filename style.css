@@ -65,7 +65,7 @@ h1{
 	padding: 10px;
 	margin: 5px;
 	display: inline-block;
-	flex: 1 1 auto;
+	flex: 0 1 auto;
 }
 
 #Graph{
@@ -75,7 +75,7 @@ h1{
 
 #Content > #DocumentViewer{
 	background: #f6f6f6;
-	min-height: 500px;
+	min-height: 300px;
 	flex: 3 1 auto;
 }
 
