@@ -93,14 +93,7 @@ function generateGraph(data) {
 		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
 	});
 	
-	$('#SearchSelect').selectize({
-		sortField: 'text',
-		searchField: 'item',
-		placeholder: "Select a pattern...",
-		create: function(input) {
-			return { value: input, text: input }
-		}
-	});
+	$('#SearchSelect').select2({ width: '100%' });
 	
 }
 
@@ -139,7 +132,7 @@ function ChangeSelection(newSelectionID){
 	
 	//handle the search box
 	if($('#SearchSelect').val() != newSelectionID){
-		$("#SearchSelect")[0].selectize.setValue(newSelectionID, false);
+		$("#SearchSelect").val(newSelectionID).trigger("change");
 	}
 	
 	//handle the highlighted node
@@ -149,6 +142,6 @@ function ChangeSelection(newSelectionID){
 }
 
 function ClearSelection(){
-	$("#SearchSelect")[0].selectize.setValue(undefined, false);
+	$("#SearchSelect").val("");
 	$(".SelectedNode").removeClass('SelectedNode');
 }

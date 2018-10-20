@@ -1,22 +1,25 @@
 var Patterns;
 var Games;
 
-var newNodes;
 
 $( document ).ready(function() {
 	loadPatterns().done(function() {
 		loadGames().done(function() {
-			var filteredPatterns = everythingFilter();
-			generateGraph({
-				nodes: createNodesObject(filteredPatterns),
-				links: createLinksObject(filteredPatterns)
-			});
+			//refreshGraph();
 		});
 	});
 });
 
+var filteredPatterns;
+function refreshGraph(){
+	filteredPatterns = userFilter(everythingFilter());
+	generateGraph({
+		nodes: createNodesObject(filteredPatterns),
+		links: createLinksObject(filteredPatterns)
+	});
+}
+
 function loadPatterns(){
-	console.log("Loading patterns!");
 	var request = $.ajax({
 		url: "AllPatterns.json",
 		dataType: "json"
@@ -28,7 +31,6 @@ function loadPatterns(){
 }
 
 function loadGames(){
-	console.log("Loading games!");
 	var request = $.ajax({
 		url: "AllGames.json",
 		dataType: "json"
@@ -42,8 +44,17 @@ function loadGames(){
 function everythingFilter(){
 	var SocialMediaGames = Games.filter(game => game.categories.includes("Social Media Games"));
 	SocialMediaGamePatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => SocialMediaGames.some(game => game.name == pLink.To)));
-	console.log(SocialMediaGamePatterns);
 	return SocialMediaGamePatterns;
+}
+
+function userFilter(inputPatterns){
+	var outputPatterns = inputPatterns;
+	var filtersValues = getFilters();
+	if(typeof filtersValues["count"] !== undefined){ //if the count filter is set
+		outputPatterns = outputPatterns.slice(0, filtersValues["count"]);
+		console.log("Filtering output to a count of " + filtersValues["count"]);
+	}
+	return outputPatterns;
 }
 
 function createNodesObject(patterns){
