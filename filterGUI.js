@@ -10,9 +10,10 @@ $(function(){
 
 function addFilter(){
 	var FilterTypes = [
-		{text: "Max Count", value: "count"}];//, 
+		{text: "Max Count", value: "count"}, 
+		{text: "Game Category", value: "game_category"}
+		];
 		/*{text: "Pattern Category", value: "pattern_category"}, 
-		{text: "Game Category", value: "game_category"}, 
 		{text: "Game", value: "game"}];*/
 	var filter = $(`
 		<li>
@@ -51,6 +52,11 @@ function addFilter(){
 			case "pattern_category":
 				break;
 			case "game_category":
+				filter.find(".FilterValue").removeAttr('disabled');
+				//filter.find(".FilterValue").attr('multiple', 'multiple');
+				//filter.find(".FilterValue").select2({tags: true});
+				GameCategories.map(cat => filter.find(".FilterValue").append(new Option(cat, cat)));
+				filter.find(".FilterValue").trigger("change");
 				break;
 			case "game":
 				break;
@@ -63,7 +69,7 @@ function getFilters(){
 	$("#FiltersList > li").each(function(index){
 		var filterType = $(this).find(".FilterTypeSelect").val();
 		var filterValue = $(this).find(".FilterValue").val();
-		filtersValues[filterType] = filterValue;
+		filtersValues.push({Type: filterType, Value: filterValue});
 	});
 	return filtersValues;
 }

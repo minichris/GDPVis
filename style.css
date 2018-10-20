@@ -34,13 +34,10 @@
 	--textColor: #FFF8F0;
 }
 
-html {
-	color: var(--textColor);
-}
-
 body {
 	background: var(--bgColor);
 	margin: 8px;
+	color: var(--textColor);
 }
 
 header{
@@ -142,4 +139,8 @@ svg{
 	width: 40%;
 	display: inline-block;
 	padding: 5px;
+}
+
+.select2-results__option{
+	color:black;
 }

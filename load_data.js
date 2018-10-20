@@ -1,5 +1,6 @@
 var Patterns;
 var Games;
+var GameCategories;
 
 
 $( document ).ready(function() {
@@ -12,7 +13,9 @@ $( document ).ready(function() {
 
 var filteredPatterns;
 function refreshGraph(){
-	filteredPatterns = userFilter(everythingFilter());
+	filteredPatterns = gameCategoryFilter(Patterns, "Social Media Games");
+	filteredPatterns = userFilter(filteredPatterns);
+	resetGraph();
 	generateGraph({
 		nodes: createNodesObject(filteredPatterns),
 		links: createLinksObject(filteredPatterns)
@@ -37,23 +40,39 @@ function loadGames(){
 	});
 	request.done(function(data) {
 		Games = data;
+		GameCategories = new Set();
+		Games.map(game => game.categories).flat().forEach(function(subcategory){
+			GameCategories.add(subcategory);
+		});
+		GameCategories = Array.from(GameCategories); //turn the set into an array
 	});
 	return request;
 }
 
-function everythingFilter(){
-	var SocialMediaGames = Games.filter(game => game.categories.includes("Social Media Games"));
-	SocialMediaGamePatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => SocialMediaGames.some(game => game.name == pLink.To)));
-	return SocialMediaGamePatterns;
+function gameCategoryFilter(inputPatterns, inputGameSubcategory){
+	var gamesOfCategory = Games.filter(game => game.categories.includes(inputGameSubcategory));
+	console.log("Found " + gamesOfCategory.length + " games in the category " + inputGameSubcategory);
+	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
+	return outputPatterns;
 }
 
 function userFilter(inputPatterns){
-	var outputPatterns = inputPatterns;
-	var filtersValues = getFilters();
-	if(typeof filtersValues["count"] !== undefined){ //if the count filter is set
-		outputPatterns = outputPatterns.slice(0, filtersValues["count"]);
-		console.log("Filtering output to a count of " + filtersValues["count"]);
-	}
+	var outputPatterns = inputPatterns; //outputPatterns is the list of patterns we will be operating on the most
+	var filtersValues = getFilters(); //gets the current filters from the GUI
+	console.log("_________FILTERS_________");
+	filtersValues.forEach(function(filter){
+		switch(filter.Type){
+			case "game_category":
+				outputPatterns = gameCategoryFilter(outputPatterns, filter.Value);
+				console.log("Filtering output to only pages which link to games in the subcategory: " + filter.Value);
+				break;
+			case "count":
+				outputPatterns = outputPatterns.slice(0, filter.Value);
+				console.log("Filtering output to a count of: " + filter.Value);
+				break;
+		}
+	});
+	console.log("_________________________");
 	return outputPatterns;
 }
 
