@@ -1,5 +1,6 @@
 var Patterns;
 var Games;
+var PatternCategories;
 var GameCategories;
 
 
@@ -14,8 +15,7 @@ $( document ).ready(function() {
 
 var filteredPatterns;
 function refreshGraph(){
-	filteredPatterns = gameCategoryFilter(Patterns, "Social Media Games");
-	filteredPatterns = userFilter(filteredPatterns);
+	filteredPatterns = userFilter(Patterns);
 	resetGraph();
 	generateGraph({
 		nodes: createNodesObject(filteredPatterns),
@@ -30,6 +30,11 @@ function loadPatterns(){
 	});
 	request.done(function(data) {
 		Patterns = data;
+		PatternCategories = new Set();
+		Patterns.map(pattern => pattern.Categories).flat().forEach(function(subcategory){
+			PatternCategories.add(subcategory);
+		});
+		PatternCategories = Array.from(PatternCategories);
 	});
 	return request;
 }
@@ -50,6 +55,11 @@ function loadGames(){
 	return request;
 }
 
+function patternCategoryFilter(inputPatterns, inputPatternSubcategory){ //filters a list of patterns to only ones that are found in a pattern subcategory
+	outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
+	return outputPatterns;
+}
+
 function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a list of patterns to only ones that link to games found in a game subcategory
 	var gamesOfCategory = Games.filter(game => game.categories.includes(inputGameSubcategory));
 	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
@@ -67,13 +77,17 @@ function userFilter(inputPatterns){
 	console.log("_________FILTERS_________");
 	filtersValues.forEach(function(filter){
 		switch(filter.Type){
+			case "pattern_category":
+				outputPatterns = patternCategoryFilter(outputPatterns, filter.Value);
+				console.log("Filtering output to only patterns which are in the subcategory: " + filter.Value);
+				break;
 			case "game_category":
 				outputPatterns = gameCategoryFilter(outputPatterns, filter.Value);
-				console.log("Filtering output to only pages which link to games in the subcategory: " + filter.Value);
+				console.log("Filtering output to only patterns which link to games in the subcategory: " + filter.Value);
 				break;
 			case "game":
 				outputPatterns = gameFilter(outputPatterns, filter.Value);
-				console.log("Filtering output to only pages which link to the game: " + filter.Value);
+				console.log("Filtering output to only patterns which link to the game: " + filter.Value);
 				break;
 			case "count":
 				outputPatterns = outputPatterns.slice(0, filter.Value);

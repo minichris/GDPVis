@@ -11,18 +11,19 @@ $(function(){ //Set up button bindings
 function addExampleFilter(){
 	var presetWoWFilter = addFilter();
 	presetWoWFilter.find(".FilterTypeSelect").val("game").trigger("change");
-	presetWoWFilter.find(".FilterValue").removeAttr('disabled');
-	Games.map(game => presetWoWFilter.find(".FilterValue").append(new Option(game.name, game.name)));
-	presetWoWFilter.find(".FilterValue").val("World of Warcraft");
-	presetWoWFilter.trigger("change");
+	presetWoWFilter.find(".FilterValue").val("World of Warcraft").trigger("change");
+	
+	var presetNegativeFilter = addFilter();
+	presetNegativeFilter.find(".FilterTypeSelect").val("pattern_category").trigger("change");
+	presetNegativeFilter.find(".FilterValue").val("Negative Patterns").trigger("change");
 }
 
 function addFilter(){
 	var FilterTypes = [
 		{text: "Max Count", value: "count"}, 
 		{text: "Game Category", value: "game_category"},
+		{text: "Pattern Category", value: "pattern_category"},
 		{text: "Game", value: "game"}];
-		/*{text: "Pattern Category", value: "pattern_category"}, */
 	var filter = $(`
 		<li>
 			<select class="FilterTypeSelect" placeholder="Select a filter type...">
@@ -46,33 +47,29 @@ function addFilter(){
 		filter.remove();
 	});
 	
-	filter.find(".FilterTypeSelect").select2();
-	filter.find(".FilterValue").select2({tags: true});
+	filter.find(".FilterTypeSelect").select2({ width: '150px' });
+	filter.find(".FilterValue").select2({ width: '180px' });
 	
 	filter.find(".FilterTypeSelect").on('change', function(){
 		var currentValue = filter.find(".FilterTypeSelect").val();
 		filter.find(".FilterValue").empty();
+		filter.find(".FilterValue").removeAttr('disabled');
 		switch(currentValue){
 			case "count":
-				filter.find(".FilterValue").removeAttr('disabled');
 				var defaultOption = new Option("50", 50, true, true);
-				filter.find(".FilterValue").append(defaultOption).trigger("change");
+				filter.find(".FilterValue").append(defaultOption);
 				break;
 			case "pattern_category":
+				PatternCategories.map(cat => filter.find(".FilterValue").append(new Option(cat, cat)));
 				break;
 			case "game_category":
-				filter.find(".FilterValue").removeAttr('disabled');
-				//filter.find(".FilterValue").attr('multiple', 'multiple');
-				//filter.find(".FilterValue").select2({tags: true});
 				GameCategories.map(cat => filter.find(".FilterValue").append(new Option(cat, cat)));
-				filter.find(".FilterValue").trigger("change");
 				break;
 			case "game":
-				filter.find(".FilterValue").removeAttr('disabled');
 				Games.map(game => filter.find(".FilterValue").append(new Option(game.name, game.name)));
-				filter.find(".FilterValue").trigger("change");
 				break;
 		}
+		filter.find(".FilterValue").trigger("change");
 	});
 	
 	return filter;

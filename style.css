@@ -76,7 +76,7 @@ h1{
 #Content > #DocumentViewer{
 	background: #f6f6f6;
 	min-height: 300px;
-	flex: 3 1 auto;
+	flex: 2 1 auto;
 }
 
 #Content > #GraphLayout{
