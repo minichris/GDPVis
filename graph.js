@@ -96,10 +96,11 @@ function generateGraph(data) {
 	
 	simulation.force("link").links(data.links); //Start the simulation of the links
 	
+	$('#SearchSelect').empty();
 	node.each(function(node){
 		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
 	});
-	
+	ClearSelection();
 	$('#SearchSelect').select2({ width: '100%' });
 	
 	function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
