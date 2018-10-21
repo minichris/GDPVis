@@ -9,8 +9,20 @@ $( document ).ready(function() {
 		loadGames().done(function() {
 			addExampleFilter();
 			refreshGraph();
+			
+			$("#Search").show();
+			$("#Graph").show();
+			$("#Filter").show();
+			$("#LoadingAjax").hide();
 		});
 	});
+});
+
+$(function(){
+	$("#Search").hide();
+	$("#Graph").hide();
+	$("#Filter").hide();
+	$("#LoadingAjax").show();
 });
 
 var filteredPatterns;

@@ -144,3 +144,18 @@ svg{
 .select2-results__option{
 	color:black;
 }
+
+#FiltersList > li{
+	margin-top: 8px;
+}
+
+#LoadingAjax{
+	min-width: 410px;
+	min-height: 690px;
+	text-align: center;
+}
+
+#LoadingAjax span{
+	margin-top: 30px;
+    display: inline-block;
+}
