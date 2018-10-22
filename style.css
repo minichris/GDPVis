@@ -66,16 +66,16 @@ h1{
 	margin: 5px;
 	display: inline-block;
 	flex: 0 1 auto;
+	min-height: 300px;
 }
 
 #Graph{
 	overflow: hidden;
-	margin-bottom: 10px;
+	position: relative;
 }
 
 #Content > #DocumentViewer{
 	background: #f6f6f6;
-	min-height: 300px;
 	flex: 2 1 auto;
 }
 
@@ -124,9 +124,29 @@ svg{
 	overflow: visible;
 }
 
+#ShowFiltersButton{
+	opacity: 0.99;  /*Hack to get it above the svg stuff because z-index doesn't work for some reason*/
+}
+
+#FilterPanel.show, #FilterPanel.collapsing{
+	position: absolute;
+    top: 50px;
+	bottom: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
 #FiltersList{
 	list-style-type: none;
     padding: 0;
+	overflow-y: scroll;
+	height: 100%;
+}
+
+.DeleteFilter{
+	padding: 4px;
+    height: 32px;
+    vertical-align: middle;
 }
 
 .FilterTypeSelect{

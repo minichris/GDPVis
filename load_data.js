@@ -12,7 +12,6 @@ $( document ).ready(function() {
 			
 			$("#Search").show();
 			$("#Graph").show();
-			$("#Filter").show();
 			$("#LoadingAjax").hide();
 		});
 	});
@@ -21,7 +20,6 @@ $( document ).ready(function() {
 $(function(){
 	$("#Search").hide();
 	$("#Graph").hide();
-	$("#Filter").hide();
 	$("#LoadingAjax").show();
 });
 

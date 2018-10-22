@@ -6,6 +6,10 @@ $(function(){ //Set up button bindings
 	$("#ApplyFiltersButton").click(function(){
 		refreshGraph();
 	});
+	
+	$("#ShowFiltersButton").click(function(){
+		
+	});
 });
 
 function addExampleFilter(){
@@ -31,7 +35,7 @@ function addFilter(){
 			</select>
 			<select disabled class="FilterValue" placeholder="Select a filter...">
 			</select>
-			<button class="DeleteFilter btn btn-danger">Delete</button>
+			<button class="DeleteFilter btn btn-danger">X</button>
 		</li>`);
 	$("#FiltersList").append(filter);
 	
