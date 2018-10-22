@@ -6,10 +6,6 @@ $(function(){ //Set up button bindings
 	$("#ApplyFiltersButton").click(function(){
 		refreshGraph();
 	});
-	
-	$("#ShowFiltersButton").click(function(){
-		
-	});
 });
 
 function addExampleFilter(){

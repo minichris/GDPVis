@@ -33,11 +33,34 @@ function refreshGraph(){
 	});
 }
 
-function loadPatterns(){
+function loadMessageUpdater(){
+	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentDownloadingFile + "/2.");
+}
+
+var CurrentFileLoadPercentage;
+var CurrentDownloadingFile = 0;
+
+function loadViaAjax(inputURL){
+	CurrentDownloadingFile += 1; //increase the currently downloading file
 	var request = $.ajax({
-		url: "AllPatterns.json",
-		dataType: "json"
+		url: inputURL,
+		dataType: "json",
+        xhr: function () {
+			var xhr = new window.XMLHttpRequest();
+			xhr.addEventListener("progress", function (evt) { //progress event
+				if (evt.lengthComputable) {
+					CurrentFileLoadPercentage = evt.loaded / evt.total; // load percentage
+					loadMessageUpdater();
+				}
+			}, false);
+			return xhr;
+		}
 	});
+	return request;
+}
+
+function loadPatterns(){
+	var request = loadViaAjax("AllPatterns.json");
 	request.done(function(data) {
 		Patterns = data;
 		PatternCategories = new Set();
@@ -50,10 +73,7 @@ function loadPatterns(){
 }
 
 function loadGames(){
-	var request = $.ajax({
-		url: "AllGames.json",
-		dataType: "json"
-	});
+	var request = loadViaAjax("AllGames.json");
 	request.done(function(data) {
 		Games = data;
 		GameCategories = new Set();
