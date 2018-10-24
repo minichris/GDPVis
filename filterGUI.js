@@ -97,6 +97,6 @@ class FilterList extends React.Component {
 }
 
 function addExampleFilter(){
-	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('FilterListComponent'));
+	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('FiltersList'));
 	filterlistComponent.setState({filters: Filters});
 };
