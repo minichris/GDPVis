@@ -102,7 +102,7 @@ function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to o
 
 function userFilter(inputPatterns){
 	var outputPatterns = inputPatterns; //outputPatterns is the list of patterns we will be operating on the most
-	var filtersValues = getFilters(); //gets the current filters from the GUI
+	var filtersValues = Filters; //gets the current filters from the GUI
 	console.log("_________FILTERS_________");
 	filtersValues.forEach(function(filter){
 		switch(filter.Type){

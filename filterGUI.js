@@ -1,12 +1,16 @@
 $(function(){ //Set up button bindings
 	$("#AddFilterButton").click(function(){
-		addFilter();
+		Filters.push({Type: "pattern_category", Value: ""});
+		filterlistComponent.forceUpdate();
 	});
 
 	$("#ApplyFiltersButton").click(function(){
 		refreshGraph();
 	});
 });
+
+var Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}];
+var filterlistComponent;
 
 function OptionList(props) {
 	let optionList = [];
@@ -31,7 +35,7 @@ function OptionList(props) {
 }
 
 function SingularFilter(props) {
-	let filterTypes = [ {text: "Max Count", value: "count"}, {text: "Game Category", value: "game_category"},	{text: "Pattern Category", value: "pattern_category"}, {text: "Game", value: "game"}];
+	let filterTypes = [ {text: "Game Category", value: "game_category"},	{text: "Pattern Category", value: "pattern_category"}, {text: "Game", value: "game"}, {text: "Max Count", value: "count"} ];
 	return (
 		<li data-index={props.index}>
 			<select value={props.type} className="FilterTypeSelect" placeholder="Select a filter type..." onChange={props.handleFilterTypeChange}>
@@ -45,8 +49,6 @@ function SingularFilter(props) {
 	);
 }
 
-
-var Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}];
 class FilterList extends React.Component {
 	constructor(props) {
     super(props);
@@ -92,10 +94,9 @@ class FilterList extends React.Component {
 		);
 	}
 
-
 }
-var filterlistComponent;
+
 function addExampleFilter(){
-	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('Content'));
+	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('FilterListComponent'));
 	filterlistComponent.setState({filters: Filters});
 };
