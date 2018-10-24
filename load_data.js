@@ -3,13 +3,12 @@ var Games;
 var PatternCategories;
 var GameCategories;
 
-
 $( document ).ready(function() {
 	loadPatterns().done(function() {
 		loadGames().done(function() {
 			addExampleFilter();
 			refreshGraph();
-			
+
 			$("#Search").show();
 			$("#Graph").show();
 			$("#LoadingAjax").hide();
@@ -86,18 +85,18 @@ function loadGames(){
 }
 
 function patternCategoryFilter(inputPatterns, inputPatternSubcategory){ //filters a list of patterns to only ones that are found in a pattern subcategory
-	outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
+	var outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
 	return outputPatterns;
 }
 
 function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a list of patterns to only ones that link to games found in a game subcategory
 	var gamesOfCategory = Games.filter(game => game.categories.includes(inputGameSubcategory));
-	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
+	var outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
 	return outputPatterns;
 }
 
 function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to only ones that link to a specific game
-	outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == inputGame));
+	var outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == inputGame));
 	return outputPatterns;
 }
 
@@ -130,18 +129,18 @@ function userFilter(inputPatterns){
 }
 
 function createNodesObject(patterns){
-	function getGroup(){ 
+	function getGroup(){
 		return Math.floor(Math.random() * 6) + 1;
 	}
-	
+
 	var nodesObject = [];  //array to store the output of the function
 	patterns.forEach(function(pattern){
 		nodesObject.push({
-			id: pattern.Title, 
+			id: pattern.Title,
 			group: getGroup()
 		});
 	});
-	
+
 	return nodesObject;
 }
 
@@ -158,6 +157,6 @@ function createLinksObject(patterns){
 				});
 			}
 		});
-	});	
+	});
 	return linksObject;
 }
