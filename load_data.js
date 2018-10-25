@@ -6,8 +6,8 @@ var GameCategories;
 $( document ).ready(function() {
 	loadPatterns().done(function() {
 		loadGames().done(function() {
-			addExampleFilter();
-			refreshGraph();
+			bindFilters();
+			applyFilters();
 
 			$("#Search").show();
 			$("#Graph").show();
@@ -22,9 +22,7 @@ $(function(){
 	$("#LoadingAjax").show();
 });
 
-var filteredPatterns;
-function refreshGraph(){
-	filteredPatterns = userFilter(Patterns);
+function refreshGraph(filteredPatterns){
 	resetGraph();
 	generateGraph({
 		nodes: createNodesObject(filteredPatterns),
@@ -100,7 +98,7 @@ function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to o
 	return outputPatterns;
 }
 
-function userFilter(inputPatterns){
+function performFiltering(inputPatterns){
 	var outputPatterns = inputPatterns; //outputPatterns is the list of patterns we will be operating on the most
 	var filtersValues = Filters; //gets the current filters from the GUI
 	console.log("_________FILTERS_________");

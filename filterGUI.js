@@ -5,9 +5,38 @@ $(function(){ //Set up button bindings
 	});
 
 	$("#ApplyFiltersButton").click(function(){
-		refreshGraph();
+		applyFilters();
+	});
+
+	$("#TooManyDialogModal").hide();
+
+	$("#TooManyCloseButton").click(function(){
+		$("#TooManyDialogModal").hide();
+	});
+
+	$("#TooManyIgnoreButton").click(function(){
+		$("#TooManyDialogModal").hide();
+		refreshGraph(performFiltering(Patterns));
+	});
+
+	$("#TooManyOkButton").click(function(){ //adding a limiter to the filters
+		$("#TooManyDialogModal").hide();
+		Filters.push({Type: "count", Value: 50});
+		filterlistComponent.forceUpdate();
+		refreshGraph(performFiltering(Patterns));
 	});
 });
+
+function applyFilters(){ //a function to decide wether to ask the user if they want to add a limiter or just go straight to updating
+	var filteredPatterns = performFiltering(Patterns);
+	if(filteredPatterns.length > 50){ //predetermined dangerous amount of patterns
+		$("#TooManyDialogModal").show();
+		$("#TooManyDialogPatternCount").text(filteredPatterns.length);
+	}
+	else{
+		refreshGraph(filteredPatterns);
+	}
+}
 
 var Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}];
 var filterlistComponent;
@@ -103,7 +132,7 @@ class FilterList extends React.Component {
 
 }
 
-function addExampleFilter(){
+function bindFilters(){
 	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('FiltersList'));
 	filterlistComponent.setState({filters: Filters});
 };
