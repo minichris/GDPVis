@@ -23,7 +23,7 @@
 	#4F0147 = Tyrian Purple (Strongest Accent)
 	#FFE2E2 = Misty Rose (Lightest Accent)
 	#FFF8F0 = Floral White (Text)
-	
+
 */
 
 :root {
@@ -103,15 +103,15 @@ h1{
 	width: 100%;
 }
 
-#Tooltip {	
-    position: absolute;			
-    text-align: center;					
-    padding: 5px;				
-    font: 12px sans-serif;		
+#Tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 5px;
+    font: 12px sans-serif;
     background: var(--bgColor2);
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }
 
 iframe{
@@ -153,7 +153,7 @@ svg{
     height: 32px;
     vertical-align: middle;
 }
-
+/*
 .FilterTypeSelect{
 	width: 30%;
 	display: inline-block;
@@ -165,13 +165,18 @@ svg{
 	display: inline-block;
 	padding: 5px;
 }
-
+*/
 .select2-results__option{
 	color:black;
 }
 
 #FiltersList > li{
 	margin-top: 8px;
+}
+
+#FiltersList > li > .select2{
+	min-width: 160px !important;
+	margin-right: 8px;
 }
 
 #LoadingAjax{

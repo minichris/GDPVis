@@ -34,19 +34,26 @@ function OptionList(props) {
 	return optionList.map(option => <option key={option.value} value={option.value}>{option.text}</option>);
 }
 
-function SingularFilter(props) {
-	let filterTypes = [ {text: "Game Category", value: "game_category"},	{text: "Pattern Category", value: "pattern_category"}, {text: "Game", value: "game"}, {text: "Max Count", value: "count"} ];
-	return (
-		<li data-index={props.index}>
-			<select value={props.type} className="FilterTypeSelect" placeholder="Select a filter type..." onChange={props.handleFilterTypeChange}>
-				{filterTypes.map(filterType => <option key={filterType.value} value={filterType.value}>{filterType.text}</option>)}
-			</select>
-			<select value={props.value} className="FilterValue" placeholder="Select a filter..." onChange={props.handleFilterValueChange}>
-				<OptionList filtertype={props.type} />
-			</select>
-			<button className="DeleteFilter btn btn-danger" onClick={props.handleDeleteButton}>X</button>
-		</li>
-	);
+class SingularFilter extends React.Component  {
+	componentDidMount() {
+  	$(this.refs["FilterTypeSelect"]).select2().on("change", this.props.handleFilterTypeChange);
+		$(this.refs["FilterValue"]).select2().on("change", this.props.handleFilterValueChange);
+	}
+
+	render() {
+		let filterTypes = [ {text: "Game Category", value: "game_category"},	{text: "Pattern Category", value: "pattern_category"}, {text: "Game", value: "game"}, {text: "Max Count", value: "count"} ];
+		return (
+			<li data-index={this.props.index}>
+				<select ref="FilterTypeSelect" value={this.props.type} className="FilterTypeSelect" placeholder="Select a filter type..." onChange={this.props.handleFilterTypeChange}>
+					{filterTypes.map(filterType => <option key={filterType.value} value={filterType.value}>{filterType.text}</option>)}
+				</select>
+				<select ref="FilterValue" value={this.props.value} className="FilterValue" placeholder="Select a filter..." onChange={this.props.handleFilterValueChange}>
+					<OptionList filtertype={this.props.type} />
+				</select>
+				<button className="DeleteFilter btn btn-danger" onClick={this.props.handleDeleteButton}>X</button>
+			</li>
+		);
+	}
 }
 
 class FilterList extends React.Component {
