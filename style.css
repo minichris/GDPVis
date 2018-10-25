@@ -175,7 +175,7 @@ svg{
 }
 
 #FiltersList > li > .select2{
-	min-width: 160px !important;
+	width: 160px !important;
 	margin-right: 8px;
 }
 
