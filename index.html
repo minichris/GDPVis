@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-
+	<title>VGTropes</title>
 </head>
 <body>
 	<header>
@@ -50,14 +50,19 @@
 				<li>The graph can be zoomed using the mouse wheel.</li>
 				<li>The nodes can be tugged about by click-dragging a node.</li>
 				<li>The graph can be panned by clicking and dragging the background.</li>
+				<li>Clicking the "Filters" button will display the currently enabled filters.</li>
+				<li>In the filters menu, the filters are appiled in order, top to bottom. There is currently no way to do "OR" logic.</li>
+				<li>The filters only update when you press "Apply Filters".</li>
+				<li>Not applying enough filtering will cause a message to come up warning you that you are trying to display too many nodes. It is highly recomended you heed this warning.</li>
 			</ul>
 			<h2>Planned</h2>
 			<ul>
-				<li>Currently, the graph is only showing patterns which contain a hyperlink to games in the "Social Media Games" category. Eventually, which patterns are filtered out will be configurable by the user (probably in a panel to the left of the graph.</li>
+				<li>Currently, the visualization has example patterns of <b>patterns found in the game <i>"World of Warcraft"</i></b> and <b>patterns in the <i>Negative Patterns</i> category</b>.</li>
 				<li>Currently, the nodes on the graph have random colours and links have random strengths.</li>
 				<li>Currently, the graph shows all links found in the article. Eventually, it may only show links found in the "Relations" segment of every pattern article.</li>
 				<li>Currently, hovering over the links between nodes shows no tooltip. Eventually, this will show the context of the link from the article.</li>
 				<li>The browser is currently implemented as an iframe, eventually it might be changed to a different method (to better fit the theming and reduce clutter).</li>
+				<li>Currently, there is no way to save your filter set-up.</li>
 				<li>Working title!</li>
 			</ul>
 		</div>
