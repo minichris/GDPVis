@@ -28,6 +28,16 @@ function refreshGraph(filteredPatterns){
 		nodes: createNodesObject(filteredPatterns),
 		links: createLinksObject(filteredPatterns)
 	});
+	setWindowHistory(Filters);
+}
+
+function setWindowHistory(filters){
+	let encoded = btoa(JSON.stringify(filters));
+	//encoded = [];
+	//filters.forEach((filter, index) => encoded.push(index + "=" + filter.Type + "," + filter.Value));
+	//encoded.join('&');
+	//window.history.pushState('VGTropes', 'VGTropes', '?' + encoded);
+	window.history.pushState('VGTropes', 'VGTropes', '?filters=' + encoded);
 }
 
 function loadMessageUpdater(){

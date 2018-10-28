@@ -38,7 +38,14 @@ function applyFilters(){ //a function to decide wether to ask the user if they w
 	}
 }
 
-var Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}];
+var Filters;
+var urlParams = new URLSearchParams( new URL(window.location).search);
+if(urlParams.has('filters')) { //if the url has filters in the GET request
+	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
+}
+else {
+	Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}]; //set example filters
+}
 var filterlistComponent;
 
 function OptionList(props) {
