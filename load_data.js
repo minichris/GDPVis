@@ -159,7 +159,7 @@ function createLinksObject(patterns){
 		pattern["PatternsLinks"].forEach(function(pLink){
 			if(includedPatternNames.includes(pLink.To)){ //if the link is to a pattern that is included
 				linksObject.push({ //create the array member
-					source: pLink.From,
+					source: pattern.Title,
 					target: pLink.To,
 					value: 1
 				});
