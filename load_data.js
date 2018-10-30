@@ -75,8 +75,20 @@ function loadPatterns(){
 			PatternCategories.add(subcategory);
 		});
 		PatternCategories = Array.from(PatternCategories);
+		generatePatternLinkParagraphs();
 	});
 	return request;
+}
+
+function generatePatternLinkParagraphs(){
+	Patterns.forEach(function(pattern, index){
+		$(pattern.Content).find("a[href]").each(function(index, element){
+			var matchedLink = pattern.PatternsLinks.find(function(link){ return link.To == $(element).text(); });
+			if(matchedLink != null){ //if it did find one
+				matchedLink.Paragraph = $(element).parent().html();
+			}
+		});
+	});
 }
 
 function loadGames(){
