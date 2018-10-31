@@ -4,13 +4,7 @@ var PatternCategories;
 var GameCategories;
 
 $( document ).ready(function() {
-	var requiredDataLoadedPromise = new Promise((resolve, reject) => {
-	  Promise.all([loadPatterns(), loadGames()]).then(function(){
-			generatePatternLinkParagraphs().then(function(){
-				resolve();
-			});
-		});
-	});
+	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 
 	requiredDataLoadedPromise.then(function() {
 		bindFilters();
@@ -85,7 +79,19 @@ function loadPatterns(){
 	return request;
 }
 
-var testElement, testPattern;
+function generatePatternLinkParagraphsFromPatterns(pattern1, pattern2){
+	function getPatternLinksHTML(sourcePattern, targetPattern){
+		return $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
+			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
+			var linksToTargetPattern = ($(linkDOM).text() == targetPattern.Title);
+			return linksToTargetPattern && afterRelations;
+		}).parent().html();
+	}
+
+	return(
+		[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)]
+	);
+}
 
 function generatePatternLinkParagraphs(){
 	return new Promise(resolve => {

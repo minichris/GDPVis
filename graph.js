@@ -69,7 +69,9 @@ function generateGraph(data) {
 
 	link.on("mouseover", function(d) {
 		function getTooltipContent(d) {
-			return Patterns.filter(pattern => pattern.Title == d.source.id)[0].PatternsLinks.filter(link => link.To == d.target.id)[0].Paragraphs.join('<hr>');
+			var sourcePattern = Patterns.find(pattern => pattern.Title == d.source.id);
+			var targetPattern = Patterns.find(pattern => pattern.Title == d.target.id);
+			return generatePatternLinkParagraphsFromPatterns(sourcePattern, targetPattern).join('<hr>');
 		}
 		tooltip.transition() //add the tooltip when the user mouses over the node
 			.duration(200).style("opacity", .9);
