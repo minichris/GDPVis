@@ -149,7 +149,14 @@ $('#SearchSelect').change(function(){
 
 function ChangeSelection(newSelectionID){
 	//handle the document viewer
-	d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + newSelectionID.replace(/ /g,'_'));
+	//d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + newSelectionID.replace(/ /g,'_'));
+	$("#DocumentViewer").html('<div class="insertedPage"></div>');
+	$("#DocumentViewer").addClass("HasInsertedPage");
+	$(".insertedPage").html(Patterns.find(pattern => pattern.Title == newSelectionID).Content);
+	$("#DocumentViewer").find("a[href]").click(function(e){
+		e.stopPropagation();
+		e.preventDefault();
+	});
 
 	//handle the search box
 	if($('#SearchSelect').val() != newSelectionID){
