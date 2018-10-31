@@ -16,12 +16,6 @@ $( document ).ready(function() {
 	});
 });
 
-$(function(){
-	$("#Search").hide();
-	$("#Graph").hide();
-	$("#LoadingAjax").show();
-});
-
 function refreshGraph(filteredPatterns){
 	resetGraph();
 	generateGraph({
@@ -31,17 +25,8 @@ function refreshGraph(filteredPatterns){
 	setWindowHistory(Filters);
 }
 
-function setWindowHistory(filters){
-	let encoded = btoa(JSON.stringify(filters));
-	//encoded = [];
-	//filters.forEach((filter, index) => encoded.push(index + "=" + filter.Type + "," + filter.Value));
-	//encoded.join('&');
-	//window.history.pushState('VGTropes', 'VGTropes', '?' + encoded);
-	window.history.pushState('VGTropes', 'VGTropes', '?filters=' + encoded);
-}
-
 function loadMessageUpdater(){
-	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentLoadingFile + "/3.");
+	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentLoadingFile + "/2.");
 }
 
 var CurrentFileLoadPercentage;
@@ -95,39 +80,6 @@ function generatePatternLinkParagraphsFromPatterns(pattern1, pattern2){
 		//get both possible sides of the relevent paragraphs, then remove any which are blank
 		[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; })
 	);
-}
-
-function generatePatternLinkParagraphs(){
-	return new Promise(resolve => {
-		CurrentLoadingFile += 1;
-		function parsePattern(index){
-			loadMessageUpdater();
-			var pattern = Patterns[index];
-			pattern.PatternsLinks.forEach(pLink => pLink.Paragraphs = []); //add a blank array to every pLink
-
-			$(pattern.Content).find("a[href]").each(function(linkIndex, linkDOM){ //for each link
-					var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
-					if( afterRelations ){ //if it is after the relations section
-						//Check if the pattern links contain a pLink that has the same "To" as the inner text of the current element
-						var matchedPLinks = pattern.PatternsLinks.forEach(function(pLink){
-						var surroundingDOM = $(linkDOM).parent();
-						//if the link text equals the pLink "To" and the paragraphs don't already contain what we about to enter
-						if($(linkDOM).text() == pLink.To && !pLink.Paragraphs.some(paragraph => paragraph == surroundingDOM.html())){
-							pLink.Paragraphs.push(surroundingDOM.html());
-						}
-					});
-				}
-			CurrentFileLoadPercentage = index / Patterns.length;
-			});
-			if(index + 1 != Patterns.length){
-				setTimeout(function(){ parsePattern(index + 1) }, 2); //give the browser time to keep the page running
-			}
-			else{
-				resolve("Done generating pattern link paragraphs");
-			}
-		}
-		parsePattern(0); //start the parsing
-	});
 }
 
 function loadGames(){
@@ -218,4 +170,26 @@ function createLinksObject(patterns){
 		});
 	});
 	return linksObject;
+}
+
+
+//-------------------------------------------------------------------------
+//The following section controls the saving and loading filters from the URL
+//-------------------------------------------------------------------------
+var Filters;
+var urlParams = new URLSearchParams( new URL(window.location).search);
+if(urlParams.has('filters')) { //if the url has filters in the GET request
+	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
+}
+else {
+	Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}]; //set example filters
+}
+
+function setWindowHistory(filters){
+	let encoded = btoa(JSON.stringify(filters));
+	//encoded = [];
+	//filters.forEach((filter, index) => encoded.push(index + "=" + filter.Type + "," + filter.Value));
+	//encoded.join('&');
+	//window.history.pushState('VGTropes', 'VGTropes', '?' + encoded);
+	window.history.pushState('VGTropes', 'VGTropes', '?filters=' + encoded);
 }
