@@ -33,6 +33,7 @@
 	--acColor: #4F0147;
 	--acColor2: #FFE2E2;
 	--textColor: #FFF8F0;
+	--linkBlue: #816dd2;
 }
 
 body {
@@ -196,6 +197,6 @@ svg{
 	color: black;
 }
 
-.TooltipHighlighted{
-	color: green;
+#Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
+	color: var(--linkBlue);
 }

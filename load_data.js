@@ -81,11 +81,14 @@ function loadPatterns(){
 
 function generatePatternLinkParagraphsFromPatterns(pattern1, pattern2){
 	function getPatternLinksHTML(sourcePattern, targetPattern){
-		return $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
+		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
 			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
 			var linksToTargetPattern = ($(linkDOM).text() == targetPattern.Title);
 			return linksToTargetPattern && afterRelations;
-		}).parent().html();
+		});
+		$(targetLink).parent().find("a").not(targetLink).contents().unwrap();
+		$(targetLink).addClass("TooltipHighlighted");
+		return targetLink.parent().html();
 	}
 
 	return(
