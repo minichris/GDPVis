@@ -89,7 +89,8 @@ function generatePatternLinkParagraphsFromPatterns(pattern1, pattern2){
 	}
 
 	return(
-		[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)]
+		//get both possible sides of the relevent paragraphs, then remove any which are blank
+		[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; })
 	);
 }
 
