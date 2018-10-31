@@ -10,11 +10,11 @@ function generateGraph(data) {
 	var height = 300;
 
 	var root = svg.append("g");
-		
+
 	svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 		root.attr("transform", d3.event.transform);
 	}));
-		
+
 
 	var color = d3.scaleOrdinal(d3.schemeCategory20b); //set the color scheme
 
@@ -23,10 +23,10 @@ function generateGraph(data) {
 		.force("gravity", d3.forceManyBody().strength(50).distanceMin(200)) //stops nodes from being pushed all the way to the edge
 		.force("charge", d3.forceManyBody().strength(-50).distanceMax(150)) //stops nodes being stuck too close together
 		.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
-		
+
 
 	var tooltip = d3.select("body").append("div").attr("id", "Tooltip").style("opacity", 0); //Define the div for the tooltip
-	
+
 	var link = root.append("g")
 		.attr("class", "links")
 		.selectAll("line")
@@ -53,22 +53,33 @@ function generateGraph(data) {
 			.on("drag", dragged)
 			.on("end", dragended));
 
-	node.on("mouseover", function(d) {		
+	node.on("mouseover", function(d) {
 		tooltip.transition() //add the tooltip when the user mouses over the node
-			.duration(200)		
-			.style("opacity", .9);		
+			.duration(200).style("opacity", .9);
 		tooltip.html(d.id) //Set the nodes title text to be its ID
-			.style("left", (d3.event.pageX) + "px")		
-			.style("top", (d3.event.pageY - 28) + "px");	
-		})					
-        .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-            tooltip.transition()		
-                .duration(500)		
-                .style("opacity", 0);	
-        })
+			.style("left", (d3.event.pageX) + "px")
+			.style("top", (d3.event.pageY - 28) + "px");
+		})
+    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+      tooltip.transition().duration(500).style("opacity", 0);
+    })
 		.on("click", function(d) { //Click to open the relevent article
 			ChangeSelection(d.id);
-		}); 
+		});
+
+	link.on("mouseover", function(d) {
+		function getTooltipContent(d) {
+			return Patterns.filter(pattern => pattern.Title == d.source.id)[0].PatternsLinks.filter(link => link.To == d.target.id)[0].Paragraphs.join('<hr>');
+		}
+		tooltip.transition() //add the tooltip when the user mouses over the node
+			.duration(200).style("opacity", .9);
+		tooltip.html(getTooltipContent(d)) //Set the nodes title text to be its ID
+			.style("left", (d3.event.pageX) + "px")
+			.style("top", (d3.event.pageY - 28) + "px");
+		})
+		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+      tooltip.transition().duration(500).style("opacity", 0);
+    });
 
 	simulation.nodes(data.nodes).on("tick", function ticked() { //Set the nodes tick function
 		link
@@ -93,16 +104,16 @@ function generateGraph(data) {
 				return  validate(d.y, 0, height);
 			});
 	});
-	
+
 	simulation.force("link").links(data.links); //Start the simulation of the links
-	
+
 	$('#SearchSelect').empty();
 	node.each(function(node){
-		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id)); 
+		$('#SearchSelect').append($("<option></option>").attr("value",node.id).text(node.id));
 	});
 	ClearSelection();
 	$('#SearchSelect').select2({ width: '100%' });
-	
+
 	function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
 		if (x < a) x = a;
 		if (x > b) x = b;
@@ -137,12 +148,12 @@ $('#SearchSelect').change(function(){
 function ChangeSelection(newSelectionID){
 	//handle the document viewer
 	d3.select("#DocumentViewer > iframe").attr("src", "http://virt10.itu.chalmers.se/index.php/" + newSelectionID.replace(/ /g,'_'));
-	
+
 	//handle the search box
 	if($('#SearchSelect').val() != newSelectionID){
 		$("#SearchSelect").val(newSelectionID).trigger("change");
 	}
-	
+
 	//handle the highlighted node
 	var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
 	$(".SelectedNode").removeClass('SelectedNode');

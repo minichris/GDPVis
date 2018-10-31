@@ -4,15 +4,20 @@ var PatternCategories;
 var GameCategories;
 
 $( document ).ready(function() {
-	loadPatterns().done(function() {
-		loadGames().done(function() {
-			bindFilters();
-			applyFilters();
-
-			$("#Search").show();
-			$("#Graph").show();
-			$("#LoadingAjax").hide();
+	var requiredDataLoadedPromise = new Promise((resolve, reject) => {
+	  Promise.all([loadPatterns(), loadGames()]).then(function(){
+			generatePatternLinkParagraphs();
+			resolve();
 		});
+	});
+
+	requiredDataLoadedPromise.then(function() {
+		bindFilters();
+		applyFilters();
+
+		$("#Search").show();
+		$("#Graph").show();
+		$("#LoadingAjax").hide();
 	});
 });
 
@@ -75,20 +80,32 @@ function loadPatterns(){
 			PatternCategories.add(subcategory);
 		});
 		PatternCategories = Array.from(PatternCategories);
-		generatePatternLinkParagraphs();
 	});
 	return request;
 }
 
+var testElement, testPattern;
+
 function generatePatternLinkParagraphs(){
-	Patterns.forEach(function(pattern, index){
-		$(pattern.Content).find("a[href]").each(function(index, element){
-			var matchedLink = pattern.PatternsLinks.find(function(link){ return link.To == $(element).text(); });
-			if(matchedLink != null){ //if it did find one
-				matchedLink.Paragraph = $(element).parent().html();
+	Patterns.forEach(function(pattern, index){ //for each pattern
+		pattern.PatternsLinks.forEach(pLink => pLink.Paragraphs = []); //add a blank array to every pLink in all patterns
+
+		$(pattern.Content).find("a[href]").each(function(index, linkDOM){ //for each link
+				var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
+				if( afterRelations ){ //if it is after the relations section
+					//Check if the pattern links contain a pLink that has the same "To" as the inner text of the current element
+					var matchedPLinks = pattern.PatternsLinks.forEach(function(pLink){
+					var surroundingDOM = $(linkDOM).parent();
+					//if the link text equals the pLink "To" and the paragraphs don't already contain what we about to enter
+					if($(linkDOM).text() == pLink.To && !pLink.Paragraphs.some(paragraph => paragraph == surroundingDOM.html())){
+						pLink.Paragraphs.push(surroundingDOM.html());
+					}
+				});
 			}
 		});
+
 	});
+	console.log("Done generating pattern link paragraphs")
 }
 
 function loadGames(){

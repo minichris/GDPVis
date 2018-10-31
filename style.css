@@ -112,6 +112,7 @@ h1{
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+		max-width: 350px;
 }
 
 iframe{
@@ -192,4 +193,8 @@ svg{
 
 .modal-title, .modal-body{
 	color: black;
+}
+
+.TooltipHighlighted{
+	color: green;
 }
