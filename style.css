@@ -211,6 +211,16 @@ svg{
 	color: black;
 }
 
+.modal{
+	background: #0b0212c4;
+}
+
 #Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
 	color: var(--linkBlue);
+}
+
+#Tooltip > hr {
+	border-top: 3px dotted var(--linkBlue);
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
 }
