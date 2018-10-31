@@ -6,8 +6,9 @@ var GameCategories;
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = new Promise((resolve, reject) => {
 	  Promise.all([loadPatterns(), loadGames()]).then(function(){
-			generatePatternLinkParagraphs();
-			resolve();
+			generatePatternLinkParagraphs().then(function(){
+				resolve();
+			});
 		});
 	});
 
@@ -46,14 +47,14 @@ function setWindowHistory(filters){
 }
 
 function loadMessageUpdater(){
-	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentDownloadingFile + "/2.");
+	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentLoadingFile + "/3.");
 }
 
 var CurrentFileLoadPercentage;
-var CurrentDownloadingFile = 0;
+var CurrentLoadingFile = 0;
 
 function loadViaAjax(inputURL){
-	CurrentDownloadingFile += 1; //increase the currently downloading file
+	CurrentLoadingFile += 1; //increase the currently downloading file
 	var request = $.ajax({
 		url: inputURL,
 		dataType: "json",
@@ -87,25 +88,36 @@ function loadPatterns(){
 var testElement, testPattern;
 
 function generatePatternLinkParagraphs(){
-	Patterns.forEach(function(pattern, index){ //for each pattern
-		pattern.PatternsLinks.forEach(pLink => pLink.Paragraphs = []); //add a blank array to every pLink in all patterns
+	return new Promise(resolve => {
+		CurrentLoadingFile += 1;
+		function parsePattern(index){
+			loadMessageUpdater();
+			var pattern = Patterns[index];
+			pattern.PatternsLinks.forEach(pLink => pLink.Paragraphs = []); //add a blank array to every pLink
 
-		$(pattern.Content).find("a[href]").each(function(index, linkDOM){ //for each link
-				var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
-				if( afterRelations ){ //if it is after the relations section
-					//Check if the pattern links contain a pLink that has the same "To" as the inner text of the current element
-					var matchedPLinks = pattern.PatternsLinks.forEach(function(pLink){
-					var surroundingDOM = $(linkDOM).parent();
-					//if the link text equals the pLink "To" and the paragraphs don't already contain what we about to enter
-					if($(linkDOM).text() == pLink.To && !pLink.Paragraphs.some(paragraph => paragraph == surroundingDOM.html())){
-						pLink.Paragraphs.push(surroundingDOM.html());
-					}
-				});
+			$(pattern.Content).find("a[href]").each(function(linkIndex, linkDOM){ //for each link
+					var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
+					if( afterRelations ){ //if it is after the relations section
+						//Check if the pattern links contain a pLink that has the same "To" as the inner text of the current element
+						var matchedPLinks = pattern.PatternsLinks.forEach(function(pLink){
+						var surroundingDOM = $(linkDOM).parent();
+						//if the link text equals the pLink "To" and the paragraphs don't already contain what we about to enter
+						if($(linkDOM).text() == pLink.To && !pLink.Paragraphs.some(paragraph => paragraph == surroundingDOM.html())){
+							pLink.Paragraphs.push(surroundingDOM.html());
+						}
+					});
+				}
+			CurrentFileLoadPercentage = index / Patterns.length;
+			});
+			if(index + 1 != Patterns.length){
+				setTimeout(function(){ parsePattern(index + 1) }, 2); //give the browser time to keep the page running
 			}
-		});
-
+			else{
+				resolve("Done generating pattern link paragraphs");
+			}
+		}
+		parsePattern(0); //start the parsing
 	});
-	console.log("Done generating pattern link paragraphs")
 }
 
 function loadGames(){
