@@ -197,6 +197,10 @@ svg{
 	color: black;
 }
 
+.modal{
+	background: #0b0212c4;
+}
+
 #Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
 	color: var(--linkBlue);
 }
