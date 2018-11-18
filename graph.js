@@ -151,9 +151,22 @@ function generateGraph(data) {
 			return targetLink.parent().html();
 		}
 
+		function getPatternRelationsText(sourcePattern, targetPattern){
+			var relationsTexts = [];
+			sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations.forEach(function(relation, index){
+				relationsTexts.push('<span class="TooltipHighlighted">' + sourcePattern.Title + "</span> " + relation.toLowerCase() + ' <span class="TooltipHighlighted">' + targetPattern.Title + "</span>");
+			})
+			return relationsTexts.join('<br>');
+		}
+
+		//get all the relation texts
+		var relationTexts = [getPatternRelationsText(pattern1, pattern2), getPatternRelationsText(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<br>');
+
+		//get both possible sides of the relevent paragraphs, then remove any which are blank
+		var releventParagraphs = [getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
+
 		return(
-			//get both possible sides of the relevent paragraphs, then remove any which are blank
-			[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>')
+			[relationTexts, releventParagraphs].join('<hr>')
 		);
 	}
 }
