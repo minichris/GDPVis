@@ -88,8 +88,8 @@ function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a li
 	return outputPatterns;
 }
 
-function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to only ones that link to a specific game
-	var outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == inputGame));
+function pageFilter(inputPatterns, inputPage){ //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage)) || (pattern.Title == inputPage));
 	return outputPatterns;
 }
 
@@ -108,12 +108,16 @@ function performFiltering(inputPatterns){
 				console.log("Filtering output to only patterns which link to games in the subcategory: " + filter.Value);
 				break;
 			case "game":
-				outputPatterns = gameFilter(outputPatterns, filter.Value);
+				outputPatterns = pageFilter(outputPatterns, filter.Value);
 				console.log("Filtering output to only patterns which link to the game: " + filter.Value);
 				break;
 			case "count":
 				outputPatterns = outputPatterns.slice(0, filter.Value);
 				console.log("Filtering output to a count of: " + filter.Value);
+				break;
+			case "pattern_linked":
+				outputPatterns = pageFilter(outputPatterns, filter.Value);
+				console.log("Filtering output to only patterns which link to the pattern: " + filter.Value);
 				break;
 		}
 	});
