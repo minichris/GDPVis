@@ -64,24 +64,6 @@ function loadPatterns(){
 	return request;
 }
 
-function generatePatternLinkParagraphsFromPatterns(pattern1, pattern2){
-	function getPatternLinksHTML(sourcePattern, targetPattern){
-		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
-			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
-			var linksToTargetPattern = ($(linkDOM).text() == targetPattern.Title);
-			return linksToTargetPattern && afterRelations;
-		});
-		$(targetLink).parent().find("a").not(targetLink).contents().unwrap();
-		$(targetLink).addClass("TooltipHighlighted");
-		return targetLink.parent().html();
-	}
-
-	return(
-		//get both possible sides of the relevent paragraphs, then remove any which are blank
-		[getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; })
-	);
-}
-
 function loadGames(){
 	var request = loadViaAjax("AllGames.json");
 	request.done(function(data) {
