@@ -170,7 +170,8 @@ svg{
 }
 */
 .select2-results__option{
-	color:black;
+	color: black;
+	font-size: 12px;
 }
 
 #FiltersList > li{

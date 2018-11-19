@@ -93,6 +93,11 @@ function pageFilter(inputPatterns, inputPage){ //filters a list of patterns to o
 	return outputPatterns;
 }
 
+function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){ //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage && pLink.AssociatedRelations.some(relation => relation == relationString))));
+	return outputPatterns;
+}
+
 function performFiltering(inputPatterns){
 	var outputPatterns = inputPatterns; //outputPatterns is the list of patterns we will be operating on the most
 	var filtersValues = Filters; //gets the current filters from the GUI
@@ -118,6 +123,14 @@ function performFiltering(inputPatterns){
 			case "pattern_linked":
 				outputPatterns = pageFilter(outputPatterns, filter.Value);
 				console.log("Filtering output to only patterns which link to the pattern: " + filter.Value);
+				break;
+			case "conflicting":
+				outputPatterns = reverseRelationLookupFilter(outputPatterns, filter.Value, "Potentially Conflicting With");
+				console.log("Filtering output to only patterns which conflict with the pattern: " + filter.Value);
+				break;
+			case "closure_effects":
+				outputPatterns = relationFilter(outputPatterns, filter.Value, "Possible Closure Effects");
+				console.log("Filtering output to only patterns are closure effects of pattern: " + filter.Value);
 				break;
 		}
 	});
