@@ -77,6 +77,10 @@ function loadGames(){
 	return request;
 }
 
+function getPatternData(patternName){
+	return Patterns.find(pattern => pattern.Title == patternName);
+}
+
 function patternCategoryFilter(inputPatterns, inputPatternSubcategory){ //filters a list of patterns to only ones that are found in a pattern subcategory
 	var outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
 	return outputPatterns;
@@ -93,8 +97,16 @@ function pageFilter(inputPatterns, inputPage){ //filters a list of patterns to o
 	return outputPatterns;
 }
 
-function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){ //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){ //filters a list of patterns to only ones that link to a specific page with a relation
 	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage && pLink.AssociatedRelations.some(relation => relation == relationString))));
+	outputPatterns.push(Patterns.filter(pattern => pattern.Title == inputPage)[0]); //also include the original page
+	return outputPatterns;
+}
+
+function patternsLinkedToByPattern(inputPatterns, inputPattern){ //filters a list of patterns to only ones that come FROM a pattern page
+	var inputPatternObject = Patterns.filter(pattern => pattern.Title == inputPattern)[0];
+	var outputPatterns = inputPatterns.filter(pattern => inputPatternObject.PatternsLinks.map(pLink => pLink.To).includes(pattern.Title));
+	outputPatterns.push(inputPatternObject); //also include the original page
 	return outputPatterns;
 }
 
@@ -124,13 +136,13 @@ function performFiltering(inputPatterns){
 				outputPatterns = pageFilter(outputPatterns, filter.Value);
 				console.log("Filtering output to only patterns which link to the pattern: " + filter.Value);
 				break;
+			case "pattern_linked2":
+				outputPatterns = patternsLinkedToByPattern(outputPatterns, filter.Value);
+				console.log("Filtering output to only patterns which link from the pattern: " + filter.Value);
+				break;
 			case "conflicting":
 				outputPatterns = reverseRelationLookupFilter(outputPatterns, filter.Value, "Potentially Conflicting With");
 				console.log("Filtering output to only patterns which conflict with the pattern: " + filter.Value);
-				break;
-			case "closure_effects":
-				outputPatterns = relationFilter(outputPatterns, filter.Value, "Possible Closure Effects");
-				console.log("Filtering output to only patterns are closure effects of pattern: " + filter.Value);
 				break;
 		}
 	});

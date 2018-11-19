@@ -50,6 +50,10 @@ function OptionList(props) {
 			optionList.push({text: "", value: ""});
 			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
 			break;
+		case "pattern_linked2":
+			optionList.push({text: "", value: ""});
+			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
+			break;
 		case "conflicting":
 			optionList.push({text: "", value: ""});
 			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
@@ -79,9 +83,10 @@ class SingularFilter extends React.Component  {
 	render() {
 		let filterTypes = [
 			{text: "Patterns which link to Games in Category...", value: "game_category"},
-			{text: "Patterns which link to Patterns in Category", value: "pattern_category"},
+			{text: "Patterns in Category", value: "pattern_category"},
 			{text: "Patterns which link to Game...", value: "game"},
 			{text: "Patterns which link to Pattern...", value: "pattern_linked"},
+			{text: "Patterns which link from Pattern...", value: "pattern_linked2"},
 			{text: "Patterns which conflict with...", value: "conflicting"},
 			{text: "Max Count", value: "count"} ];
 		return (
