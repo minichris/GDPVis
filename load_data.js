@@ -77,6 +77,63 @@ function loadGames(){
 	return request;
 }
 
+//Give a page title, find the type of the page
+function getPageType(pageTitle){
+	if(Patterns.find(pattern => pattern.Title == pageTitle) != null){
+		return "Pattern";
+	}
+	if(Games.find(game => game.name == pageTitle) != null){
+		return "Game";
+	}
+	if(PatternCategories.find(pageTitle)){
+		return "Pattern Category";
+	}
+	if(GameCategories.find(pageTitle)){
+		return "Game Category";
+	}
+	return "Other";
+}
+
+function generateReleventFilters(pageTitle){
+	//get the currently filtered patterns
+	var currentlyFilteredPatterns = performFiltering(Patterns);
+	//check if the page we are looking for is in the current patterns
+	if(currentlyFilteredPatterns.find(fPattern => fPattern.Title == pageTitle)){
+		return Filters; //just return the current filters, unchanged
+	}
+	else{ //the pattern isn't in the current list of patterns
+		switch(getPageType(pageTitle)){
+			case "Pattern":
+				return([
+					{Type: "pattern_linked", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Game":
+				return([
+					{Type: "game", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Pattern Category":
+				return([
+					{Type: "pattern_category", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+			break;
+			case "Game Category":
+				return([
+					{Type: "game_category", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Other":
+				return Filters; //just return the current filters, unchanged
+			break;
+		}
+	}
+}
+
 function getPatternData(patternName){
 	return Patterns.find(pattern => pattern.Title == patternName);
 }
@@ -193,7 +250,9 @@ if(urlParams.has('filters')) { //if the url has filters in the GET request
 	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
 }
 else {
-	Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}]; //set example filters
+	//set example filters
+	Filters = [{Type: "game", Value: "World of Warcraft"},
+	{Type: "pattern_category", Value: "Negative Patterns"}];
 }
 
 function setWindowHistory(filters){
