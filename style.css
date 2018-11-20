@@ -133,7 +133,7 @@ iframe, .insertedPage{
 	background: var(--bgColor);
 	flex: 2 1 300px;
 	overflow-y: scroll;
-  height: auto;
+	max-height: 468px;
 }
 
 svg{

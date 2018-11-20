@@ -85,52 +85,58 @@ function getPageType(pageTitle){
 	if(Games.find(game => game.name == pageTitle) != null){
 		return "Game";
 	}
-	if(PatternCategories.find(pageTitle)){
+	//pattern category names may contain this string, remove it before next tests, but not before
+	pageTitle = pageTitle.replace('Category:', '');
+	if(PatternCategories.find(cat => cat == pageTitle) != null){
 		return "Pattern Category";
 	}
-	if(GameCategories.find(pageTitle)){
+	if(GameCategories.find(cat => cat == pageTitle) != null){
 		return "Game Category";
 	}
 	return "Other";
 }
 
-function generateReleventFilters(pageTitle){
+function checkPatternCurrentlyFiltered(patternName){
 	//get the currently filtered patterns
 	var currentlyFilteredPatterns = performFiltering(Patterns);
 	//check if the page we are looking for is in the current patterns
-	if(currentlyFilteredPatterns.find(fPattern => fPattern.Title == pageTitle)){
-		return Filters; //just return the current filters, unchanged
-	}
-	else{ //the pattern isn't in the current list of patterns
-		switch(getPageType(pageTitle)){
-			case "Pattern":
+	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
+}
+
+function generateReleventFilters(pageTitle){
+	switch(getPageType(pageTitle)){
+		case "Pattern":
+			if(checkPatternCurrentlyFiltered(pageTitle)){ //if the pattern is currently visable
+				return Filters; //just return the current filters, unchanged
+			}
+			else{ //if the pattern isn't currently visable
 				return([
 					{Type: "pattern_linked", Value: pageTitle},
 					{Type: "count", Value: 50}
 				]);
-				break;
-			case "Game":
-				return([
-					{Type: "game", Value: pageTitle},
-					{Type: "count", Value: 50}
-				]);
-				break;
-			case "Pattern Category":
-				return([
-					{Type: "pattern_category", Value: pageTitle},
-					{Type: "count", Value: 50}
-				]);
+			}
 			break;
-			case "Game Category":
-				return([
-					{Type: "game_category", Value: pageTitle},
-					{Type: "count", Value: 50}
-				]);
-				break;
-			case "Other":
-				return Filters; //just return the current filters, unchanged
+		case "Game":
+			return([
+				{Type: "game", Value: pageTitle},
+				{Type: "count", Value: 50}
+			]);
 			break;
-		}
+		case "Pattern Category":
+			return([
+				{Type: "pattern_category", Value: pageTitle},
+				{Type: "count", Value: 50}
+			]);
+		break;
+		case "Game Category":
+			return([
+				{Type: "game_category", Value: pageTitle},
+				{Type: "count", Value: 50}
+			]);
+			break;
+		case "Other":
+			return Filters; //just return the current filters, unchanged
+		break;
 	}
 }
 
