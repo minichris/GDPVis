@@ -38,14 +38,6 @@ function applyFilters(){ //a function to decide wether to ask the user if they w
 	}
 }
 
-var Filters;
-var urlParams = new URLSearchParams( new URL(window.location).search);
-if(urlParams.has('filters')) { //if the url has filters in the GET request
-	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
-}
-else {
-	Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}]; //set example filters
-}
 var filterlistComponent;
 
 function OptionList(props) {
@@ -53,6 +45,18 @@ function OptionList(props) {
 	switch(props.filtertype){
 		case "count":
 			optionList.push({text: "50", value: 50});
+			break;
+		case "pattern_linked":
+			optionList.push({text: "", value: ""});
+			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
+			break;
+		case "pattern_linked2":
+			optionList.push({text: "", value: ""});
+			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
+			break;
+		case "conflicting":
+			optionList.push({text: "", value: ""});
+			Patterns.map(pattern => optionList.push({text: pattern.Title, value: pattern.Title}));
 			break;
 		case "pattern_category":
 			optionList.push({text: "", value: ""});
@@ -77,7 +81,14 @@ class SingularFilter extends React.Component  {
 	}
 
 	render() {
-		let filterTypes = [ {text: "Game Category", value: "game_category"},	{text: "Pattern Category", value: "pattern_category"}, {text: "Game", value: "game"}, {text: "Max Count", value: "count"} ];
+		let filterTypes = [
+			{text: "Patterns which link to Games in Category...", value: "game_category"},
+			{text: "Patterns in Category", value: "pattern_category"},
+			{text: "Patterns which link to Game...", value: "game"},
+			{text: "Patterns which link to Pattern...", value: "pattern_linked"},
+			{text: "Patterns which link from Pattern...", value: "pattern_linked2"},
+			{text: "Patterns which conflict with...", value: "conflicting"},
+			{text: "Max Count", value: "count"} ];
 		return (
 			<li data-index={this.props.index}>
 				<select ref="FilterTypeSelect" value={this.props.type} className="FilterTypeSelect" placeholder="Select a filter type..." onChange={this.props.handleFilterTypeChange}>

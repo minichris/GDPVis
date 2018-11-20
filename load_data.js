@@ -77,6 +77,67 @@ function loadGames(){
 	return request;
 }
 
+//Give a page title, find the type of the page
+function getPageType(pageTitle){
+	if(Patterns.find(pattern => pattern.Title == pageTitle) != null){
+		return "Pattern";
+	}
+	if(Games.find(game => game.name == pageTitle) != null){
+		return "Game";
+	}
+	if(PatternCategories.find(pageTitle)){
+		return "Pattern Category";
+	}
+	if(GameCategories.find(pageTitle)){
+		return "Game Category";
+	}
+	return "Other";
+}
+
+function generateReleventFilters(pageTitle){
+	//get the currently filtered patterns
+	var currentlyFilteredPatterns = performFiltering(Patterns);
+	//check if the page we are looking for is in the current patterns
+	if(currentlyFilteredPatterns.find(fPattern => fPattern.Title == pageTitle)){
+		return Filters; //just return the current filters, unchanged
+	}
+	else{ //the pattern isn't in the current list of patterns
+		switch(getPageType(pageTitle)){
+			case "Pattern":
+				return([
+					{Type: "pattern_linked", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Game":
+				return([
+					{Type: "game", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Pattern Category":
+				return([
+					{Type: "pattern_category", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+			break;
+			case "Game Category":
+				return([
+					{Type: "game_category", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+				break;
+			case "Other":
+				return Filters; //just return the current filters, unchanged
+			break;
+		}
+	}
+}
+
+function getPatternData(patternName){
+	return Patterns.find(pattern => pattern.Title == patternName);
+}
+
 function patternCategoryFilter(inputPatterns, inputPatternSubcategory){ //filters a list of patterns to only ones that are found in a pattern subcategory
 	var outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
 	return outputPatterns;
@@ -88,8 +149,21 @@ function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a li
 	return outputPatterns;
 }
 
-function gameFilter(inputPatterns, inputGame){ //filters a list of patterns to only ones that link to a specific game
-	var outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == inputGame));
+function pageFilter(inputPatterns, inputPage){ //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage)) || (pattern.Title == inputPage));
+	return outputPatterns;
+}
+
+function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){ //filters a list of patterns to only ones that link to a specific page with a relation
+	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage && pLink.AssociatedRelations.some(relation => relation == relationString))));
+	outputPatterns.push(Patterns.filter(pattern => pattern.Title == inputPage)[0]); //also include the original page
+	return outputPatterns;
+}
+
+function patternsLinkedToByPattern(inputPatterns, inputPattern){ //filters a list of patterns to only ones that come FROM a pattern page
+	var inputPatternObject = Patterns.filter(pattern => pattern.Title == inputPattern)[0];
+	var outputPatterns = inputPatterns.filter(pattern => inputPatternObject.PatternsLinks.map(pLink => pLink.To).includes(pattern.Title));
+	outputPatterns.push(inputPatternObject); //also include the original page
 	return outputPatterns;
 }
 
@@ -108,12 +182,24 @@ function performFiltering(inputPatterns){
 				console.log("Filtering output to only patterns which link to games in the subcategory: " + filter.Value);
 				break;
 			case "game":
-				outputPatterns = gameFilter(outputPatterns, filter.Value);
+				outputPatterns = pageFilter(outputPatterns, filter.Value);
 				console.log("Filtering output to only patterns which link to the game: " + filter.Value);
 				break;
 			case "count":
 				outputPatterns = outputPatterns.slice(0, filter.Value);
 				console.log("Filtering output to a count of: " + filter.Value);
+				break;
+			case "pattern_linked":
+				outputPatterns = pageFilter(outputPatterns, filter.Value);
+				console.log("Filtering output to only patterns which link to the pattern: " + filter.Value);
+				break;
+			case "pattern_linked2":
+				outputPatterns = patternsLinkedToByPattern(outputPatterns, filter.Value);
+				console.log("Filtering output to only patterns which link from the pattern: " + filter.Value);
+				break;
+			case "conflicting":
+				outputPatterns = reverseRelationLookupFilter(outputPatterns, filter.Value, "Potentially Conflicting With");
+				console.log("Filtering output to only patterns which conflict with the pattern: " + filter.Value);
 				break;
 		}
 	});
@@ -164,7 +250,9 @@ if(urlParams.has('filters')) { //if the url has filters in the GET request
 	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
 }
 else {
-	Filters = [{Type: "game", Value: "World of Warcraft"}, {Type: "pattern_category", Value: "Negative Patterns"}]; //set example filters
+	//set example filters
+	Filters = [{Type: "game", Value: "World of Warcraft"},
+	{Type: "pattern_category", Value: "Negative Patterns"}];
 }
 
 function setWindowHistory(filters){

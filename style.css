@@ -1,5 +1,4 @@
 .links line {
-	stroke: #999;
 	stroke-opacity: 0.5;
 	stroke-width: 1.5px;
 }
@@ -184,7 +183,8 @@ svg{
 }
 */
 .select2-results__option{
-	color:black;
+	color: black;
+	font-size: 12px;
 }
 
 #FiltersList > li{

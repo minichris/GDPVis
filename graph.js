@@ -34,6 +34,9 @@ function generateGraph(data) {
 		.enter().append("line")
 		.attr("stroke-width", function(d) {
 			return Math.sqrt(d.value);
+		})
+		.attr("stroke", function(d) {
+			return generateLinkColor(d);
 		});
 
 	var node = root.append("g")
@@ -151,16 +154,14 @@ function generateGraph(data) {
 			return targetLink.parent().html();
 		}
 
-		function getPatternRelationsText(sourcePattern, targetPattern){
-			var relationsTexts = [];
-			sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations.forEach(function(relation, index){
-				relationsTexts.push('<span class="TooltipHighlighted">' + sourcePattern.Title + "</span> " + relation.toLowerCase() + ' <span class="TooltipHighlighted">' + targetPattern.Title + "</span>");
-			})
-			return relationsTexts.join('<br>');
+		function formatRelationTexts(sourcePattern, targetPattern){
+			return getPatternRelationsText(sourcePattern, targetPattern).map(function(relation){
+				return '<span class="TooltipHighlighted">' + sourcePattern.Title + "</span> " + relation.toLowerCase() + ' <span class="TooltipHighlighted">' + targetPattern.Title + "</span>";
+			}).join('<br>');
 		}
 
 		//get all the relation texts
-		var relationTexts = [getPatternRelationsText(pattern1, pattern2), getPatternRelationsText(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<br>');
+		var relationTexts = [formatRelationTexts(pattern1, pattern2), formatRelationTexts(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<br>');
 
 		//get both possible sides of the relevent paragraphs, then remove any which are blank
 		var releventParagraphs = [getPatternLinksHTML(pattern1, pattern2), getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
@@ -168,6 +169,30 @@ function generateGraph(data) {
 		return(
 			[relationTexts, releventParagraphs].join('<hr>')
 		);
+	}
+
+	function generateLinkColor(link){
+		function checkForRelation(relation){
+			return(
+				getPatternRelationsText(getPatternData(link.source), getPatternData(link.target)).includes(relation) ||
+				getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
+			);
+		}
+
+		if(checkForRelation("Potentially Conflicting With")){
+			return "yellow"; //if it is conflicting
+		}
+		else{
+			return "#999"; //regular gray if it doesn't
+		}
+	}
+
+	function getPatternRelationsText(sourcePattern, targetPattern){ //get the relation between a pattern
+		var relationsTexts = [];
+		if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
+			relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations;
+		}
+		return relationsTexts;
 	}
 }
 
