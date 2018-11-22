@@ -23,6 +23,7 @@ $(function(){ //Set up button bindings
 		$("#TooManyDialogModal").hide();
 		Filters.push({Type: "count", Value: 50});
 		filterlistComponent.setState({filters: Filters});
+		filterlistComponent.forceUpdate();
 		refreshGraph(performFiltering(Patterns));
 	});
 });
@@ -95,7 +96,7 @@ class SingularFilter extends React.Component  {
 					{filterTypes.map(filterType => <option key={filterType.value} value={filterType.value}>{filterType.text}</option>)}
 				</select>
 				<select ref="FilterValue" value={this.props.value} className="FilterValue" placeholder="Select a filter..." onChange={this.props.handleFilterValueChange}>
-					<OptionList filtertype={this.props.type} />
+					<OptionList index={this.props.type} filtertype={this.props.type} />
 				</select>
 				<button className="DeleteFilter btn btn-danger" onClick={this.props.handleDeleteButton}>X</button>
 			</li>

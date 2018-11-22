@@ -124,13 +124,13 @@ function generateReleventFilters(pageTitle){
 			break;
 		case "Pattern Category":
 			return([
-				{Type: "pattern_category", Value: pageTitle},
+				{Type: "pattern_category", Value: pageTitle.replace('Category:', '')},
 				{Type: "count", Value: 50}
 			]);
 		break;
 		case "Game Category":
 			return([
-				{Type: "game_category", Value: pageTitle},
+				{Type: "game_category", Value: pageTitle.replace('Category:', '')},
 				{Type: "count", Value: 50}
 			]);
 			break;
