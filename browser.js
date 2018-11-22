@@ -1,5 +1,6 @@
 //function for creating a document browser
 function CreateDocumentViewer(pageTitle){
+    ReactDOM.unmountComponentAtNode(document.getElementById('DocumentViewer'));
 	$("#DocumentViewer").html('<div class="insertedPage"></div>');
 	$("#DocumentViewer").addClass("HasInsertedPage");
     console.log("Creating a document viewer for page '" + pageTitle + "'");
@@ -7,7 +8,7 @@ function CreateDocumentViewer(pageTitle){
         case "Pattern Category":
         case "Game Category":
             console.log("Attempting to add a game category page to the document browser");
-            ReactDOM.render(<GameCategoryPage category={pageTitle.replace('Category:', '')}/>, document.getElementById('DocumentViewer'));
+            ReactDOM.render(<CategoryPage category={pageTitle.replace('Category:', '')}/>, document.getElementById('DocumentViewer'));
             break;
         default:
         	$(".insertedPage").html(Patterns.find(pattern => pattern.Title == pageTitle).Content);
@@ -43,12 +44,21 @@ function DocumentViewerEventHandler(e){
 	filterlistComponent.forceUpdate();
 }
 
-function GameCategoryPage(props){
-    function getGamesInCategory(searchCategory){
-        return Games.filter(game => game.categories.some(cat => cat == searchCategory));
+function CategoryPage(props){
+    let pageTitlesInCategory = []; //generic array to hold all the page titles
+    //we KNOW it has to be one of the two types of category page
+    switch(getPageType(props.category)){
+        case "Pattern Category":
+            pageTitlesInCategory = patternCategoryFilter(Patterns, props.category).map(pattern => pattern.Title);
+            break;
+        case "Game Category":
+            pageTitlesInCategory = Games.filter(game => game.categories.some(cat => cat == props.category)).map(game => game.name);
+            break;
     }
-    let gamesNames =  getGamesInCategory(props.category).map(game => game.name);
     return(
-        <div className="insertedPage"><h1>{props.category}</h1><ul>{gamesNames.map((gameName) => <li>{gameName}</li>)}</ul></div>
+        <div className="insertedPage">
+            <h1>{props.category}</h1>
+            <ul>{pageTitlesInCategory.map((title) => <li key={title}>{title}</li>)}</ul>
+        </div>
     );
 }
