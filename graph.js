@@ -67,7 +67,7 @@ function generateGraph(data) {
       tooltip.transition().duration(500).style("opacity", 0);
     })
 		.on("click", function(d) { //Click to open the relevent article
-			ChangeSelection(d.id);
+			ChangePatternSelection(d.id);
 		});
 
 	link.on("mouseover", function(d) {
@@ -198,14 +198,14 @@ function generateGraph(data) {
 
 $('#SearchSelect').change(function(){
 	if($('#SearchSelect').val() != undefined){
-		ChangeSelection($('#SearchSelect').val());
+		ChangePatternSelection($('#SearchSelect').val());
 	}
 });
 
 //function which handles changing the currently selected pattern
-function ChangeSelection(newSelectionID){
-	//handle the document viewer
-	CreateDocumentViewer(newSelectionID);
+function ChangePatternSelection(newSelectionID){
+	//handle the document DocumentViewer
+	CreateDocumentViewer(newSelectionID)
 
 	//handle the search box
 	if($('#SearchSelect').val() != newSelectionID){
