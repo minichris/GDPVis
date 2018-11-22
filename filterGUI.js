@@ -22,7 +22,7 @@ $(function(){ //Set up button bindings
 	$("#TooManyOkButton").click(function(){ //adding a limiter to the filters
 		$("#TooManyDialogModal").hide();
 		Filters.push({Type: "count", Value: 50});
-		filterlistComponent.forceUpdate();
+		filterlistComponent.setState({filters: Filters});
 		refreshGraph(performFiltering(Patterns));
 	});
 });
@@ -71,7 +71,7 @@ function OptionList(props) {
 			Games.map(game => optionList.push({text: game.name, value: game.name}));
 			break;
 	}
-	return optionList.map(option => <option key={option.value} value={option.value}>{option.text}</option>);
+	return optionList.map(option => <option key={option.value + option.text} value={option.value}>{option.text}</option>);
 }
 
 class SingularFilter extends React.Component  {
@@ -119,7 +119,7 @@ class FilterList extends React.Component {
 		});
 	}
 
-  handleFilterTypeChange(event) {
+	handleFilterTypeChange(event) {
 		let currentFilters = this.state.filters;
 		currentFilters[event.target.parentElement.dataset.index] = {
 			Type: event.target.value,
@@ -128,7 +128,7 @@ class FilterList extends React.Component {
 		this.setState({
 			filters: currentFilters
 		});
-  }
+	}
 
 	handleFilterValueChange(event) {
 		let currentFilters = this.state.filters;
@@ -144,7 +144,7 @@ class FilterList extends React.Component {
 	render() {
 		const filterlistRef = React.createRef();
 		return(
-			this.state.filters.map((filter, index) => <SingularFilter parentref={filterlistRef} index={index} key={index} type={filter.Type} value={filter.Value} handleDeleteButton={this.handleDeleteButton.bind(this)} handleFilterTypeChange={this.handleFilterTypeChange.bind(this)} handleFilterValueChange={this.handleFilterValueChange.bind(this)} />)
+			this.state.filters.map((filter, index) => <SingularFilter parentref={filterlistRef} index={index} key={filter.Type + filter.Value} type={filter.Type} value={filter.Value} handleDeleteButton={this.handleDeleteButton.bind(this)} handleFilterTypeChange={this.handleFilterTypeChange.bind(this)} handleFilterValueChange={this.handleFilterValueChange.bind(this)} />)
 		);
 	}
 

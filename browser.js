@@ -24,5 +24,6 @@ function DocumentViewerEventHandler(e){
 	if(checkPatternCurrentlyFiltered(linkClicked)){
 		ChangeSelection(linkClicked); //select the pattern
 	}
+    filterlistComponent.setState({filters: Filters});
 	filterlistComponent.forceUpdate();
 }
