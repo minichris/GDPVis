@@ -77,7 +77,7 @@ function OptionList(props) {
 
 class SingularFilter extends React.Component  {
 	componentDidMount() {
-  	$(this.refs["FilterTypeSelect"]).select2().on("change", this.props.handleFilterTypeChange);
+  		$(this.refs["FilterTypeSelect"]).select2().on("change", this.props.handleFilterTypeChange);
 		$(this.refs["FilterValue"]).select2().on("change", this.props.handleFilterValueChange);
 	}
 

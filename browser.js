@@ -10,11 +10,13 @@ function CreateDocumentViewer(pageTitle){
             console.log("Attempting to add a game category page to the document browser");
             ReactDOM.render(<CategoryPage category={pageTitle.replace('Category:', '')}/>, document.getElementById('DocumentViewer'));
             break;
+        case "Game":
+            ReactDOM.render(<GamePage game={pageTitle}/>, document.getElementById('DocumentViewer'));
         default:
         	$(".insertedPage").html(Patterns.find(pattern => pattern.Title == pageTitle).Content);
             break;
     }
-	$("#DocumentViewer").scrollTop(0); //scroll it back to the top for the user
+	//$("#DocumentViewer").scrollTop(0); //scroll it back to the top for the user
 	document.getElementById("DocumentViewer").scrollTop = 0;
 	$("#DocumentViewer").find("a[href]").click(function(e){
 		DocumentViewerEventHandler(e);
@@ -56,9 +58,44 @@ function CategoryPage(props){
             break;
     }
     return(
-        <div className="insertedPage">
+        <div className="insertedPage CategoryPage">
             <h1>{props.category}</h1>
-            <ul>{pageTitlesInCategory.map((title) => <li key={title}>{title}</li>)}</ul>
+            <ul>{pageTitlesInCategory.map((title) =>
+                <li key={title}>
+                    <a title={title} href={'http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_')}>{title}</a>
+                </li>)}
+            </ul>
         </div>
     );
+}
+
+class GamePage extends React.Component  {
+    componentDidMount() {
+        $("#DocumentViewer").find("a[href]").click(function(e){
+    		DocumentViewerEventHandler(e);
+    	});
+    }
+
+    getPatternLink(title){
+        return ('http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_'));
+    }
+
+    render() {
+        var game = Games.find(game => game.name == this.props.game);
+        var gamePatterns = pageFilter(Patterns, game.name);
+
+        return(
+            <div className="insertedPage GamePage">
+                <h1>{game.name}</h1>
+                <h2>About</h2>
+                <p>[insert info here]</p>
+                <h2>Gameplay</h2>
+                {gamePatterns.map((pattern) =>
+                    <li key={pattern.Title}>
+                        <a title={pattern.Title} href={this.getPatternLink(pattern.Title)}>{pattern.Title}</a>
+                    </li>
+                )}
+            </div>
+        );
+    }
 }
