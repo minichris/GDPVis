@@ -132,7 +132,7 @@ iframe, .insertedPage{
 #Content > .HasInsertedPage#DocumentViewer{
 	background: var(--bgColor);
 	flex: 2 1 300px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	max-height: 468px;
 }
 

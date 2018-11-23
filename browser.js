@@ -36,6 +36,9 @@ class DocumentViewer extends React.Component{
             case "Pattern":
                 pageToRender = <PatternPage title={pageTitle}/>;
                 break;
+            case "Special":
+                pageToRender = <SpecialPage title={pageTitle}/>;
+                break;
         }
         return(pageToRender);
     }
@@ -157,6 +160,31 @@ class PatternPage extends React.Component {
                     <h1>Error :(</h1>
                     <p>There was an error getting this pattern page.
                     If you know this page exists on the Gameplay Design Pattern Wiki, please report this to an administrator.</p>
+                </div>
+            );
+        }
+    }
+}
+
+class SpecialPage extends React.Component {
+    render(){
+        if(this.props.title == "Special:VGTropes"){ //if this is the starting page
+            return(
+                <div className="insertedPage SpecialPage">
+                    <h1>Welcome to VGTropes</h1>
+                    <p>
+                    VGTropes is a visualization tool built on top of the GameDesignPatterns.org wiki.
+                    It can help you browse the collection of patterns, analysis games, contribute to the wiki, and much more.
+                    To get started, why not try looking at the <a href="javascript:void(0)" title="Category:Patterns">Patterns category</a> for some inspiration,
+                    or try filtering the patterns shown by clicking the "Filters" button in the graph view, or just clicking a node in the graph. 
+                    </p>
+                </div>
+            );
+        }
+        else{
+            return(
+                <div className="insertedPage SpecialPage">
+                    <h1>Error: Not all special pages are supported, yet.</h1>
                 </div>
             );
         }

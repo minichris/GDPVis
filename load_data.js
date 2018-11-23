@@ -79,6 +79,9 @@ function loadGames(){
 
 //Give a page title, find the type of the page
 function getPageType(pageTitle){
+	if(pageTitle.includes("Special:")){
+		return "Special";
+	}
 	if(Patterns.find(pattern => pattern.Title == pageTitle) != null){
 		return "Pattern";
 	}
@@ -135,6 +138,7 @@ function generateReleventFilters(pageTitle){
 			]);
 			break;
 		case "Other":
+		case "Special":
 			return Filters; //just return the current filters, unchanged
 		break;
 	}

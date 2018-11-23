@@ -204,6 +204,7 @@ $('#SearchSelect').change(function(){
 
 
 var docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
+docViewerComponent.setState({title: "Special:VGTropes"});
 
 //function which handles changing the currently selected pattern
 function ChangePatternSelection(newSelectionID){
