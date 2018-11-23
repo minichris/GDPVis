@@ -202,10 +202,13 @@ $('#SearchSelect').change(function(){
 	}
 });
 
+
+var docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
+
 //function which handles changing the currently selected pattern
 function ChangePatternSelection(newSelectionID){
 	//handle the document DocumentViewer
-	CreateDocumentViewer(newSelectionID)
+	docViewerComponent.setState({title: newSelectionID});
 
 	//handle the search box
 	if($('#SearchSelect').val() != newSelectionID){

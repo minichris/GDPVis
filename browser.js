@@ -1,26 +1,44 @@
 //function for creating a document browser
-function CreateDocumentViewer(pageTitle){
-    ReactDOM.unmountComponentAtNode(document.getElementById('DocumentViewer'));
-	$("#DocumentViewer").html('<div class="insertedPage"></div>');
-	$("#DocumentViewer").addClass("HasInsertedPage");
-    console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle));
-    switch(getPageType(pageTitle)){
-        case "Pattern Category":
-        case "Game Category":
-            ReactDOM.render(<CategoryPage title={pageTitle.replace('Category:', '')}/>, document.getElementById('DocumentViewer'));
-            break;
-        case "Game":
-            ReactDOM.render(<GamePage title={pageTitle}/>, document.getElementById('DocumentViewer'));
-            break;
-        case "Pattern":
-        	ReactDOM.render(<PatternPage title={pageTitle}/>, document.getElementById('DocumentViewer'));
-            break;
+class DocumentViewer extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            title: null
+        };
     }
-	//$("#DocumentViewer").scrollTop(0); //scroll it back to the top for the user
-	document.getElementById("DocumentViewer").scrollTop = 0;
-	$("#DocumentViewer").find("a[href]").click(function(e){
-		DocumentViewerEventHandler(e);
-	});
+
+    componentDidMount(){
+        $("#DocumentViewer").addClass("HasInsertedPage");
+    }
+
+    componentDidUpdate(){
+        document.getElementById("DocumentViewer").scrollTop = 0;
+    	$("#DocumentViewer").find("a[href]").click(function(e){
+    		DocumentViewerEventHandler(e);
+    	});
+    }
+
+    render(){
+        let pageTitle = this.state.title;
+        if(pageTitle == null){
+            return(<div><h1>Error</h1><p>Null browser set up</p></div>);
+        }
+        console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle));
+        let pageToRender;
+        switch(getPageType(pageTitle)){
+            case "Pattern Category":
+            case "Game Category":
+                pageToRender = <CategoryPage title={pageTitle.replace('Category:', '')}/>;
+                break;
+            case "Game":
+                pageToRender = <GamePage title={pageTitle}/>;
+                break;
+            case "Pattern":
+                pageToRender = <PatternPage title={pageTitle}/>;
+                break;
+        }
+        return(pageToRender);
+    }
 }
 
 //function for handling link clicks in the document browser
@@ -44,7 +62,7 @@ function DocumentViewerEventHandler(e){
     	}
         else{
             //handle the document viewer
-            CreateDocumentViewer(linkClicked);
+            docViewerComponent.setState({title: linkClicked});
         }
         filterlistComponent.setState({filters: Filters});
     	filterlistComponent.forceUpdate();
@@ -78,12 +96,6 @@ class CategoryPage extends React.Component{
 }
 
 class GamePage extends React.Component {
-    componentDidMount() {
-        $("#DocumentViewer").find("a[href]").click(function(e){
-    		DocumentViewerEventHandler(e);
-    	});
-    }
-
     getPatternLink(title){
         return ('http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_'));
     }
