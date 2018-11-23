@@ -231,9 +231,11 @@ svg{
 	height: 100px;
 	background: var(--bgColor2);
 	border: 2px solid white;
-	flex: 1 0 auto;
 	margin: 8px;
 	border-radius: 8px;
+    padding: 4px;
+	font-size: small;
+	word-break: break-word;
 }
 
 .CategoryPage > #CatListBox{

@@ -100,20 +100,41 @@ class GamePage extends React.Component {
         return ('http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_'));
     }
 
+    getPatternsReasons(game){
+        var gamePatterns = pageFilter(Patterns, game.name);
+        var releventParagraphs = [];
+        gamePatterns.forEach(function(pattern){
+            let parser = new DOMParser();
+            let xmlObject = parser.parseFromString(pattern.Content, "text/xml");
+            $(xmlObject).find("#mw-content-text").find("p").each(function(){
+                if($(this).text().includes(game.name)){
+                    releventParagraphs.push({
+                        pattern: pattern.Title,
+                        reason: "Reasoning: " + $(this).text().replace(game.name, '<b>' + game.name + '</b>')
+                    });
+                }
+            });
+        });
+        return releventParagraphs;
+    }
+
     render() {
         var game = Games.find(game => game.name == this.props.title);
-        var gamePatterns = pageFilter(Patterns, game.name);
+        var gamePatternsWithReasons = this.getPatternsReasons(game);
 
         return(
             <div className="insertedPage GamePage">
                 <h1>{game.name}</h1>
                 <h2>About</h2>
                 <p>[insert info here]</p>
-                <h2>Gameplay</h2>
-                {gamePatterns.map((pattern) =>
-                    <li key={pattern.Title}>
-                        <a title={pattern.Title} href={this.getPatternLink(pattern.Title)}>{pattern.Title}</a>
-                    </li>
+                <h2>Gameplay Patterns Used</h2>
+                <i>Note: this section is automatically generated from parts of pattern pages on the wiki. It can contain examples which aren't relevent to this game. Read with caution.</i>
+                {gamePatternsWithReasons.map((patternreason) =>
+                    <div key={patternreason.pattern + "listObject"}>
+                        <h3>{patternreason.pattern}</h3>
+                        <p dangerouslySetInnerHTML={{__html: patternreason.reason}}></p>
+                        <a title={patternreason.pattern} href={this.getPatternLink(patternreason.pattern)}>Continue reading about "{patternreason.pattern}"...</a>
+                    </div>
                 )}
             </div>
         );
