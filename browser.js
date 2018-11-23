@@ -85,11 +85,11 @@ class CategoryPage extends React.Component{
         return(
             <div className="insertedPage CategoryPage">
                 <h1>{categoryTitle}</h1>
-                <ul>{pageTitlesInCategory.map((title) =>
-                    <li key={title}>
-                        <a title={title} href={'http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_')}>{title}</a>
-                    </li>)}
-                </ul>
+                <div id="CatListBox">
+                {pageTitlesInCategory.map((title) =>
+                    <a key={title} title={title} href={'http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_')}>{title}</a>
+                )}
+                </div>
             </div>
         );
     }

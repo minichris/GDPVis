@@ -224,3 +224,19 @@ svg{
 	margin-top: 0.5rem;
 	margin-bottom: 0.5rem;
 }
+
+.CategoryPage > #CatListBox > a{
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	background: var(--bgColor2);
+	border: 2px solid white;
+	flex: 1 0 auto;
+	margin: 8px;
+	border-radius: 8px;
+}
+
+.CategoryPage > #CatListBox{
+	flex-wrap: wrap;
+	display: flex;
+}
