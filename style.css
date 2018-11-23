@@ -39,6 +39,7 @@ body {
 	background: var(--bgColor);
 	margin: 8px;
 	color: var(--textColor);
+	overflow: hidden;
 }
 
 header{
