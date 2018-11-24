@@ -39,7 +39,7 @@ body {
 	background: var(--bgColor);
 	margin: 8px;
 	color: var(--textColor);
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 header{
@@ -134,7 +134,7 @@ iframe, .insertedPage{
 	background: var(--bgColor);
 	flex: 2 1 300px;
 	overflow-y: auto;
-	max-height: 468px;
+	height: 468px;
 }
 
 svg{
