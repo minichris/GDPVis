@@ -2,14 +2,15 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
+var docViewerComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
-
+	docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
 	requiredDataLoadedPromise.then(function() {
+		loadFiltersorDefaults();
 		bindFilters();
 		applyFilters();
-
 		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
@@ -22,7 +23,7 @@ function refreshGraph(filteredPatterns){
 		nodes: createNodesObject(filteredPatterns),
 		links: createLinksObject(filteredPatterns)
 	});
-	setWindowHistory(Filters);
+	setWindowHistory(docViewerComponent.state.title);
 }
 
 function loadMessageUpdater(){
@@ -255,21 +256,25 @@ function createLinksObject(patterns){
 //The following section controls the saving and loading filters from the URL
 //-------------------------------------------------------------------------
 var Filters;
-var urlParams = new URLSearchParams( new URL(window.location).search);
-if(urlParams.has('filters')) { //if the url has filters in the GET request
-	Filters = JSON.parse(atob(urlParams.get('filters'))); //parse the filters
-}
-else {
-	//set example filters
-	Filters = [{Type: "game", Value: "World of Warcraft"},
-	{Type: "pattern_category", Value: "Negative Patterns"}];
+function loadFiltersorDefaults(){
+	var urlParams = new URLSearchParams( new URL(window.location).search);
+	if(urlParams.has('data')) { //if the url has filters in the GET request
+		Filters = JSON.parse(atob(urlParams.get('data')))["filters"]; //parse the filters
+		let pageToDisplay = JSON.parse(atob(urlParams.get('data')))["currentPage"];
+		docViewerComponent.setState({title: pageToDisplay});
+	}
+	else {
+		//set example filters
+		Filters = [{Type: "game", Value: "World of Warcraft"},
+		{Type: "pattern_category", Value: "Negative Patterns"}];
+	}
 }
 
-function setWindowHistory(filters){
-	let encoded = btoa(JSON.stringify(filters));
-	//encoded = [];
-	//filters.forEach((filter, index) => encoded.push(index + "=" + filter.Type + "," + filter.Value));
-	//encoded.join('&');
-	//window.history.pushState('VGTropes', 'VGTropes', '?' + encoded);
-	window.history.pushState('VGTropes', 'VGTropes', '?filters=' + encoded);
+function setWindowHistory(currentPage){
+	let saveData = {
+		filters: Filters, //current filters
+		currentPage: currentPage //current browser page
+	}
+	let encoded = btoa(JSON.stringify(saveData));
+	window.history.pushState('VGTropes', 'VGTropes', '?data=' + encoded);
 }

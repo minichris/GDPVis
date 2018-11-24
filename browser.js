@@ -3,7 +3,7 @@ class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            title: null
+            title: "Special:VGTropes"
         };
     }
 
@@ -16,6 +16,7 @@ class DocumentViewer extends React.Component{
     	$("#DocumentViewer").find("a[href]").click(function(e){
     		DocumentViewerEventHandler(e);
     	});
+        setWindowHistory(docViewerComponent.state.title);
     }
 
     render(){
