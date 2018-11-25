@@ -5,20 +5,24 @@ class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            title: "Special:VGTropes"
+            title: "Special:VGTropes",
+            prevtitle: "Special:VGTropes"
         };
-    }
-
-    componentDidMount(){
-        $("#DocumentViewer").addClass("HasInsertedPage");
     }
 
     componentDidUpdate(){
         document.getElementById("DocumentViewer").scrollTop = 0;
-    	$("#DocumentViewer").find("a[href]").click(function(e){
+    	$(".insertedPage").find("a[href]").click(function(e){
     		DocumentViewerEventHandler(e);
     	});
         setWindowHistory(docViewerComponent.state.title);
+    }
+
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+        if(prevState.title != this.state.prevtitle){
+            this.state.prevtitle = prevState.title;
+        }
+        return null;
     }
 
     render(){
@@ -26,7 +30,7 @@ class DocumentViewer extends React.Component{
         if(pageTitle == null){
             return(<div><h1>Error</h1><p>Null browser set up</p></div>);
         }
-        console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle));
+        console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
         let pageToRender;
         switch(getPageType(pageTitle)){
             case "Pattern Category":
@@ -40,7 +44,7 @@ class DocumentViewer extends React.Component{
                 pageToRender = <PatternPage title={pageTitle}/>;
                 break;
             case "Special":
-                pageToRender = <SpecialPage title={pageTitle}/>;
+                pageToRender = <SpecialPage title={pageTitle} prevtitle={this.state.prevtitle}/>;
                 break;
         }
         return(pageToRender);
@@ -54,25 +58,20 @@ function DocumentViewerEventHandler(e){
 	e.preventDefault();
 	//get where the link was going to
 	var linkClicked = e.target.attributes['title'].value;
-    if(getPageType(linkClicked) == "Other"){ //if this is a special page
-        window.open(e.target.attributes['href'].value, '_blank'); //open in a new tab
-    }
-    else{
-    	//get some new filters based on the selected link and update the filter list
-    	Filters = generateReleventFilters(linkClicked);
-    	refreshGraph(performFiltering(Patterns));
+	//get some new filters based on the selected link and update the filter list
+	Filters = generateReleventFilters(linkClicked);
+	refreshGraph(performFiltering(Patterns));
 
-    	//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-    	if(checkPatternCurrentlyFiltered(linkClicked)){
-    		ChangePatternSelection(linkClicked); //select the pattern
-    	}
-        else{
-            //handle the document viewer
-            docViewerComponent.setState({title: linkClicked});
-        }
-        filterlistComponent.setState({filters: Filters});
-    	filterlistComponent.forceUpdate();
+	//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
+	if(checkPatternCurrentlyFiltered(linkClicked)){
+		ChangePatternSelection(linkClicked); //select the pattern
+	}
+    else{
+        //handle the document viewer
+        docViewerComponent.setState({title: linkClicked});
     }
+    filterlistComponent.setState({filters: Filters});
+	filterlistComponent.forceUpdate();
 }
 
 class CategoryPage extends React.Component{
@@ -212,10 +211,30 @@ class SpecialPage extends React.Component {
         }
         else{
             return(
-                <div className="insertedPage SpecialPage">
-                    <h1>Error: Not all special pages are supported, yet.</h1>
-                </div>
+                <OtherPage title={this.props.title} prevtitle={this.props.prevtitle}/>
             );
         }
+    }
+}
+
+class OtherPage extends React.Component{
+    constructor(props) {
+        super(props);
+        this.handleGoToPrevPage = this.handleGoToPrevPage.bind(this);
+    }
+
+    handleGoToPrevPage(e){
+        e.preventDefault();
+        docViewerComponent.setState({title: this.props.prevtitle});
+    }
+
+    render(){
+        let url = "http://virt10.itu.chalmers.se/index.php/" + this.props.title.replace(' ', '_');
+        return(
+            <div className="insertediframe">
+                <iframe src={url}></iframe>
+                <a id="iframebacktext" onClick={this.handleGoToPrevPage} href="javascript:void(0)">While browsing in an iframe, the pattern graph <b>will not</b> update. Click here to return to the last none iframe article you visited...</a>
+            </div>
+        );
     }
 }
