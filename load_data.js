@@ -15,8 +15,8 @@ $( document ).ready(function() {
 		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
+		toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 	});
-	toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 });
 
 function refreshGraph(filteredPatterns){

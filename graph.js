@@ -198,8 +198,8 @@ class Tooltip extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			d: "Abilities",
-			type: "Pattern"
+			d: null,
+			type: null
 		};
 	}
 
@@ -212,6 +212,9 @@ class Tooltip extends React.Component{
 					break;
 				case "Pattern":
 					subcomponent = (<PatternTooltip Pattern={this.state.d.id} />);
+					break;
+				case null:
+					subcomponent = (<p>nothing to see here</p>);
 					break;
 			}
 		}
@@ -263,8 +266,15 @@ class LinkTooltip extends React.Component{
 
 class PatternTooltip extends React.Component{
 	render(){
+		let parser = new DOMParser();
+		let patternObj = Patterns.find(pattern => pattern.Title == this.props.Pattern);
+		let xmlObject = parser.parseFromString(patternObj.Content, "text/xml");
+		let discriptionText = $(xmlObject).find("#mw-content-text > p > i").first().text();
 		return(
-			<div id="TooltipInner">{this.props.Pattern}</div>
+			<div id="TooltipInner">
+				{this.props.Pattern}<br />
+				<i>{discriptionText}</i>
+			</div>
 		);
 	}
 }
