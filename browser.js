@@ -1,4 +1,6 @@
-//function for creating a document browser
+//-------------------------------------------------------------------------
+//The following section contains the Browser react components
+//-------------------------------------------------------------------------
 class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);

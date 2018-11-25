@@ -3,6 +3,7 @@ var Games;
 var PatternCategories;
 var GameCategories;
 var docViewerComponent;
+var toolTipComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
@@ -15,6 +16,7 @@ $( document ).ready(function() {
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
 	});
+	toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 });
 
 function refreshGraph(filteredPatterns){

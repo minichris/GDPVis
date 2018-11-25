@@ -220,7 +220,7 @@ svg{
 	color: var(--linkBlue);
 }
 
-#Tooltip > hr {
+#Tooltip > div > hr {
 	border-top: 3px dotted var(--linkBlue);
 	margin-top: 0.5rem;
 	margin-bottom: 0.5rem;
