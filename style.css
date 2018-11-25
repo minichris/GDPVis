@@ -77,9 +77,10 @@ h1{
 }
 
 #Content > #DocumentViewer{
-	flex: 2 1;
+	flex: 2 1 50%;
 	padding: 0px;
 	height: 468px;
+	display: grid;
 }
 
 iframe{
