@@ -1,0 +1,30 @@
+{
+  "name": "viewer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script-compiled.js",
+  "scripts": {
+    "build": "babel src --out-dir build --copy-files --source-maps",
+	"server": "C:/tools/php72/PHP -S localhost:8000 -t build"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+	  "minify"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime",
+      "@babel/plugin-transform-react-jsx"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-transform-react-jsx": "^7.1.6",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-minify": "^0.5.0"
+  }
+}

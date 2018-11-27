@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+	<title>VGTropes</title>
+</head>
+<body>
+	<header>
+		<h1>VGTropes</h1>
+	</header>
+	<div id="Content">
+		<div id="GraphLayout">
+			<div id="Search" style="display: none;">
+				<select id="SearchSelect" placeholder="Select a pattern...">
+					<option></option>
+				</select>
+			</div>
+			<div id="Graph" style="display: none;">
+				<button id="ShowFiltersButton" class="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
+				<svg width="100%" height="auto" viewBox="0 0 300 300"></svg>
+				<div id="FilterPanel" class="collapse">
+					<div id="FilterPanelHeading">
+						<h2>Filters</h2>
+						<button id="AddFilterButton" class="btn btn-light">Add Filter</button>
+						<button id="ApplyFiltersButton" class="btn btn-success">Apply Filters</button>
+					</div>
+					<ul id="FiltersList">
+					</ul>
+				</div>
+			</div>
+			<div id="LoadingAjax">
+				<span>Loading...</span>
+			</div>
+		</div>
+		<div id="DocumentViewer"></div>
+		<!--div id="Info"></div-->
+	</div>
+	<div class="modal" id="TooManyDialogModal" tabIndex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Warning: high amount of elements</h5>
+					<button type="button" id="TooManyCloseButton" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					The graph you are trying to display will contain <span id="TooManyDialogPatternCount"></span> patterns! This high amount may cause your browser to become unresponsive. Add a limiter to prevent this?
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="TooManyIgnoreButton" class="btn btn-danger">Show anyway</button>
+					<button type="button" id="TooManyOkButton" class="btn btn-primary">Add limiter</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="Tooltip"></div>
+	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js" crossorigin></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="./load_data.js" type="text/babel"></script>
+	<script src="./browser.js" type="text/babel"></script>
+	<script src="./graph.js" type="text/babel"></script>
+	<script src="./filterGUI.js" type="text/babel"></script>
+</body>
+</html>
