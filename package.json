@@ -4,7 +4,7 @@
   "description": "",
   "main": "script-compiled.js",
   "scripts": {
-    "build": "babel src --out-dir build --copy-files --source-maps",
+    "babel": "babel src --out-dir build --copy-files --source-maps",
 	"server": "C:/tools/php72/PHP -S localhost:8000 -t build"
   },
   "babel": {
