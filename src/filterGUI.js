@@ -106,11 +106,11 @@ class SingularFilter extends React.Component  {
 
 class FilterList extends React.Component {
 	constructor(props) {
-    super(props);
-    this.state = {
-			filters: []
-    };
-  }
+    	super(props);
+    	this.state = {
+				filters: []
+    	};
+  	}
 
 	handleDeleteButton(event){
 		let currentFilters = this.state.filters;

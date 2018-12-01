@@ -180,6 +180,8 @@ class SpecialPage extends React.Component {
                     To get started, why not try looking at the <a href="javascript:void(0)" title="Category:Patterns">Patterns category</a> for some inspiration,
                     or try filtering the patterns shown by clicking the "Filters" button in the graph view, or just clicking a node in the graph.
                     </p>
+                    <h2>Article Omnibox</h2>
+                        <SearchBox />
                     <h2>Features</h2>
         			<ul>
         				<li>Clicking on a node will change the currently viewed article.</li>

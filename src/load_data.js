@@ -1,7 +1,7 @@
-var Patterns;
-var Games;
-var PatternCategories;
-var GameCategories;
+var Patterns = [];
+var Games = [];
+var PatternCategories = [];
+var GameCategories = [];
 var docViewerComponent;
 var toolTipComponent;
 
