@@ -181,7 +181,7 @@ class SpecialPage extends React.Component {
                     or try filtering the patterns shown by clicking the "Filters" button in the graph view, or just clicking a node in the graph.
                     </p>
                     <h2>Article Omnibox</h2>
-                        <SearchBox />
+                        <div id="SearchBoxOuter"></div>
                     <h2>Features</h2>
         			<ul>
         				<li>Clicking on a node will change the currently viewed article.</li>

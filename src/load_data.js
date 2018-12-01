@@ -1,9 +1,8 @@
-var Patterns = [];
-var Games = [];
-var PatternCategories = [];
-var GameCategories = [];
-var docViewerComponent;
-var toolTipComponent;
+var Patterns;
+var Games;
+var PatternCategories;
+var GameCategories;
+var docViewerComponent, toolTipComponent, seachBoxComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
@@ -15,6 +14,7 @@ $( document ).ready(function() {
 		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
+		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 	});
 });
