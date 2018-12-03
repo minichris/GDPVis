@@ -117,6 +117,10 @@ iframe{
 	padding: 0px;
 }
 
+#Content > #GraphLayout > div:not(:last-child){
+	margin-bottom: 10px;
+}
+
 #Content > #GraphLayout > div{
 	border-radius: 15px;
 	padding: 10px;
@@ -124,7 +128,6 @@ iframe{
 }
 
 #Search{
-	margin-bottom: 10px;
 	padding: 0 !important;
 }
 

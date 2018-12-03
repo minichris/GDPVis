@@ -4,7 +4,7 @@ function resetGraph(){
 }
 
 function generateGraph(data) {
-	console.log("Displaying " + data.nodes.length + " nodes and " + data.links.length + " links.");
+	$("#GraphInformationBox").text("Displaying " + data.nodes.length + " nodes and " + data.links.length + " links.");
 	var svg = d3.select("svg");
 	var width = 300;
 	var height = 300;
