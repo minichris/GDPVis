@@ -26,7 +26,7 @@ class SearchBox extends React.Component {
 
     componentDidMount() {
   		$(this.refs["SearchBox"]).select2({
-            width: '50%',
+            width: '20%',
             templateResult: this.formatOption,
             minimumInputLength: 3,
             allowClear: true,
