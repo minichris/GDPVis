@@ -7,7 +7,7 @@ class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			patterns: {nodes: [], links: []}
+			patterns: []
 		}
 		this.svg = React.createRef();
 	}
@@ -46,7 +46,6 @@ class Graph extends React.Component{
 	}
 
 	componentDidUpdate(){
-		$("svg").empty();
 		this.generateGraph(this.state.patterns);
 	}
 
