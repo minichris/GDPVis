@@ -2,11 +2,12 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
-var docViewerComponent, toolTipComponent, seachBoxComponent;
+var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 	docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
+	graphComponent = ReactDOM.render(<Graph />, document.getElementById("GraphOuter"));
 	requiredDataLoadedPromise.then(function() {
 		loadFiltersorDefaults();
 		bindFilters();
@@ -21,10 +22,7 @@ $( document ).ready(function() {
 
 function refreshGraph(filteredPatterns){
 	resetGraph();
-	generateGraph({
-		nodes: createNodesObject(filteredPatterns),
-		links: createLinksObject(filteredPatterns)
-	});
+	graphComponent.setState({patterns: filteredPatterns});
 	setWindowHistory(docViewerComponent.state.title);
 }
 
@@ -218,39 +216,6 @@ function performFiltering(inputPatterns){
 	});
 	console.log("_________________________");
 	return outputPatterns;
-}
-
-function createNodesObject(patterns){
-	function getGroup(){
-		return Math.floor(Math.random() * 6) + 1;
-	}
-
-	var nodesObject = [];  //array to store the output of the function
-	patterns.forEach(function(pattern){
-		nodesObject.push({
-			id: pattern.Title,
-			group: getGroup()
-		});
-	});
-
-	return nodesObject;
-}
-
-function createLinksObject(patterns){
-	var linksObject = []; //array to store the output of the function
-	var includedPatternNames = patterns.map(pattern => pattern.Title); //all included pattern's names
-	patterns.forEach(function(pattern){
-		pattern["PatternsLinks"].forEach(function(pLink){
-			if(includedPatternNames.includes(pLink.To)){ //if the link is to a pattern that is included
-				linksObject.push({ //create the array member
-					source: pattern.Title,
-					target: pLink.To,
-					value: 1
-				});
-			}
-		});
-	});
-	return linksObject;
 }
 
 
