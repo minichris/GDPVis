@@ -2,12 +2,13 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
-var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent;
+var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 	docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
 	graphComponent = ReactDOM.render(<Graph />, document.getElementById("GraphOuter"));
+	graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
 	requiredDataLoadedPromise.then(function() {
 		loadFiltersorDefaults();
 		bindFilters();
@@ -21,8 +22,8 @@ $( document ).ready(function() {
 });
 
 function refreshGraph(filteredPatterns){
-	resetGraph();
 	graphComponent.setState({patterns: filteredPatterns});
+	graphSelectBoxComponent.setState({patterns: filteredPatterns});
 	setWindowHistory(docViewerComponent.state.title);
 }
 

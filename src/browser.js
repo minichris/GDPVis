@@ -69,6 +69,8 @@ function DocumentViewerEventHandler(e){
     else{
         //handle the document viewer
         docViewerComponent.setState({title: linkClicked});
+        graphSelectBoxComponent.setState({filters: Filters, value: null});
+        graphSelectBoxComponent.forceUpdate();
     }
     filterlistComponent.setState({filters: Filters});
 	filterlistComponent.forceUpdate();
