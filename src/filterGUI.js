@@ -72,7 +72,7 @@ function OptionList(props) {
 			Games.map(game => optionList.push({text: game.name, value: game.name}));
 			break;
 	}
-	return optionList.map(option => <option key={option.value + option.text} value={option.value}>{option.text}</option>);
+	return optionList.map((option, i) => <option key={i} value={option.value}>{option.text}</option>);
 }
 
 class SingularFilter extends React.Component  {
@@ -93,7 +93,7 @@ class SingularFilter extends React.Component  {
 		return (
 			<li data-index={this.props.index}>
 				<select ref="FilterTypeSelect" value={this.props.type} className="FilterTypeSelect" placeholder="Select a filter type..." onChange={this.props.handleFilterTypeChange}>
-					{filterTypes.map(filterType => <option key={filterType.value} value={filterType.value}>{filterType.text}</option>)}
+					{filterTypes.map((filterType, i) => <option key={i} value={filterType.value}>{filterType.text}</option>)}
 				</select>
 				<select ref="FilterValue" value={this.props.value} className="FilterValue" placeholder="Select a filter..." onChange={this.props.handleFilterValueChange}>
 					<OptionList index={this.props.type} filtertype={this.props.type} />
@@ -145,7 +145,7 @@ class FilterList extends React.Component {
 	render() {
 		const filterlistRef = React.createRef();
 		return(
-			this.state.filters.map((filter, index) => <SingularFilter parentref={filterlistRef} index={index} key={filter.Type + filter.Value} type={filter.Type} value={filter.Value} handleDeleteButton={this.handleDeleteButton.bind(this)} handleFilterTypeChange={this.handleFilterTypeChange.bind(this)} handleFilterValueChange={this.handleFilterValueChange.bind(this)} />)
+			this.state.filters.map((filter, index) => <SingularFilter parentref={filterlistRef} index={index} key={index} type={filter.Type} value={filter.Value} handleDeleteButton={this.handleDeleteButton.bind(this)} handleFilterTypeChange={this.handleFilterTypeChange.bind(this)} handleFilterValueChange={this.handleFilterValueChange.bind(this)} />)
 		);
 	}
 

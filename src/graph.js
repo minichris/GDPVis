@@ -221,7 +221,7 @@ class GraphSelectBox extends React.Component{
 	handleChange(event) {
 		if(event.target.value != this.state.value && this.state.value != null){
 			this.setState({value: event.target.value});
-			ChangePatternSelection( $('#SearchSelect').val() );
+			ChangePatternSelection( this.state.value );
 		}
    	}
 

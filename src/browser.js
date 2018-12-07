@@ -46,6 +46,11 @@ class DocumentViewer extends React.Component{
             case "Special":
                 pageToRender = <SpecialPage title={pageTitle} prevtitle={this.state.prevtitle}/>;
                 break;
+            default:
+                pageToRender = (
+                    <span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+                );
+                break;
         }
         return(pageToRender);
     }
@@ -70,7 +75,6 @@ function DocumentViewerEventHandler(e){
         //handle the document viewer
         docViewerComponent.setState({title: linkClicked});
         graphSelectBoxComponent.setState({filters: Filters, value: null});
-        graphSelectBoxComponent.forceUpdate();
     }
     filterlistComponent.setState({filters: Filters});
 	filterlistComponent.forceUpdate();
@@ -93,8 +97,8 @@ class CategoryPage extends React.Component{
             <div className="insertedPage CategoryPage">
                 <h1>{categoryTitle}</h1>
                 <div id="CatListBox">
-                {pageTitlesInCategory.map((title) =>
-                    <a key={title} title={title} href={'http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_')}>{title}</a>
+                {pageTitlesInCategory.map((title, i) =>
+                    <a key={i} title={title} href={'http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_')}>{title}</a>
                 )}
                 </div>
             </div>
@@ -136,8 +140,8 @@ class GamePage extends React.Component {
                 <p>[insert info here]</p>
                 <h2>Gameplay Patterns Used</h2>
                 <i>Note: this section is automatically generated from parts of pattern pages on the wiki. It can contain examples which aren't relevent to this game. Read with caution.</i>
-                {gamePatternsWithReasons.map((patternreason) =>
-                    <div key={patternreason.pattern + "listObject"}>
+                {gamePatternsWithReasons.map((patternreason, i) =>
+                    <div key={i}>
                         <h3>{patternreason.pattern}</h3>
                         <p dangerouslySetInnerHTML={{__html: patternreason.reason}}></p>
                         <a title={patternreason.pattern} href={this.getPatternLink(patternreason.pattern)}>Continue reading about "{patternreason.pattern}"...</a>

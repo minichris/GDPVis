@@ -9,17 +9,17 @@ class SearchBox extends React.Component {
 
     getOptions(){ //get all the options for the option text
         let options = [];
-        Patterns.forEach(pattern =>
-            options.push(<option key={options.length} data-type={"Pattern"} value={pattern.Title}>{pattern.Title}</option>)
+        Patterns.forEach((pattern, i) =>
+            options.push(<option key={i + "_Pattern"} data-type={"Pattern"} value={pattern.Title}>{pattern.Title}</option>)
         );
-        Games.forEach(game =>
-            options.push(<option key={options.length} data-type={"Game"} value={game.name}>{game.name}</option>)
+        Games.forEach((game, i) =>
+            options.push(<option key={i + "_Game"} data-type={"Game"} value={game.name}>{game.name}</option>)
         );
-        PatternCategories.forEach(cat =>
-            options.push(<option key={options.length} data-type={"Pattern Category"} value={cat}>{cat}</option>)
+        PatternCategories.forEach((cat, i) =>
+            options.push(<option key={i + "_PCat"} data-type={"Pattern Category"} value={cat}>{cat}</option>)
         );
-        GameCategories.forEach(cat =>
-            options.push(<option key={options.length} data-type={"Game Category"} value={cat}>{cat}</option>)
+        GameCategories.forEach((cat, i) =>
+            options.push(<option key={i + "_GCat"} data-type={"Game Category"} value={cat}>{cat}</option>)
         );
         return options;
     }
