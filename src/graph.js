@@ -41,7 +41,7 @@ class Graph extends React.Component{
 	}
 
 	componentDidUpdate(){
-		$(this.svg.current).empty();
+		$(this.svg.current).find("g").empty();
 		this.generateGraph(this.state.patterns);
 	}
 
@@ -49,13 +49,11 @@ class Graph extends React.Component{
 		let nodesData = this.createNodes(patterns);
 		let linksData = this.createLinks(patterns);
 
-		$("#GraphInformationBox").text("Displaying " + nodesData.length + " nodes and " + linksData.length + " links.");
-
 		var svg = d3.select(this.svg.current);
 		var width = 300;
 		var height = 300;
 
-		var root = svg.append("g");
+		var root = svg.select("g");
 
 		svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
@@ -195,8 +193,15 @@ class Graph extends React.Component{
 	}
 
 	render(){
+		let nodesData = this.createNodes(this.state.patterns);
+		let linksData = this.createLinks(this.state.patterns);
 		return(
-			<svg ref={this.svg} width="100%" height="auto" viewBox="0 0 300 300"></svg>
+			<svg ref={this.svg} width="100%" height="auto" viewBox="0 0 300 300">
+				<g id="stillHere"></g>
+				<text x="0" y="300" style={{fill: 'white'}}>
+					Displaying {nodesData.length} nodes and {linksData.length} links.
+				</text>
+			</svg>
 		);
 	}
 }
