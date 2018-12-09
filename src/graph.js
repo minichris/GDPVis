@@ -45,6 +45,116 @@ class Graph extends React.Component{
 		this.generateGraph(this.state.patterns);
 	}
 
+	generateGraphChord(patterns) {
+		let nodesData = this.createNodes(patterns);
+		for (let i = 0; i < nodesData.length; i++) {
+			let radius = nodesData.length * 5;
+			let width = (radius * 2) + 50;
+			let angle = (i / (nodesData.length/2)) * Math.PI; // Calculate the angle at which the element will be placed.
+     		nodesData[i]["x"] = (radius * Math.cos(angle)) + (width/2); // Calculate the x position of the element.
+        	nodesData[i]["y"] = (radius * Math.sin(angle)) + (width/2); // Calculate the y position of the element.
+        }
+
+		let linksData = this.createLinks(patterns);
+
+		var svg = d3.select(this.svg.current);
+		var width = 300;
+		var height = 300;
+
+		var root = svg.select("g");
+
+		svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
+			root.attr("transform", d3.event.transform);
+		}));
+
+		var color = d3.scaleOrdinal(d3.schemeCategory20b); //set the color scheme
+
+		var node = root.append("g")
+			.attr("class", "nodes")
+			.selectAll("circle")
+			.data(nodesData)
+			.enter().append("circle")
+			.attr("r", 5)
+			.attr("id", function(d) {
+				return "Node_" + d.id.replace(/[\W_]/g,'_');
+			})
+			.attr("fill", function(d) {
+				return color(d.group);
+			})
+			.attr('cx', function (d) {
+            	return d.x;
+            })
+            .attr('cy', function (d) {
+            	return d.y;
+            });
+
+		var link = root.append("g")
+			.attr("class", "links")
+			.selectAll("line")
+			.data(linksData)
+			.enter().append("line")
+			.attr("stroke-width", function(d) {
+				return Math.sqrt(d.value);
+			})
+			.attr("stroke", function(d) {
+				return generateLinkColor(d);
+			})
+			.attr("x1", function(d) {
+				return nodesData.find(node => node.id == d.source).x;
+			})
+			.attr("y1", function(d) {
+				return nodesData.find(node => node.id == d.source).y;
+			})
+			.attr("x2", function(d) {
+				return nodesData.find(node => node.id == d.target).x;
+			})
+			.attr("y2", function(d) {
+				return nodesData.find(node => node.id == d.target).y;
+			});
+
+		var tooltip = d3.select("#Tooltip");
+		node.on("mouseover", function(d) {
+			tooltip.transition() //add the tooltip when the user mouses over the node
+				.duration(200).style("opacity", .9);
+			tooltip.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
+			toolTipComponent.setState({d: d, type: "Pattern"});
+			})
+	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+	      tooltip.transition().duration(500).style("opacity", 0);
+	    })
+		.on("click", function(d) { //Click to open the relevent article
+			ChangePatternSelection(d.id);
+		});
+
+		link.on("mouseover", function(d) {
+			tooltip.transition() //add the tooltip when the user mouses over the node
+				.duration(200).style("opacity", .9);
+			tooltip.style("left", (d3.event.pageX) + "px")
+				.style("top", (d3.event.pageY - 28) + "px");
+			toolTipComponent.setState({d: d, type: "Link"});
+		})
+		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+	      tooltip.transition().duration(500).style("opacity", 0);
+	    });
+
+		function generateLinkColor(link){
+			function checkForRelation(relation){
+				return(
+					getPatternRelationsText(getPatternData(link.source), getPatternData(link.target)).includes(relation) ||
+					getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
+				);
+			}
+
+			if(checkForRelation("Potentially Conflicting With")){
+				return "yellow"; //if it is conflicting
+			}
+			else{
+				return "#999"; //regular gray if it doesn't
+			}
+		}
+	}
+
 	generateGraph(patterns) {
 		let nodesData = this.createNodes(patterns);
 		let linksData = this.createLinks(patterns);
