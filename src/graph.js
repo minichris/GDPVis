@@ -69,9 +69,6 @@ class Graph extends React.Component{
 			.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
 
 
-		var tooltip = d3.select("#Tooltip");
-		$("#Tooltip").css("opacity", 0); //Define the div for the tooltip
-
 		var link = root.append("g")
 			.attr("class", "links")
 			.selectAll("line")
@@ -101,6 +98,7 @@ class Graph extends React.Component{
 				.on("drag", dragged)
 				.on("end", dragended));
 
+		var tooltip = d3.select("#Tooltip");
 		node.on("mouseover", function(d) {
 			tooltip.transition() //add the tooltip when the user mouses over the node
 				.duration(200).style("opacity", .9);
