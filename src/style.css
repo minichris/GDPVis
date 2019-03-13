@@ -40,6 +40,7 @@ body {
 	margin: 8px;
 	color: var(--textColor);
 	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 header{
@@ -59,6 +60,7 @@ h1{
 	border-radius: 15px;
 	display: flex;
 	flex-wrap: wrap;
+	overflow-y: auto;
 }
 
 #Content > div{
