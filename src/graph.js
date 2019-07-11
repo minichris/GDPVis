@@ -1,3 +1,5 @@
+var node = null;
+var root;
 class Graph extends React.Component{
 	constructor(props){
 		super(props);
@@ -40,10 +42,28 @@ class Graph extends React.Component{
 		return linksObject;
 	}
 
+	textBBviaRect(rect){
+		return rect.parentElement.getElementsByTagName('text')[0].getBoundingClientRect();
+	}
+
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
 		this.generateGraph(this.state.patterns);
 	}
+	
+	componentDidMount(){
+		var reactParent = this;
+		console.log(reactParent);
+		// adjust the padding values depending on font and font size
+		var paddingLeftRight = 18; 
+		var paddingTopBottom = 5;
+		d3.select(reactParent.svg.current).select("g").selectAll("rect")
+			.attr("x", function(d) { return d.x - reactParent.textBBviaRect(this).width/2 - paddingLeftRight/2; })
+			.attr("y", function(d) { return d.y - reactParent.textBBviaRect(this).height + paddingTopBottom/2;  })
+			.attr("width", function(d) { return reactParent.textBBviaRect(this).width + paddingLeftRight; })
+			.attr("height", function(d) { return reactParent.textBBviaRect(this).height + paddingTopBottom; });
+	}
+
 
 	generateGraph(patterns) {
 		let nodesData = this.createNodes(patterns);
@@ -53,7 +73,7 @@ class Graph extends React.Component{
 		var width = 300;
 		var height = 300;
 
-		var root = svg.select("g");
+		root = svg.select("g");
 
 		svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
@@ -81,22 +101,49 @@ class Graph extends React.Component{
 				return generateLinkColor(d);
 			});
 
-		var node = root.append("g")
+		node = root.append("g")
 			.attr("class", "nodes")
-			.selectAll("circle")
+			.selectAll("svg")
 			.data(nodesData)
-			.enter().append("circle")
-			.attr("r", 5)
-			.attr("id", function(d) {
-				return "Node_" + d.id.replace(/[\W_]/g,'_');
-			})
-			.attr("fill", function(d) {
-				return color(d.group);
-			})
+			.enter().append("svg")
 			.call(d3.drag()
 				.on("start", dragstarted)
 				.on("drag", dragged)
 				.on("end", dragended));
+				
+		node.append("rect");
+			
+		var texts = node.append("text")
+		.attr("r", 5)
+		.attr("id", function(d) {
+			return "Node_" + d.id.replace(/[\W_]/g,'_');
+		})
+		.attr("fill", function(d) {
+			return color(d.group);
+		})
+		.attr("text-anchor", "middle")
+		.text(function(d) {
+			return d.id;
+		});
+		
+		texts.each(function(d, i) {
+			d.bb = this.getBBox(); // get bounding box of text field and store it in texts array
+		});
+		
+		root.selectAll("rect").each(function(d){
+			console.log(this);
+			console.log(d);
+		});
+		
+		//root.selectAll("rect")
+			//.attr("x", function(d) { return 0; })
+			//.attr("y", function(d) { return 0; })
+			//.attr("width", function(d) { return 50; })
+			//.attr("height", function(d) { return 50; })
+			//.attr("x", function(d) { return d.x - textBBviaRect(this).width/2 - paddingLeftRight/2; })
+			//.attr("y", function(d) { return d.y - textBBviaRect(this).height + paddingTopBottom/2;  })
+			//.attr("width", function(d) { return textBBviaRect(this).width + paddingLeftRight; })
+			//.attr("height", function(d) { return textBBviaRect(this).height + paddingTopBottom; });
 
 		var tooltip = d3.select("#Tooltip");
 		node.on("mouseover", function(d) {
@@ -140,10 +187,10 @@ class Graph extends React.Component{
 				});
 
 			node
-				.attr("cx", function(d) {
+				.attr("x", function(d) {
 					return validate(d.x, 0, width);
 				})
-				.attr("cy", function(d) {
+				.attr("y", function(d) {
 					return  validate(d.y, 0, height);
 				});
 		});
