@@ -42,26 +42,9 @@ class Graph extends React.Component{
 		return linksObject;
 	}
 
-	textBBviaRect(rect){
-		return rect.parentElement.getElementsByTagName('text')[0].getBoundingClientRect();
-	}
-
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
 		this.generateGraph(this.state.patterns);
-	}
-	
-	componentDidMount(){
-		var reactParent = this;
-		console.log(reactParent);
-		// adjust the padding values depending on font and font size
-		var paddingLeftRight = 18; 
-		var paddingTopBottom = 5;
-		d3.select(reactParent.svg.current).select("g").selectAll("rect")
-			.attr("x", function(d) { return d.x - reactParent.textBBviaRect(this).width/2 - paddingLeftRight/2; })
-			.attr("y", function(d) { return d.y - reactParent.textBBviaRect(this).height + paddingTopBottom/2;  })
-			.attr("width", function(d) { return reactParent.textBBviaRect(this).width + paddingLeftRight; })
-			.attr("height", function(d) { return reactParent.textBBviaRect(this).height + paddingTopBottom; });
 	}
 
 
@@ -106,44 +89,36 @@ class Graph extends React.Component{
 			.selectAll("svg")
 			.data(nodesData)
 			.enter().append("svg")
+			.attr("id", function(d) {
+				return "Node_" + d.id.replace(/[\W_]/g,'_');
+			})
+			.attr("class", "node")
 			.call(d3.drag()
 				.on("start", dragstarted)
 				.on("drag", dragged)
 				.on("end", dragended));
 				
-		node.append("rect");
-			
-		var texts = node.append("text")
+		node.append("circle")
 		.attr("r", 5)
-		.attr("id", function(d) {
-			return "Node_" + d.id.replace(/[\W_]/g,'_');
-		})
+		.attr("fill", function(d) {
+			return color(d.group);
+		});
+			
+		node.append("text")
+		.attr("y", 5)
+		.attr("x", 10)
 		.attr("fill", function(d) {
 			return color(d.group);
 		})
-		.attr("text-anchor", "middle")
+		.attr("text-anchor", "start")
 		.text(function(d) {
 			return d.id;
-		});
-		
-		texts.each(function(d, i) {
-			d.bb = this.getBBox(); // get bounding box of text field and store it in texts array
 		});
 		
 		root.selectAll("rect").each(function(d){
 			console.log(this);
 			console.log(d);
 		});
-		
-		//root.selectAll("rect")
-			//.attr("x", function(d) { return 0; })
-			//.attr("y", function(d) { return 0; })
-			//.attr("width", function(d) { return 50; })
-			//.attr("height", function(d) { return 50; })
-			//.attr("x", function(d) { return d.x - textBBviaRect(this).width/2 - paddingLeftRight/2; })
-			//.attr("y", function(d) { return d.y - textBBviaRect(this).height + paddingTopBottom/2;  })
-			//.attr("width", function(d) { return textBBviaRect(this).width + paddingLeftRight; })
-			//.attr("height", function(d) { return textBBviaRect(this).height + paddingTopBottom; });
 
 		var tooltip = d3.select("#Tooltip");
 		node.on("mouseover", function(d) {

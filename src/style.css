@@ -12,9 +12,13 @@
 	cursor: pointer;
 }
 
-.nodes .SelectedNode{
+.nodes .SelectedNode > circle{
 	stroke-width: 2px;
 	stroke: var(--acColor2);
+}
+
+.node {
+	cursor: pointer;
 }
 
 /*
