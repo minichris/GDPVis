@@ -3,22 +3,34 @@
 	stroke-width: 1.5px;
 }
 
-.nodes circle {
-	stroke: var(--bgColor2);
-	stroke-width: 1.5px;
-}
-
-.nodes circle:hover {
-	cursor: pointer;
-}
-
 .nodes .SelectedNode > circle{
 	stroke-width: 2px;
 	stroke: var(--acColor2);
 }
 
-.node {
+.node circle {
 	cursor: pointer;
+	stroke: var(--bgColor2);
+	stroke-width: 1.5px;
+}
+
+.nodes .SelectedNode > text{
+	font-weight: bold;
+	fill: var(--acColor2);
+}
+
+.node text {
+	font-size: 10px;
+	text-shadow: #000000 0px 0px 3px;
+	cursor: default;
+	pointer-events: none;
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
 /*

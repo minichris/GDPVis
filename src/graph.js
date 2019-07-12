@@ -1,5 +1,13 @@
-var node = null;
-var root;
+var RelationshipColors = {
+	//goes R, G, B
+	"Potentially Conflicting With": [255, 30, 30],
+	"Possible Closure Effects": [100, 30, 30],
+	"Can Instantiate": [30, 30, 255],
+	"Can Be Instantiated By": [30, 30, 255],
+	"Can Modulate": [30, 255, 30],
+	"Can Be Modulated By": [30, 255, 30]
+}
+
 class Graph extends React.Component{
 	constructor(props){
 		super(props);
@@ -56,19 +64,19 @@ class Graph extends React.Component{
 		var width = 300;
 		var height = 300;
 
-		root = svg.select("g");
+		var root = svg.select("g");
 
 		svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
 		}));
 
 
-		var color = d3.scaleOrdinal(d3.schemeCategory20b); //set the color scheme
+		var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
 
 		var simulation = d3.forceSimulation()
-			.force("link", d3.forceLink().id(function(d) { return d.id; })) //sets up the links to use the nodes ID, rather then its index in the list
-			.force("gravity", d3.forceManyBody().strength(50).distanceMin(200)) //stops nodes from being pushed all the way to the edge
-			.force("charge", d3.forceManyBody().strength(-50).distanceMax(150)) //stops nodes being stuck too close together
+			.force("link", d3.forceLink().id(function(d) { return d.id; }).strength(0.05).distanceMin(800)) //sets up the links to use the nodes ID, rather then its index in the list
+			.force("gravity", d3.forceManyBody().strength(5).distanceMin(1000)) //stops nodes from being pushed all the way to the edge
+			.force("charge", d3.forceManyBody().strength(-50).distanceMax(1500)) //stops nodes being stuck too close together
 			.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
 
 
@@ -84,7 +92,7 @@ class Graph extends React.Component{
 				return generateLinkColor(d);
 			});
 
-		node = root.append("g")
+		var node = root.append("g")
 			.attr("class", "nodes")
 			.selectAll("svg")
 			.data(nodesData)
@@ -98,15 +106,15 @@ class Graph extends React.Component{
 				.on("drag", dragged)
 				.on("end", dragended));
 				
-		node.append("circle")
+		var circle = node.append("circle")
 		.attr("r", 5)
 		.attr("fill", function(d) {
 			return color(d.group);
 		});
 			
 		node.append("text")
-		.attr("y", 5)
-		.attr("x", 10)
+		.attr("y", 3.5)
+		.attr("x", 7)
 		.attr("fill", function(d) {
 			return color(d.group);
 		})
@@ -121,7 +129,7 @@ class Graph extends React.Component{
 		});
 
 		var tooltip = d3.select("#Tooltip");
-		node.on("mouseover", function(d) {
+		circle.on("mouseover", function(d) {
 			tooltip.transition() //add the tooltip when the user mouses over the node
 				.duration(200).style("opacity", .9);
 			tooltip.style("left", (d3.event.pageX) + "px")
@@ -202,13 +210,34 @@ class Graph extends React.Component{
 					getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
 				);
 			}
+			
+			let color = [80,80,80]; //rgb
 
 			if(checkForRelation("Potentially Conflicting With")){
-				return "yellow"; //if it is conflicting
+				for(let i = 0; i < 3; i++){
+					color[i] = color[i] + RelationshipColors["Potentially Conflicting With"][i]
+				}
 			}
-			else{
-				return "#999"; //regular gray if it doesn't
+			
+			if(checkForRelation("Possible Closure Effects")){
+				for(let i = 0; i < 3; i++){
+					color[i] = color[i] + RelationshipColors["Possible Closure Effects"][i]
+				}
 			}
+			
+			if(checkForRelation("Can Instantiate") || checkForRelation("Can Be Instantiated By")){
+				for(let i = 0; i < 3; i++){
+					color[i] = color[i] + RelationshipColors["Can Be Instantiated By"][i]
+				}
+			}
+
+			if(checkForRelation("Can Modulate") || checkForRelation("Can Be Modulated By")){
+				for(let i = 0; i < 3; i++){
+					color[i] = color[i] + RelationshipColors["Can Be Modulated By"][i]
+				}
+			}	
+			
+			return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 		}
 	}
 

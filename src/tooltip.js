@@ -33,6 +33,41 @@ class Tooltip extends React.Component{
 	}
 }
 
+function getRelationColorContribution(link){
+	console.log(link);
+	function checkForRelation(relation){
+		return(
+			getPatternRelationsText(getPatternData(link.source), getPatternData(link.target)).includes(relation) ||
+			getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
+		);
+	}
+	
+	let red = 0, green = 0, blue = 0;
+
+	if(checkForRelation("Potentially Conflicting With")){
+		red = 255;
+	}
+	
+	if(checkForRelation("Possible Closure Effects")){
+		red = 100;
+	}
+	
+	if(checkForRelation("Can Instantiate") || checkForRelation("Can Be Instantiated By")){
+		blue = 255;
+	}
+
+	if(checkForRelation("Can Modulate") || checkForRelation("Can Be Modulated By")){
+		green = 255;
+	}	
+	
+	if(red != 0 || green != 0 || blue != 0){
+		return ("rgb(" + red + ", " + green +", " + blue + ")");
+	}
+	else{
+		return "#999"; //regular gray if it doesn't
+	}
+}
+
 class LinkTooltip extends React.Component{
 	getPatternLinksHTML(sourcePattern, targetPattern){
 		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
@@ -47,7 +82,24 @@ class LinkTooltip extends React.Component{
 
 	formatRelationTexts(sourcePattern, targetPattern){
 		return getPatternRelationsText(sourcePattern, targetPattern).map(function(relation){
-			return '<span class="TooltipHighlighted">' + sourcePattern.Title + "</span> " + relation.toLowerCase() + ' <span class="TooltipHighlighted">' + targetPattern.Title + "</span>";
+			function getRelationColors(){
+				if (typeof RelationshipColors[relation] !== 'undefined'){
+					return RelationshipColors[relation].flat();
+				}
+				else{
+					return "50,50,50";
+				}
+			}
+			
+			return 	`<span class="TooltipHighlighted">
+						${sourcePattern.Title}
+					</span>
+					<span style="color: rgb(${getRelationColors()})">
+						${relation.toLowerCase()}
+					</span> 
+					<span class="TooltipHighlighted">
+						${targetPattern.Title}
+					</span>;`
 		}).join('<br>');
 	}
 
