@@ -66,7 +66,7 @@ class Graph extends React.Component{
 
 		var root = svg.select("g");
 
-		svg.call(d3.zoom().scaleExtent([1 / 2, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
+		svg.call(d3.zoom().scaleExtent([1/4, 2]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
 		}));
 
@@ -74,8 +74,8 @@ class Graph extends React.Component{
 		var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
 
 		var simulation = d3.forceSimulation()
-			.force("link", d3.forceLink().id(function(d) { return d.id; }).strength(0.05).distanceMin(800)) //sets up the links to use the nodes ID, rather then its index in the list
-			.force("gravity", d3.forceManyBody().strength(5).distanceMin(1000)) //stops nodes from being pushed all the way to the edge
+			.force("link", d3.forceLink().id(function(d) { return d.id; }).strength(0.05)) //sets up the links to use the nodes ID, rather then its index in the list
+			.force("gravity", d3.forceManyBody().strength(10).distanceMin(1000)) //stops nodes from being pushed all the way to the edge
 			.force("charge", d3.forceManyBody().strength(-50).distanceMax(1500)) //stops nodes being stuck too close together
 			.force("center", d3.forceCenter(width / 2, height / 2)); //makes the nodes gravitate toward the center (useful for when they spawn)
 
@@ -171,10 +171,10 @@ class Graph extends React.Component{
 
 			node
 				.attr("x", function(d) {
-					return validate(d.x, 0, width);
+					return d.x;
 				})
 				.attr("y", function(d) {
-					return  validate(d.y, 0, height);
+					return d.y;
 				});
 		});
 
