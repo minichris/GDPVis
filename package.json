@@ -5,7 +5,7 @@
   "main": "script-compiled.js",
   "scripts": {
     "babel": "babel src --out-dir build --copy-files --source-maps",
-    "server": "C:/tools/php72/PHP -S localhost:8000 -t build"
+    "server": "C:/tools/php73/PHP -S localhost:8000 -t build"
   },
   "babel": {
     "presets": [
