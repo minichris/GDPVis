@@ -80,6 +80,23 @@ function DocumentViewerEventHandler(e){
 	filterlistComponent.forceUpdate();
 }
 
+function DisplayDocumentViewer(show){
+	if(show){
+		document.getElementById("DocumentViewer").style.display = "block";
+		document.getElementById("DocumentViewer").style.width = "50%"
+		document.getElementById("DocumentViewer").style.padding = "10px"
+		document.getElementById("DocumentViewer").style.borderWidth = "2px";
+	}
+	else{
+		document.getElementById("DocumentViewer").style.width = "0%"
+		document.getElementById("DocumentViewer").style.padding = "0px"
+		document.getElementById("DocumentViewer").style.borderWidth = "0px"
+		setTimeout(function(){
+			document.getElementById("DocumentViewer").style.display = "none";			
+		}, 500);
+	}
+}
+
 class CategoryPage extends React.Component{
     render(){
         let categoryTitle = this.props.title;

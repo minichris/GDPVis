@@ -19,7 +19,7 @@ class Graph extends React.Component{
 
 	createNodes(patterns){
 		function getGroup(){
-			return Math.floor(Math.random() * 6) + 1;
+			return Math.floor(Math.random() * 12) + 1;
 		}
 
 		var nodesObject = [];  //array to store the output of the function
@@ -126,6 +126,13 @@ class Graph extends React.Component{
 		root.selectAll("rect").each(function(d){
 			console.log(this);
 			console.log(d);
+		});
+		
+		$(this.svg.current).click(function(e) { //clicking the background
+			if(e.target.parentNode.id == "GraphOuter"){
+				console.log(event);
+				DisplayDocumentViewer(false);
+			}
 		});
 
 		var tooltip = d3.select("#Tooltip");
@@ -311,7 +318,7 @@ class GraphSelectBox extends React.Component{
 function ChangePatternSelection(newSelectionID){
 	//handle the document DocumentViewer
 	docViewerComponent.setState({title: newSelectionID});
-
+	DisplayDocumentViewer(true);
 	//handle the search box
 	graphSelectBoxComponent.setState({value: newSelectionID});
 

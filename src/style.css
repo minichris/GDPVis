@@ -74,7 +74,6 @@ h1{
 }
 
 #Content{
-	margin-top: 10px;
 	padding: 5px;
 	border-radius: 15px;
 	display: flex;
@@ -83,7 +82,6 @@ h1{
 }
 
 #Content > div{
-	border-radius: 15px;
 	padding: 10px;
 	margin: 5px;
 	display: inline-block;
@@ -97,10 +95,19 @@ h1{
 }
 
 #Content > #DocumentViewer{
-	flex: 2 1 50%;
+	/*flex: 2 1 50%;
 	padding: 0px;
 	height: 468px;
-	display: grid;
+	display: grid;*/
+	position: absolute;
+	width: 0%;
+	transition: width 0.5s, border-width 0.5s, padding 0.5s;
+	transition-timing-function: ease;
+    right: 0;
+    margin: 0;
+	background: var(--bgColor2);
+	border: black solid;
+	height: 90%;
 }
 
 iframe{
@@ -129,7 +136,7 @@ iframe{
 .insertedPage{
 	padding: 10px;
 	overflow-y: auto;
-	height: 468px;
+	height: 100%;
 }
 
 #Content > #GraphLayout{
