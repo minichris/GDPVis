@@ -30,8 +30,18 @@ class SearchBox extends React.Component {
             templateResult: this.formatOption,
             minimumInputLength: 3,
             allowClear: true,
-            placeholder: "Click here and start typing to search."
+            placeholder: "Search..."
         });
+		
+		let component = this;
+		
+		$(this.refs["SearchBox"]).on('select2:select', function (e) {
+			component.searchButtonClicked(null);
+		});
+	}
+	
+	componentWillUnmount() {
+		$(this.refs["SearchBox"]).off('select2:select');
 	}
 
     formatOption(option) {
