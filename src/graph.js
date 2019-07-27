@@ -277,10 +277,8 @@ class Graph extends React.Component{
 				<FilterModule ref="FilterModule" />
 				<svg ref={this.svg} width="100%" height="auto" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
-					<text x="0" y="300" style={{fill: 'white'}}>
-						Displaying {nodesData.length} nodes and {linksData.length} links.
-					</text>
 				</svg>
+				<span id="GraphItemCount">Displaying {nodesData.length} nodes and {linksData.length} links.</span>
 				<RelationshipSelector ref="RelationshipSelector" />
 			</div>
 		);

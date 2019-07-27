@@ -310,6 +310,14 @@ header > h1 {
 	width: min-content;
 }
 
+#GraphItemCount {
+	bottom: 0;
+    text-align: center;
+    position: sticky;
+    display: block;
+    pointer-events: none;;
+}
+
 /* Relationship Selector Stuff */
 #RelationshipSelector{
     position: absolute;
