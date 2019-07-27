@@ -187,6 +187,8 @@ class Graph extends React.Component{
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
 	      tooltip.transition().duration(500).style("opacity", 0);
 	    });
+		
+		$("#GraphItemCount").text("Displaying " + nodesData.length + " nodes and " + linksData.length + " links.");
 
 		simulation.nodes(nodesData).on("tick", function ticked() { //Set the nodes tick function
 			link
@@ -270,15 +272,13 @@ class Graph extends React.Component{
 	}
 
 	render(){
-		let nodesData = this.createNodes(this.state.patterns);
-		let linksData = this.createLinks(this.state.patterns);
 		return(
 			<div id="GraphOuter">
 				<FilterModule ref="FilterModule" />
 				<svg ref={this.svg} width="100%" height="auto" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
 				</svg>
-				<span id="GraphItemCount">Displaying {nodesData.length} nodes and {linksData.length} links.</span>
+				<span id="GraphItemCount"></span>
 				<RelationshipSelector ref="RelationshipSelector" />
 			</div>
 		);
