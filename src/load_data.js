@@ -131,6 +131,10 @@ function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //
 	let relationsTexts = null;
 	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
 		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations;
+		
+		if(relationsTexts.length == 0){ //if it only hyperlinks without a "named relation"
+			relationsTexts = ["Hyperlinks To"];
+		}
 	}
 	return relationsTexts;
 }
@@ -157,12 +161,12 @@ function getSharedPatternRelationships(patternNames){
 	let hasInstantiates = checkForRelation(patternNames, "Can Instantiate") || checkForRelation(patternNames, "Can Be Instantiated By");
 	let hasConflicting = checkForRelation(patternNames, "Potentially Conflicting With");
 	let hasClorsureEffects = checkForRelation(patternNames, "Possible Closure Effects");
-	let hasHyperlinked = (getPatternOneWayRelationTexts(patternNames[0], patternNames[1]) == []);
+	let hasHyperlinked = checkForRelation(patternNames, "Hyperlinks To");
 	
 	let relationships = {
 		modulates: hasModulates,
 		instantiates: hasInstantiates,
-		conflicting: hasConflicting,
+		conflicts: hasConflicting,
 		closureeffects: hasClorsureEffects,
 		hyperlinked: hasHyperlinked
 	}
@@ -170,45 +174,6 @@ function getSharedPatternRelationships(patternNames){
 	return(relationships);
 }
 
-
-//For a given page title, generates a relevent filter setup
-function generateReleventFilters(pageTitle){
-	switch(getPageType(pageTitle)){
-		case "Pattern":
-			if(checkPatternCurrentlyFiltered(pageTitle)){ //if the pattern is currently visable
-				return Filters; //just return the current filters, unchanged
-			}
-			else{ //if the pattern isn't currently visable
-				return([
-					{Type: "pattern_linked", Value: pageTitle},
-					{Type: "count", Value: 50}
-				]);
-			}
-			break;
-		case "Game":
-			return([
-				{Type: "game", Value: pageTitle},
-				{Type: "count", Value: 50}
-			]);
-			break;
-		case "Pattern Category":
-			return([
-				{Type: "pattern_category", Value: pageTitle.replace('Category:', '')},
-				{Type: "count", Value: 50}
-			]);
-		break;
-		case "Game Category":
-			return([
-				{Type: "game_category", Value: pageTitle.replace('Category:', '')},
-				{Type: "count", Value: 50}
-			]);
-			break;
-		case "Other":
-		case "Special":
-			return Filters; //just return the current filters, unchanged
-		break;
-	}
-}
 
 //------------------------------------------
 //FILTERS FUNCTIONS FOR THE FILTERING SYSTEM
@@ -290,6 +255,44 @@ function performFiltering(){
 }
 
 
+//For a given page title, generates a relevent filter setup
+function generateReleventFilters(pageTitle){
+	switch(getPageType(pageTitle)){
+		case "Pattern":
+			if(checkPatternCurrentlyFiltered(pageTitle)){ //if the pattern is currently visable
+				return Filters; //just return the current filters, unchanged
+			}
+			else{ //if the pattern isn't currently visable
+				return([
+					{Type: "pattern_linked", Value: pageTitle},
+					{Type: "count", Value: 50}
+				]);
+			}
+			break;
+		case "Game":
+			return([
+				{Type: "game", Value: pageTitle},
+				{Type: "count", Value: 50}
+			]);
+			break;
+		case "Pattern Category":
+			return([
+				{Type: "pattern_category", Value: pageTitle.replace('Category:', '')},
+				{Type: "count", Value: 50}
+			]);
+		break;
+		case "Game Category":
+			return([
+				{Type: "game_category", Value: pageTitle.replace('Category:', '')},
+				{Type: "count", Value: 50}
+			]);
+			break;
+		case "Other":
+		case "Special":
+			return Filters; //just return the current filters, unchanged
+		break;
+	}
+}
 //-------------------------------------------------------------------------
 //The following section controls the saving and loading filters from the URL
 //-------------------------------------------------------------------------

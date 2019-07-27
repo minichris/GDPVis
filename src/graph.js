@@ -5,7 +5,8 @@ var RelationshipColors = {
 	"Can Instantiate": [30, 30, 255],
 	"Can Be Instantiated By": [30, 30, 255],
 	"Can Modulate": [30, 255, 30],
-	"Can Be Modulated By": [30, 255, 30]
+	"Can Be Modulated By": [30, 255, 30],
+	"Hyperlinks To": [50, 50, 50]
 }
 
 class Graph extends React.Component{
@@ -33,18 +34,40 @@ class Graph extends React.Component{
 		return nodesObject;
 	}
 
-	createLinks(patterns){
+	//Gets all the relationships a link is allowed to show
+	LinkEnabledRelationships(sourcePatternName, targetPatternName){
+		let currentAllowedRelationships = this.refs.RelationshipSelector.state;
+		let linkRelationships = getSharedPatternRelationships([sourcePatternName,targetPatternName]);
+		let outputRelationships = [];
+		for (var relationship in currentAllowedRelationships) { //for each property in currentAllowedRelationships
+			if (currentAllowedRelationships.hasOwnProperty(relationship)) { //if the property is unique to currentAllowedRelationships
+				outputRelationships[relationship] = ( currentAllowedRelationships[relationship] && linkRelationships[relationship] );
+			}
+		}
+		
+		/*if(Object.values(outputRelationships).filter(b => b).length > 0){ //if it should be shown
+			console.log("------------");
+			console.log(sourcePatternName + " & " + targetPatternName);
+			console.log(linkRelationships);
+		}*/
+		
+		return outputRelationships;
+	}
+
+	createLinks(patterns){	
+		let graph = this;
 		var linksObject = []; //array to store the output of the function
 		var includedPatternNames = patterns.map(pattern => pattern.Title); //all included pattern's names
 		patterns.forEach(function(pattern){
 			pattern["PatternsLinks"].forEach(function(pLink){
 				if(includedPatternNames.includes(pLink.To)){ //if the link is to a pattern that is included
-					if(checkForRelation([pattern.Title,pLink.To], "Can Be Instantiated By")){
-					linksObject.push({ //create the array member
-						source: pattern.Title,
-						target: pLink.To,
-						value: 1
-					});
+					let enabledLinkCount = Object.values(graph.LinkEnabledRelationships(pattern.Title, pLink.To)).filter(b => b);
+					if(enabledLinkCount.length > 0){
+						linksObject.push({ //create the array member
+							source: pattern.Title,
+							target: pLink.To,
+							value: 1
+						});
 					}
 				}
 			});
@@ -258,7 +281,7 @@ class Graph extends React.Component{
 						Displaying {nodesData.length} nodes and {linksData.length} links.
 					</text>
 				</svg>
-				<RelationshipSelector />
+				<RelationshipSelector ref="RelationshipSelector" />
 			</div>
 		);
 	}
@@ -338,6 +361,8 @@ class RelationshipSelector extends React.Component{
 		this.setState({
 		  [name]: value
 		});
+		
+		graphComponent.forceUpdate();
 	}
 	
 	render(){

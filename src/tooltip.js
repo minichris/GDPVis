@@ -75,7 +75,14 @@ class LinkTooltip extends React.Component{
 	}
 
 	formatRelationTexts(sourcePattern, targetPattern){
-		return getPatternOneWayRelationTexts(sourcePattern.Title, targetPattern.Title).map(function(relation){
+		let oneWayRelationTexts = getPatternOneWayRelationTexts(sourcePattern.Title, targetPattern.Title);
+		
+		if(oneWayRelationTexts == null){
+			return null;
+		}
+		
+		
+		return oneWayRelationTexts.map(function(relation){
 			function getRelationColors(){
 				if (typeof RelationshipColors[relation] !== 'undefined'){
 					return RelationshipColors[relation].flat();
@@ -93,7 +100,7 @@ class LinkTooltip extends React.Component{
 					</span> 
 					<span class="TooltipHighlighted">
 						${targetPattern.Title}
-					</span>;`
+					</span>`
 		}).join('<br>');
 	}
 
