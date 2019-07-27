@@ -11,7 +11,7 @@ class DocumentViewer extends React.Component{
     }
 
     componentDidUpdate(){
-        document.getElementById("DocumentViewer").scrollTop = 0;
+        document.getElementById("DocumentViewer").children[0].scrollTop = 0; //scroll the inner back to the top on page change
     	$(".insertedPage").find("a[href]").click(function(e){
     		DocumentViewerEventHandler(e);
     	});
