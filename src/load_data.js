@@ -2,13 +2,14 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
-var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent;
+var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 	docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	graphComponent = ReactDOM.render(<Graph />, document.getElementById("GraphOuter"));
+	graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
 	graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
+	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	requiredDataLoadedPromise.then(function() {
 		loadFiltersorDefaults();
 		bindFilters();

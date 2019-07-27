@@ -1,44 +1,3 @@
-$(function(){ //Set up button bindings
-	$("#AddFilterButton").click(function(){
-		Filters.push({Type: "pattern_category", Value: ""});
-		filterlistComponent.forceUpdate();
-	});
-
-	$("#ApplyFiltersButton").click(function(){
-		applyFilters();
-	});
-
-	$("#TooManyDialogModal").hide();
-
-	$("#TooManyCloseButton").click(function(){
-		$("#TooManyDialogModal").hide();
-	});
-
-	$("#TooManyIgnoreButton").click(function(){
-		$("#TooManyDialogModal").hide();
-		refreshGraph(performFiltering(Patterns));
-	});
-
-	$("#TooManyOkButton").click(function(){ //adding a limiter to the filters
-		$("#TooManyDialogModal").hide();
-		Filters.push({Type: "count", Value: 50});
-		filterlistComponent.setState({filters: Filters});
-		filterlistComponent.forceUpdate();
-		refreshGraph(performFiltering(Patterns));
-	});
-});
-
-function applyFilters(){ //a function to decide wether to ask the user if they want to add a limiter or just go straight to updating
-	var filteredPatterns = performFiltering(Patterns);
-	if(filteredPatterns.length > 50){ //predetermined dangerous amount of patterns
-		$("#TooManyDialogModal").show();
-		$("#TooManyDialogPatternCount").text(filteredPatterns.length);
-	}
-	else{
-		refreshGraph(filteredPatterns);
-	}
-}
-
 var filterlistComponent;
 
 function OptionList(props) {
@@ -108,7 +67,7 @@ class FilterList extends React.Component {
 	constructor(props) {
     	super(props);
     	this.state = {
-				filters: []
+			filters: []
     	};
   	}
 
@@ -151,7 +110,52 @@ class FilterList extends React.Component {
 
 }
 
+function updateFiltersGUI(){
+	graphComponent.refs.FilterModule.refs.List.setState({ filters: Filters });
+}
+
+class FilterModule extends React.Component {
+	handleAddFilterButtonClick(event){
+		Filters.push({Type: "pattern_category", Value: ""});
+		updateFiltersGUI();
+	}
+	
+	handleApplyFilterButtonClick(event){
+		applyFilters();
+	}
+	
+	render(){
+		return (
+		<>
+			<button id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
+			<div id="GraphOuter"></div>
+			<div id="FilterPanel" className="collapse">
+				<div id="FilterPanelHeading">
+					<h2>Filters</h2>
+					<button onClick={this.handleAddFilterButtonClick.bind(this)} id="AddFilterButton" className="btn btn-light">Add Filter</button>
+					<button onClick={this.handleApplyFilterButtonClick.bind(this)} id="ApplyFiltersButton" className="btn btn-success">Apply Filters</button>
+				</div>
+				<ul id="FiltersList">
+					<FilterList ref="List" />
+				</ul>
+			</div>
+		</>
+		);
+	}
+}
+
+function applyFilters(){ //a function to decide wether to ask the user if they want to add a limiter or just go straight to updating
+	var filteredPatterns = performFiltering(Patterns);
+	if(filteredPatterns.length > 50){ //predetermined dangerous amount of patterns
+		warningDialogComponent.setState({Count: filteredPatterns.length});
+		$("#TooManyDialogModal").show();
+		$("#TooManyDialogPatternCount").text(filteredPatterns.length);
+	}
+	else{
+		refreshGraph(filteredPatterns);
+	}
+}
+
 function bindFilters(){
-	filterlistComponent = ReactDOM.render(<FilterList />, document.getElementById('FiltersList'));
-	filterlistComponent.setState({filters: Filters});
+	graphComponent.refs.FilterModule.refs.List.setState({filters: Filters});
 };

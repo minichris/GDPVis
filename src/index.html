@@ -22,17 +22,6 @@
 
 			</div>
 			<div id="Graph" style="display: none;">
-				<button id="ShowFiltersButton" class="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
-				<div id="GraphOuter"></div>
-				<div id="FilterPanel" class="collapse">
-					<div id="FilterPanelHeading">
-						<h2>Filters</h2>
-						<button id="AddFilterButton" class="btn btn-light">Add Filter</button>
-						<button id="ApplyFiltersButton" class="btn btn-success">Apply Filters</button>
-					</div>
-					<ul id="FiltersList">
-					</ul>
-				</div>
 			</div>
 			<div id="LoadingAjax">
 				<span>Loading...</span>
@@ -41,25 +30,7 @@
 		<div id="DocumentViewer"></div>
 		<!--div id="Info"></div-->
 	</div>
-	<div class="modal" id="TooManyDialogModal" tabIndex="-1" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Warning: high amount of elements</h5>
-					<button type="button" id="TooManyCloseButton" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					The graph you are trying to display will contain <span id="TooManyDialogPatternCount"></span> patterns! This high amount may cause your browser to become unresponsive. Add a limiter to prevent this?
-				</div>
-				<div class="modal-footer">
-					<button type="button" id="TooManyIgnoreButton" class="btn btn-danger">Show anyway</button>
-					<button type="button" id="TooManyOkButton" class="btn btn-primary">Add limiter</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div id="WarningDialog"></div>
 	<div id="Tooltip" style="opacity: 0"></div>
 	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -71,5 +42,6 @@
 	<script src="./graph.js" type="text/babel"></script>
 	<script src="./search.js" type="text/babel"></script>
 	<script src="./filterGUI.js" type="text/babel"></script>
+	<script src="./warningdialog.js" type="text/babel"></script>
 </body>
 </html>

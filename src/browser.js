@@ -76,8 +76,7 @@ function DocumentViewerEventHandler(e){
         docViewerComponent.setState({title: linkClicked});
         graphSelectBoxComponent.setState({filters: Filters, value: null});
     }
-    filterlistComponent.setState({filters: Filters});
-	filterlistComponent.forceUpdate();
+    updateFiltersGUI();
 }
 
 function DisplayDocumentViewer(show){

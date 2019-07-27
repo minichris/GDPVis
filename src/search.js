@@ -56,8 +56,7 @@ class SearchBox extends React.Component {
         Filters = generateReleventFilters(articleSelected);
     	refreshGraph(performFiltering(Patterns));
         docViewerComponent.setState({title: articleSelected});
-        filterlistComponent.setState({filters: Filters});
-    	filterlistComponent.forceUpdate();
+        updateFiltersGUI();
     }
 
     render(){
