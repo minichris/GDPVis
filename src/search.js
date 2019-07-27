@@ -54,7 +54,7 @@ class SearchBox extends React.Component {
     searchButtonClicked(event){
         let articleSelected = $("#SearchBox").val();
         Filters = generateReleventFilters(articleSelected);
-    	refreshGraph(performFiltering(Patterns));
+    	refreshGraph(performFiltering());
         docViewerComponent.setState({title: articleSelected});
         updateFiltersGUI();
     }

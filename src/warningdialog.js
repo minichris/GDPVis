@@ -8,14 +8,14 @@ class WarningDialog extends React.Component{
 	
 	handleShowAnywayButtonClick(event){
 		$("#TooManyDialogModal").hide();
-		refreshGraph(performFiltering(Patterns));
+		refreshGraph(performFiltering());
 	}
 	
 	handleAddLimiterButtonClick(event){
 		$("#TooManyDialogModal").hide();
 		Filters.push({Type: "count", Value: 50});
 		updateFiltersGUI();
-		refreshGraph(performFiltering(Patterns));
+		refreshGraph(performFiltering());
 	}
 	
 	handleCancelButtonClick(event){

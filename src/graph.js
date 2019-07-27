@@ -39,11 +39,13 @@ class Graph extends React.Component{
 		patterns.forEach(function(pattern){
 			pattern["PatternsLinks"].forEach(function(pLink){
 				if(includedPatternNames.includes(pLink.To)){ //if the link is to a pattern that is included
+					if(checkForRelation([pattern.Title,pLink.To], "Can Be Instantiated By")){
 					linksObject.push({ //create the array member
 						source: pattern.Title,
 						target: pLink.To,
-						value: 0
+						value: 1
 					});
+					}
 				}
 			});
 		});
@@ -213,34 +215,28 @@ class Graph extends React.Component{
 		}
 
 		function generateLinkColor(link){
-			function checkForRelation(relation){
-				return(
-					getPatternRelationsText(getPatternData(link.source), getPatternData(link.target)).includes(relation) ||
-					getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
-				);
-			}
 			
 			let color = [80,80,80]; //rgb
 
-			if(checkForRelation("Potentially Conflicting With")){
+			if(checkForRelation([link.source,link.target],"Potentially Conflicting With")){
 				for(let i = 0; i < 3; i++){
 					color[i] = color[i] + RelationshipColors["Potentially Conflicting With"][i]
 				}
 			}
 			
-			if(checkForRelation("Possible Closure Effects")){
+			if(checkForRelation([link.source,link.target],"Possible Closure Effects")){
 				for(let i = 0; i < 3; i++){
 					color[i] = color[i] + RelationshipColors["Possible Closure Effects"][i]
 				}
 			}
 			
-			if(checkForRelation("Can Instantiate") || checkForRelation("Can Be Instantiated By")){
+			if(checkForRelation([link.source,link.target],"Can Instantiate") || checkForRelation([link.source,link.target],"Can Be Instantiated By")){
 				for(let i = 0; i < 3; i++){
 					color[i] = color[i] + RelationshipColors["Can Be Instantiated By"][i]
 				}
 			}
 
-			if(checkForRelation("Can Modulate") || checkForRelation("Can Be Modulated By")){
+			if(checkForRelation([link.source,link.target],"Can Modulate") || checkForRelation([link.source,link.target],"Can Be Modulated By")){
 				for(let i = 0; i < 3; i++){
 					color[i] = color[i] + RelationshipColors["Can Be Modulated By"][i]
 				}
@@ -413,10 +409,4 @@ function ChangePatternSelection(newSelectionID){
 	$(nodeIDToHighlight).addClass('SelectedNode');
 }
 
-function getPatternRelationsText(sourcePattern, targetPattern){ //get the relation between a pattern
-	var relationsTexts = [];
-	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
-		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations;
-	}
-	return relationsTexts;
-}
+

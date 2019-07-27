@@ -22,12 +22,14 @@ $( document ).ready(function() {
 	});
 });
 
+//Given a set of filtered patterns, refreshes the graph with these patterns
 function refreshGraph(filteredPatterns){
 	graphComponent.setState({patterns: filteredPatterns});
 	graphSelectBoxComponent.setState({patterns: filteredPatterns});
 	setWindowHistory(docViewerComponent.state.title);
 }
 
+//Function for updaing the loading text
 function loadMessageUpdater(){
 	$("#LoadingAjax > span").text("Currently loaded " + Math.floor(100 * CurrentFileLoadPercentage) + "% of file " + CurrentLoadingFile + "/2.");
 }
@@ -35,6 +37,7 @@ function loadMessageUpdater(){
 var CurrentFileLoadPercentage;
 var CurrentLoadingFile = 0;
 
+//The common setup for loading JSON, including progress text system
 function loadViaAjax(inputURL){
 	CurrentLoadingFile += 1; //increase the currently downloading file
 	var request = $.ajax({
@@ -54,6 +57,7 @@ function loadViaAjax(inputURL){
 	return request;
 }
 
+//Loads and transforms the patterns from the json format
 function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
 	request.done(function(data) {
@@ -67,6 +71,7 @@ function loadPatterns(){
 	return request;
 }
 
+//Loads and transforms the Games from the json format
 function loadGames(){
 	var request = loadViaAjax("AllGames.json");
 	request.done(function(data) {
@@ -78,6 +83,14 @@ function loadGames(){
 		GameCategories = Array.from(GameCategories); //turn the set into an array
 	});
 	return request;
+}
+
+//Function to find if a pattern is in the list of currently filtered patterns
+function checkPatternCurrentlyFiltered(patternName){
+	//get the currently filtered patterns
+	var currentlyFilteredPatterns = performFiltering();
+	//check if the page we are looking for is in the current patterns
+	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
 }
 
 //Give a page title, find the type of the page
@@ -102,13 +115,63 @@ function getPageType(pageTitle){
 	return "Other";
 }
 
-function checkPatternCurrentlyFiltered(patternName){
-	//get the currently filtered patterns
-	var currentlyFilteredPatterns = performFiltering(Patterns);
-	//check if the page we are looking for is in the current patterns
-	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
+//Given a pattern name, gets the pattern's data
+function getPatternData(patternName){
+	return Patterns.find(pattern => pattern.Title == patternName);
 }
 
+//------------------------------
+//PATTERN RELATIONSHIP FUNCTIONS
+//------------------------------
+
+//Given a source pattern name and a target pattern name, find relation from the source to the target
+function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //get the relation between a pattern
+	let sourcePattern = getPatternData(sourcePatternName);
+	let targetPattern = getPatternData(targetPatternName);
+	let relationsTexts = null;
+	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
+		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations;
+	}
+	return relationsTexts;
+}
+
+//Given two pattern names and a relation text, returns if the 
+function checkForRelation(patternNames, relationText){
+	if(getPatternOneWayRelationTexts(patternNames[0], patternNames[1]) != null){
+		return getPatternOneWayRelationTexts(patternNames[0], patternNames[1]).includes(relationText);
+	}
+	
+	else if(getPatternOneWayRelationTexts(patternNames[1], patternNames[0]) != null){
+		return getPatternOneWayRelationTexts(patternNames[1], patternNames[0]).includes(relationText);
+	}
+	
+	else{
+		return false;
+	}
+}
+
+
+//Given two pattern names, Function to get a list of relationships between two patterns
+function getSharedPatternRelationships(patternNames){
+	let hasModulates = checkForRelation(patternNames, "Can Modulate") || checkForRelation(patternNames, "Can Be Modulated By");
+	let hasInstantiates = checkForRelation(patternNames, "Can Instantiate") || checkForRelation(patternNames, "Can Be Instantiated By");
+	let hasConflicting = checkForRelation(patternNames, "Potentially Conflicting With");
+	let hasClorsureEffects = checkForRelation(patternNames, "Possible Closure Effects");
+	let hasHyperlinked = (getPatternOneWayRelationTexts(patternNames[0], patternNames[1]) == []);
+	
+	let relationships = {
+		modulates: hasModulates,
+		instantiates: hasInstantiates,
+		conflicting: hasConflicting,
+		closureeffects: hasClorsureEffects,
+		hyperlinked: hasHyperlinked
+	}
+	
+	return(relationships);
+}
+
+
+//For a given page title, generates a relevent filter setup
 function generateReleventFilters(pageTitle){
 	switch(getPageType(pageTitle)){
 		case "Pattern":
@@ -147,41 +210,47 @@ function generateReleventFilters(pageTitle){
 	}
 }
 
-function getPatternData(patternName){
-	return Patterns.find(pattern => pattern.Title == patternName);
-}
+//------------------------------------------
+//FILTERS FUNCTIONS FOR THE FILTERING SYSTEM
+//------------------------------------------
 
-function patternCategoryFilter(inputPatterns, inputPatternSubcategory){ //filters a list of patterns to only ones that are found in a pattern subcategory
+//filters a list of patterns to only ones that are found in a pattern subcategory
+function patternCategoryFilter(inputPatterns, inputPatternSubcategory){
 	var outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(category => category == inputPatternSubcategory));
 	return outputPatterns;
 }
 
-function gameCategoryFilter(inputPatterns, inputGameSubcategory){ //filters a list of patterns to only ones that link to games found in a game subcategory
+//filters a list of patterns to only ones that link to games found in a game subcategory
+function gameCategoryFilter(inputPatterns, inputGameSubcategory){ 
 	var gamesOfCategory = Games.filter(game => game.categories.includes(inputGameSubcategory));
 	var outputPatterns = inputPatterns.filter(pattern => pattern.PatternsLinks.some(pLink => gamesOfCategory.some(game => game.name == pLink.To)));
 	return outputPatterns;
 }
 
-function pageFilter(inputPatterns, inputPage){ //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+//filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
+function pageFilter(inputPatterns, inputPage){ 
 	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage)) || (pattern.Title == inputPage));
 	return outputPatterns;
 }
 
-function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){ //filters a list of patterns to only ones that link to a specific page with a relation
+//filters a list of patterns to only ones that link to a specific page with a relation
+function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){
 	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage && pLink.AssociatedRelations.some(relation => relation == relationString))));
 	outputPatterns.push(Patterns.filter(pattern => pattern.Title == inputPage)[0]); //also include the original page
 	return outputPatterns;
 }
 
-function patternsLinkedToByPattern(inputPatterns, inputPattern){ //filters a list of patterns to only ones that come FROM a pattern page
+//filters a list of patterns to only ones that come FROM a pattern page
+function patternsLinkedToByPattern(inputPatterns, inputPattern){
 	var inputPatternObject = Patterns.filter(pattern => pattern.Title == inputPattern)[0];
 	var outputPatterns = inputPatterns.filter(pattern => inputPatternObject.PatternsLinks.map(pLink => pLink.To).includes(pattern.Title));
 	outputPatterns.push(inputPatternObject); //also include the original page
 	return outputPatterns;
 }
 
-function performFiltering(inputPatterns){
-	var outputPatterns = inputPatterns; //outputPatterns is the list of patterns we will be operating on the most
+//Performs filtering on the global list of patterns with the global current filter setup
+function performFiltering(){
+	var outputPatterns = Patterns; //outputPatterns is the list of patterns we will be operating on the most
 	var filtersValues = Filters; //gets the current filters from the GUI
 	console.log("_________FILTERS_________");
 	filtersValues.forEach(function(filter){

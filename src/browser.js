@@ -65,7 +65,7 @@ function DocumentViewerEventHandler(e){
 	var linkClicked = e.target.attributes['title'].value;
 	//get some new filters based on the selected link and update the filter list
 	Filters = generateReleventFilters(linkClicked);
-	refreshGraph(performFiltering(Patterns));
+	refreshGraph(performFiltering());
 
 	//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
 	if(checkPatternCurrentlyFiltered(linkClicked)){

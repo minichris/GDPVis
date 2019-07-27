@@ -35,12 +35,6 @@ class Tooltip extends React.Component{
 
 function getRelationColorContribution(link){
 	console.log(link);
-	function checkForRelation(relation){
-		return(
-			getPatternRelationsText(getPatternData(link.source), getPatternData(link.target)).includes(relation) ||
-			getPatternRelationsText(getPatternData(link.target), getPatternData(link.source)).includes(relation)
-		);
-	}
 	
 	let red = 0, green = 0, blue = 0;
 
@@ -81,7 +75,7 @@ class LinkTooltip extends React.Component{
 	}
 
 	formatRelationTexts(sourcePattern, targetPattern){
-		return getPatternRelationsText(sourcePattern, targetPattern).map(function(relation){
+		return getPatternOneWayRelationTexts(sourcePattern.Title, targetPattern.Title).map(function(relation){
 			function getRelationColors(){
 				if (typeof RelationshipColors[relation] !== 'undefined'){
 					return RelationshipColors[relation].flat();

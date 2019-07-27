@@ -145,7 +145,7 @@ class FilterModule extends React.Component {
 }
 
 function applyFilters(){ //a function to decide wether to ask the user if they want to add a limiter or just go straight to updating
-	var filteredPatterns = performFiltering(Patterns);
+	var filteredPatterns = performFiltering();
 	if(filteredPatterns.length > 50){ //predetermined dangerous amount of patterns
 		warningDialogComponent.setState({Count: filteredPatterns.length});
 		$("#TooManyDialogModal").show();
