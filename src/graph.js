@@ -42,7 +42,7 @@ class Graph extends React.Component{
 					linksObject.push({ //create the array member
 						source: pattern.Title,
 						target: pLink.To,
-						value: 1
+						value: 0
 					});
 				}
 			});
