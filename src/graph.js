@@ -42,13 +42,15 @@ class Graph extends React.Component{
 					linksObject.push({ //create the array member
 						source: pattern.Title,
 						target: pLink.To,
-						value: 1
+						value: 0
 					});
 				}
 			});
 		});
 		return linksObject;
 	}
+	
+	
 
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
@@ -260,6 +262,7 @@ class Graph extends React.Component{
 						Displaying {nodesData.length} nodes and {linksData.length} links.
 					</text>
 				</svg>
+				<RelationshipSelector />
 			</div>
 		);
 	}
@@ -313,6 +316,85 @@ class GraphSelectBox extends React.Component{
 					<option key={i} value={pat.Title}>{pat.Title}</option>
 				)}
 			</select>
+		);
+	}
+}
+
+class RelationshipSelector extends React.Component{
+	constructor(props) {
+		super(props);
+		this.state = {
+			modulates: true,
+			instantiates: true,
+			conflicts: true,
+			closureeffects: true,
+			hyperlinked: true
+		};
+
+		this.handleInputChange = this.handleInputChange.bind(this);
+	}
+	
+	handleInputChange(event) {
+		const target = event.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+
+		this.setState({
+		  [name]: value
+		});
+	}
+	
+	render(){
+		return(
+			<div id="RelationshipSelector">
+				<span>Relationships to Show</span>
+				<form>
+					<label>
+						<input
+						name="modulates"
+						type="checkbox"
+						checked={this.state.modulates}
+						onChange={this.handleInputChange} />
+						Modulates / Modulated By
+					</label>
+					<br />
+					<label>
+						<input
+						name="instantiates"
+						type="checkbox"
+						checked={this.state.instantiates}
+						onChange={this.handleInputChange} />
+						Instantiates / Instantiated By
+					</label>
+					<br />
+					<label>
+						<input
+						name="conflicts"
+						type="checkbox"
+						checked={this.state.conflicts}
+						onChange={this.handleInputChange} />
+						Potentially Conflicting
+					</label>
+					<br />
+					<label>
+						<input
+						name="closureeffects"
+						type="checkbox"
+						checked={this.state.closureeffects}
+						onChange={this.handleInputChange} />
+						Possible Closure Effects
+					</label>
+					<br />
+					<label>
+						<input
+						name="hyperlinked"
+						type="checkbox"
+						checked={this.state.hyperlinked}
+						onChange={this.handleInputChange} />
+						Articles Hyperlinked
+					</label>
+				</form>
+			</div>
 		);
 	}
 }

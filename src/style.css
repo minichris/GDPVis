@@ -74,7 +74,6 @@ h1{
 }
 
 #Content{
-	padding: 5px;
 	border-radius: 15px;
 	display: flex;
 	flex-wrap: wrap;
@@ -143,12 +142,7 @@ iframe{
 	padding: 0px;
 }
 
-#Content > #GraphLayout > div:not(:last-child){
-	margin-bottom: 10px;
-}
-
 #Content > #GraphLayout > div{
-	border-radius: 15px;
 	padding: 10px;
 	background: var(--bgColor);
 }
@@ -312,12 +306,32 @@ header > h1 {
 	float: right;
 }
 
-#Content > #GraphLayout > div:not(:last-child) {
-	margin: 5px;
-}
-
 #Content > #GraphLayout > #Search {
 	width: min-content;
+}
+
+/* Relationship Selector Stuff */
+#RelationshipSelector{
+    position: absolute;
+    bottom: 10px;
+    border: black solid 2px;
+    padding: 10px;
+    background: #bebebe9e;
+	color: black;
+}
+
+#RelationshipSelector > span{
+    text-align: center;
+    display: block;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+input[type=checkbox]{
+	margin-right: 5px;
+	width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
 }
 
 /*
