@@ -115,6 +115,51 @@ function getPageType(pageTitle){
 	return "Other";
 }
 
+
+//given a page's title, returns the orginal page location
+function getOrginalPageLocation(pageTitle){
+	let pageType = getPageType(pageTitle);
+	if(pageType == "Game Category" || pageType == "Pattern Category"){
+		return "http://virt10.itu.chalmers.se/index.php/Category:" + pageTitle.replace(/ /g,"_");
+	}
+	if(pageType == "Special"){
+		return false; //lets just ignore special pages for now
+		//return "http://virt10.itu.chalmers.se/index.php/Special:" + pageTitle.replace(/ /g,"_");
+	}
+	return "http://virt10.itu.chalmers.se/index.php/" + pageTitle.replace(/ /g,"_");
+}
+
+function getEditPageLocation(pageTitle){
+	if(getPageType(pageTitle) == "Game Category" || getPageType(pageTitle) == "Pattern Category"){
+		return "http://virt10.itu.chalmers.se/index.php?title=Category:" + pageTitle + "&action=edit";
+	}
+	if(getPageType(pageTitle) == "Special"){
+		return false;
+	}
+	return "http://virt10.itu.chalmers.se/index.php?title=" + pageTitle + "&action=edit";
+}
+
+function getDiscussionPageLocation(pageTitle){
+	let pageType = getPageType(pageTitle);
+	if(pageType == "Game Category" || pageType == "Pattern Category"){
+		return "http://virt10.itu.chalmers.se/index.php/Category_talk:" + pageTitle.replace(/ /g,"_");
+	}
+	if(pageType == "Special"){
+		return false;
+	}
+	return "http://virt10.itu.chalmers.se/index.php/Talk:" + pageTitle.replace(/ /g,"_");
+}
+
+function getHistoryPageLocation(pageTitle){
+	if(getPageType(pageTitle) == "Game Category" || getPageType(pageTitle) == "Pattern Category"){
+		return "http://virt10.itu.chalmers.se/index.php?title=Category:" + pageTitle + "&action=history";
+	}
+	if(getPageType(pageTitle) == "Special"){
+		return false;
+	}
+	return "http://virt10.itu.chalmers.se/index.php?title=" + pageTitle + "&action=history";
+}
+
 //Given a pattern name, gets the pattern's data
 function getPatternData(patternName){
 	return Patterns.find(pattern => pattern.Title == patternName);

@@ -94,14 +94,21 @@ h1{
 	display: grid;*/
 	position: absolute;
 	width: 0%;
-	transition: width 0.5s, border-width 0.5s, padding 0.5s;
-	transition-timing-function: ease;
+	/*transition: width 0.5s, border-width 0.5s, padding 0.5s;
+	transition-timing-function: ease;*/
     right: 0;
     margin: 0;
-	background: var(--bgColor2);
-	border: black solid;
+	/*background: var(--bgColor2);
+	border: black solid;*/
 	height: 90%;
 	user-select: text;
+	resize: horizontal;
+	overflow-x: auto;
+	overflow-y: hidden;
+	direction: rtl;
+	transition: none;
+	display: flex;
+	flex-direction: column;
 }
 
 iframe{
@@ -129,7 +136,6 @@ iframe{
 
 .insertedPage{
 	padding: 10px;
-	overflow-y: auto;
 	height: 100%;
 }
 
@@ -317,6 +323,43 @@ header > h1 {
     pointer-events: none;;
 }
 
+#DocumentContainer{
+	overflow-y: scroll;
+	background: #666666;
+    border: black solid 2px;
+}
+
+/* Document Viewer Toolbar Stuff */
+
+#DocumentViewerToolbar{
+	margin-top: 5px;
+	display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+	pointer-events: none;
+}
+
+#ExternalLinkGroup {
+	flex-direction: row-reverse;
+    display: flex;
+}
+
+#DocumentViewerToolbar > button{
+	pointer-events: all;
+}
+
+#DocumentViewerToolbar > #ExternalLinkGroup > button{
+	pointer-events: all;
+}
+
+#DocumentViewerToolbar > #ExternalLinkGroup > button:not(:last-child){
+	margin-right: 5px;
+}
+
+#TocToggleButton {
+	
+}
+
 /* Relationship Selector Stuff */
 #RelationshipSelector{
     position: absolute;
@@ -353,7 +396,6 @@ Items removed from the new design version
 #SearchBoxOuter > #SearchButton {
 	display: none;
 }
-
 #ShowFiltersButton{
 	display: none;
 }

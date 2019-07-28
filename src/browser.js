@@ -11,7 +11,7 @@ class DocumentViewer extends React.Component{
     }
 
     componentDidUpdate(){
-        document.getElementById("DocumentViewer").children[0].scrollTop = 0; //scroll the inner back to the top on page change
+        document.getElementById("DocumentContainer").scrollTop = 0; //scroll the inner back to the top on page change
     	$(".insertedPage").find("a[href]").click(function(e){
     		DocumentViewerEventHandler(e);
     	});
@@ -24,6 +24,26 @@ class DocumentViewer extends React.Component{
         }
         return null;
     }
+	
+	tocToggleButtonClick(event){
+		
+	}
+	
+	originalPageButtonClick(event){
+		window.open(getOrginalPageLocation(this.state.title));
+	}
+	
+	editPageButtonClick(event){
+		window.open(getEditPageLocation(this.state.title));
+	}
+	
+	discussionPageButtonClick(event){
+		window.open(getDiscussionPageLocation(this.state.title));
+	}
+	
+	historyPageButtonClick(event){
+		window.open(getHistoryPageLocation(this.state.title));
+	}
 
     render(){
         let pageTitle = this.state.title;
@@ -52,7 +72,23 @@ class DocumentViewer extends React.Component{
                 );
                 break;
         }
-        return(pageToRender);
+
+        return(
+			<>
+				<div id="DocumentContainer">
+				{pageToRender}
+				</div>
+				<div id="DocumentViewerToolbar">
+					<button style={{visibility: "hidden"}} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">T</button>
+					<div id="ExternalLinkGroup">
+						<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light">O</button>
+						<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light">E</button>
+						<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light">D</button>
+						<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light">H</button>
+					</div>
+				</div>
+			</>
+		);
     }
 }
 
@@ -81,7 +117,7 @@ function DocumentViewerEventHandler(e){
 
 function DisplayDocumentViewer(show){
 	if(show){
-		document.getElementById("DocumentViewer").style.display = "block";
+		document.getElementById("DocumentViewer").style.display = "flex";
 		document.getElementById("DocumentViewer").style.width = "50%"
 		document.getElementById("DocumentViewer").style.padding = "10px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px";
