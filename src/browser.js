@@ -81,10 +81,10 @@ class DocumentViewer extends React.Component{
 				<div id="DocumentViewerToolbar">
 					<button style={{visibility: "hidden"}} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">T</button>
 					<div id="ExternalLinkGroup">
-						<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light">O</button>
-						<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light">E</button>
-						<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light">D</button>
-						<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light">H</button>
+						<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
+						<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
+						<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
+						<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
 					</div>
 				</div>
 			</>

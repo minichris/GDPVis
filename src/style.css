@@ -348,12 +348,16 @@ header > h1 {
 	pointer-events: all;
 }
 
+button > img{
+	width: 24px;
+}
+
 #DocumentViewerToolbar > #ExternalLinkGroup > button{
 	pointer-events: all;
 }
 
 #DocumentViewerToolbar > #ExternalLinkGroup > button:not(:last-child){
-	margin-right: 5px;
+	margin-right: 10px;
 }
 
 #TocToggleButton {
