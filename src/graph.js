@@ -6,7 +6,12 @@ var RelationshipColors = {
 	"Can Be Instantiated By": [30, 30, 255],
 	"Can Modulate": [30, 255, 30],
 	"Can Be Modulated By": [30, 255, 30],
-	"Hyperlinks To": [50, 50, 50]
+	"Hyperlinks To": [170, 170, 170]
+}
+
+function getRelationshipColor(relationshipText){
+	let color = RelationshipColors[relationshipText];
+	return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 }
 
 class Graph extends React.Component{
@@ -368,7 +373,7 @@ class RelationshipSelector extends React.Component{
 			<div id="RelationshipSelector">
 				<span>Relationships to Show</span>
 				<form>
-					<label>
+					<label style={{color: getRelationshipColor("Can Modulate")}}>
 						<input
 						name="modulates"
 						type="checkbox"
@@ -377,7 +382,7 @@ class RelationshipSelector extends React.Component{
 						Modulates / Modulated By
 					</label>
 					<br />
-					<label>
+					<label style={{color: getRelationshipColor("Can Instantiate")}}>
 						<input
 						name="instantiates"
 						type="checkbox"
@@ -386,7 +391,7 @@ class RelationshipSelector extends React.Component{
 						Instantiates / Instantiated By
 					</label>
 					<br />
-					<label>
+					<label style={{color: getRelationshipColor("Potentially Conflicting With")}}>
 						<input
 						name="conflicts"
 						type="checkbox"
@@ -395,7 +400,7 @@ class RelationshipSelector extends React.Component{
 						Potentially Conflicting
 					</label>
 					<br />
-					<label>
+					<label style={{color: getRelationshipColor("Possible Closure Effects")}}>
 						<input
 						name="closureeffects"
 						type="checkbox"
@@ -404,7 +409,7 @@ class RelationshipSelector extends React.Component{
 						Possible Closure Effects
 					</label>
 					<br />
-					<label>
+					<label style={{color: getRelationshipColor("Hyperlinks To")}}>
 						<input
 						name="hyperlinked"
 						type="checkbox"
