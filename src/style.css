@@ -152,6 +152,7 @@ iframe{
 	padding: 10px;
 	height: 100%;
 	direction: ltr;
+	width: 100%;
 }
 
 #Content > #GraphLayout{
