@@ -67,6 +67,14 @@ h1{
 	margin: 0px;
 }
 
+a{
+	color: #a6b5ff;
+}
+
+a:hover {
+	color: #808dcd;
+}
+
 #Content{
 	border-radius: 15px;
 	display: flex;
@@ -109,6 +117,7 @@ h1{
 	transition: none;
 	display: flex;
 	flex-direction: column;
+	max-width: 100%;
 }
 
 iframe{
@@ -137,6 +146,7 @@ iframe{
 .insertedPage{
 	padding: 10px;
 	height: 100%;
+	direction: ltr;
 }
 
 #Content > #GraphLayout{
@@ -327,6 +337,35 @@ header > h1 {
 	overflow-y: scroll;
 	background: #666666;
     border: black solid 2px;
+	display: flex;
+    flex-direction: row-reverse;
+}
+
+/* Table of Content Stuff */
+
+#TableOfContents{
+	padding: 10px 0px 10px 10px;
+	position: absolute;
+    width: 200px;
+	direction: ltr;
+	font-size: 0.8rem;
+	overflow: scroll;
+	display: none; /* Starts hidden */
+}
+
+#TableOfContents::-webkit-scrollbar{
+	display:none;
+}
+
+#TableOfContents > div{
+	cursor: pointer;
+    background: #909090;
+    border: black solid 1px;
+    margin-top: 5px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 /* Document Viewer Toolbar Stuff */
@@ -360,8 +399,8 @@ button > img{
 	margin-right: 10px;
 }
 
-#TocToggleButton {
-	
+#TocToggleButton{
+	font-weight: 500;
 }
 
 /* Relationship Selector Stuff */

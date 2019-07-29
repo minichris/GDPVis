@@ -8,6 +8,7 @@ class DocumentViewer extends React.Component{
             title: "Special:VGTropes",
             prevtitle: "Special:VGTropes"
         };
+		this.internalPageRef = React.createRef();
     }
 
     componentDidUpdate(){
@@ -35,20 +36,22 @@ class DocumentViewer extends React.Component{
         switch(getPageType(pageTitle)){
             case "Pattern Category":
             case "Game Category":
-                pageToRender = <CategoryPage title={pageTitle.replace('Category:', '')}/>;
+                pageToRender = <CategoryPage ref={this.internalPageRef} title={pageTitle.replace('Category:', '')}/>;
                 break;
             case "Game":
-                pageToRender = <GamePage title={pageTitle}/>;
+                pageToRender = <GamePage ref={this.internalPageRef} title={pageTitle}/>;
                 break;
             case "Pattern":
-                pageToRender = <PatternPage title={pageTitle}/>;
+                pageToRender = <PatternPage ref={this.internalPageRef} title={pageTitle}/>;
                 break;
             case "Special":
-                pageToRender = <SpecialPage title={pageTitle} prevtitle={this.state.prevtitle}/>;
+                pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle} prevtitle={this.state.prevtitle}/>;
                 break;
             default:
                 pageToRender = (
-                    <span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+					<div ref={this.internalPageRef}>
+						<span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+					</div>
                 );
                 break;
         }
@@ -56,6 +59,7 @@ class DocumentViewer extends React.Component{
         return(
 			<>
 				<div id="DocumentContainer">
+				<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
 				{pageToRender}
 				</div>
 				<DocumentViewerToolbar pageTitle={this.state.title} />
@@ -64,13 +68,59 @@ class DocumentViewer extends React.Component{
     }
 }
 
+class DocumentViewerTableOfContents extends React.Component{
+	componentDidMount(){
+		document.getElementById("TableOfContents").style.display = "none";
+	}
+	
+	componentDidUpdate(prevProps) { //this has to be done in here because it works from what is put into the other component
+		$("#TableOfContents").empty();
+		$("#DocumentContainer").find(":header").each(function(i, heading){
+			let marginSize = (heading.tagName.replace('H','') - 1);
+			$("#TableOfContents").append("<div style='margin-left: " + marginSize + "rem'>" + heading.innerText + "</div>");
+		});
+		$("#TableOfContents > div").click(function(event){
+			console.log(event.target.innerHTML);
+			$("#DocumentContainer").find(":header").each(function(i, heading){
+				console.log(heading);
+				if(heading.innerText == event.target.innerHTML){
+					heading.scrollIntoView();
+				}
+			});
+		});
+	}
+	
+	render(){
+		return(
+			<div style={{display: "none"}} id="TableOfContents"></div>
+		);
+	}
+}
+
 class DocumentViewerToolbar extends React.Component{
 	constructor(props) {
         super(props);
     }
 	
 	tocToggleButtonClick(event){
-		
+		if(document.getElementById("TableOfContents").style.display == "block"){ //if it was in the visable state, now going hidden
+			document.getElementById("TableOfContents").style.display = "";
+			document.getElementsByClassName("insertedPage")[0].style.marginLeft = "";	
+		}
+		else{ //if it was in the hidden state, now going visable
+			document.getElementById("TableOfContents").style.display = "block";
+			document.getElementsByClassName("insertedPage")[0].style.marginLeft = "200px";	
+			document.getElementById("TableOfContents").style.height = document.querySelector("#DocumentContainer").clientHeight + "px";
+		}
+	}
+	
+	shouldShowToCToggleButton(pageTitle){
+		if(getPageType(pageTitle) == "Special"){
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 	
 	originalPageButtonClick(event){
@@ -92,7 +142,7 @@ class DocumentViewerToolbar extends React.Component{
 	render(){
 		return (
 			<div id="DocumentViewerToolbar">
-				<button style={{visibility: "hidden"}} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">T</button>
+				<button onClick={this.tocToggleButtonClick.bind(this)} disabled={!this.shouldShowToCToggleButton(this.props.pageTitle)} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">ToC</button>
 				<div id="ExternalLinkGroup">
 					<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(this.props.pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
 					<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(this.props.pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
@@ -130,7 +180,7 @@ function DocumentViewerEventHandler(e){
 function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
-		document.getElementById("DocumentViewer").style.width = "50%"
+		document.getElementById("DocumentViewer").style.width = "65%"
 		document.getElementById("DocumentViewer").style.padding = "10px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px";
 	}
