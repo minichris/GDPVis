@@ -38,6 +38,8 @@ class SearchBox extends React.Component {
 		$(this.refs["SearchBox"]).on('select2:select', function (e) {
 			component.searchButtonClicked(null);
 		});
+		
+		$(this.refs["SearchBox"]).val(null).trigger('change');
 	}
 	
 	componentWillUnmount() {
