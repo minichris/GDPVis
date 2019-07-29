@@ -166,7 +166,7 @@ class Graph extends React.Component{
 		circle.on("mouseover", function(d) {
 			tooltip.transition() //add the tooltip when the user mouses over the node
 				.duration(200).style("opacity", .9);
-			tooltip.style("left", (d3.event.pageX) + "px")
+			tooltip.style("left", (d3.event.pageX + 15) + "px")
 				.style("top", (d3.event.pageY - 28) + "px");
 			toolTipComponent.setState({d: d, type: "Pattern"});
 			})
@@ -180,7 +180,7 @@ class Graph extends React.Component{
 		link.on("mouseover", function(d) {
 			tooltip.transition() //add the tooltip when the user mouses over the node
 				.duration(200).style("opacity", .9);
-			tooltip.style("left", (d3.event.pageX) + "px")
+			tooltip.style("left", (d3.event.pageX + 15) + "px")
 				.style("top", (d3.event.pageY - 28) + "px");
 			toolTipComponent.setState({d: d, type: "Link"});
 		})

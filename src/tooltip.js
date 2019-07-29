@@ -105,15 +105,24 @@ class LinkTooltip extends React.Component{
 	}
 
 	generateLinkTooltipHTML(pattern1, pattern2){
-		//get all the relation texts
-		var relationTexts = [this.formatRelationTexts(pattern1, pattern2), this.formatRelationTexts(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<br>');
-
+		/*//get all the relation texts
+		var relationTexts = [this.formatRelationTexts(pattern1, pattern2), this.formatRelationTexts(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<br>');*/
+		
+		var relationTexts = [this.formatRelationTexts(pattern1, pattern2), this.formatRelationTexts(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
+		return(
+			"<span class='TooltipTitle'>" + 
+			relationTexts
+			+ "</span><div class='FindOutMoreText'>Click to find out more...</div>"
+		);
+		
+		/*
 		//get both possible sides of the relevent paragraphs, then remove any which are blank
 		var releventParagraphs = [this.getPatternLinksHTML(pattern1, pattern2), this.getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
 
 		return(
 			[relationTexts, releventParagraphs].join('<hr>')
 		);
+		*/
 	}
 
 	render(){
@@ -133,8 +142,9 @@ class PatternTooltip extends React.Component{
 		let discriptionText = $(xmlObject).find("#mw-content-text > p > i").first().text();
 		return(
 			<div id="TooltipInner">
-				{this.props.Pattern}<br />
-				<i>{discriptionText}</i>
+				<span className="TooltipTitle">{this.props.Pattern}</span><br />
+				<span className="TooltipBrief">{discriptionText}</span><br />
+				<div className="FindOutMoreText">Click to find out more...</div>
 			</div>
 		);
 	}

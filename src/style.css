@@ -174,18 +174,6 @@ iframe{
 	width: 100%;
 }
 
-#Tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 5px;
-    font: 12px sans-serif;
-    background: var(--bgColor2);
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-		max-width: 350px;
-}
-
 svg{
 	overflow: visible;
 }
@@ -265,16 +253,6 @@ svg{
 	background: #0b0212c4;
 }
 
-#Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
-	color: var(--linkBlue);
-}
-
-#Tooltip > div > hr {
-	border-top: 3px dotted var(--linkBlue);
-	margin-top: 0.5rem;
-	margin-bottom: 0.5rem;
-}
-
 .CategoryPage > #CatListBox > a{
 	display: inline-block;
 	width: 100px;
@@ -339,6 +317,45 @@ header > h1 {
     border: black solid 2px;
 	display: flex;
     flex-direction: row-reverse;
+}
+
+/* Tooltip Stuff */
+
+#Tooltip {
+    position: absolute;
+    padding: 5px;
+    background: var(--bgColor2);
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+	max-width: 350px;
+	border: black solid 2px;
+}
+
+
+#Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
+	color: var(--linkBlue);
+}
+
+hr {
+	border-top: 2.5px solid black;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-right: 20%;
+    margin-left: 20%;
+}
+
+.TooltipTitle {
+	font-weight: 500;
+}
+
+.TooltipBrief {
+	font-style: italic;
+}
+
+.FindOutMoreText {
+	font-size: 0.8rem;
+	text-align: right;
 }
 
 /* Table of Content Stuff */
