@@ -71,7 +71,7 @@ header{
 #Content{
 	display: flex;
 	flex-wrap: wrap;
-	overflow-y: auto;
+	overflow-y: visible;
 }
 
 #ShowFiltersButton, #DocumentViewer, #LoadingAjax, #FilterPanel {
