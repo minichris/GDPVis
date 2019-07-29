@@ -24,26 +24,6 @@ class DocumentViewer extends React.Component{
         }
         return null;
     }
-	
-	tocToggleButtonClick(event){
-		
-	}
-	
-	originalPageButtonClick(event){
-		window.open(getOrginalPageLocation(this.state.title));
-	}
-	
-	editPageButtonClick(event){
-		window.open(getEditPageLocation(this.state.title));
-	}
-	
-	discussionPageButtonClick(event){
-		window.open(getDiscussionPageLocation(this.state.title));
-	}
-	
-	historyPageButtonClick(event){
-		window.open(getHistoryPageLocation(this.state.title));
-	}
 
     render(){
         let pageTitle = this.state.title;
@@ -78,18 +58,50 @@ class DocumentViewer extends React.Component{
 				<div id="DocumentContainer">
 				{pageToRender}
 				</div>
-				<div id="DocumentViewerToolbar">
-					<button style={{visibility: "hidden"}} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">T</button>
-					<div id="ExternalLinkGroup">
-						<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
-						<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
-						<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
-						<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
-					</div>
-				</div>
+				<DocumentViewerToolbar pageTitle={this.state.title} />
 			</>
 		);
     }
+}
+
+class DocumentViewerToolbar extends React.Component{
+	constructor(props) {
+        super(props);
+    }
+	
+	tocToggleButtonClick(event){
+		
+	}
+	
+	originalPageButtonClick(event){
+		window.open(getOrginalPageLocation(this.props.pageTitle));
+	}
+	
+	editPageButtonClick(event){
+		window.open(getEditPageLocation(this.props.pageTitle));
+	}
+	
+	discussionPageButtonClick(event){
+		window.open(getDiscussionPageLocation(this.props.pageTitle));
+	}
+	
+	historyPageButtonClick(event){
+		window.open(getHistoryPageLocation(this.props.pageTitle));
+	}
+	
+	render(){
+		return (
+			<div id="DocumentViewerToolbar">
+				<button style={{visibility: "hidden"}} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">T</button>
+				<div id="ExternalLinkGroup">
+					<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(this.props.pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
+					<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(this.props.pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
+					<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(this.props.pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
+					<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(this.props.pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
+				</div>
+			</div>
+		);
+	}
 }
 
 //function for handling link clicks in the document browser

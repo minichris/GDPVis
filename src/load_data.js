@@ -19,6 +19,7 @@ $( document ).ready(function() {
 		$("#LoadingAjax").hide();
 		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
+		DisplayDocumentViewer(true);
 	});
 });
 
