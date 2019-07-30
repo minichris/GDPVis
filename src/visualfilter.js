@@ -1,3 +1,10 @@
+/*
+VISUAL BASED FILTERING RULES
+Nodes may only have one output port.
+Port to port connections are one to one.
+Any port can connect to a wildcard type input port, but wildcard ports shouldn't be used as output ports.
+*/
+
 //This is where all the possible types of links will be stored for the entire visual filtering systemLanguage
 var portTypes = [
 	{Type: "Pattern Array"},
@@ -6,21 +13,60 @@ var portTypes = [
 ]
 
 class Port {
-	constructor(name, type, owner) {
+	constructor(name, type, facing, owner) {
 		this.name = name; //Friendly name of the port
 		this.type = type; //portType of the port
+		this.facing = facing; //The facing of the port, needed to find compatibilty
 		this.owner = owner; //reference to filter which owns this port
 		this.connectedPort = null; //reference to the port we are connected to
 	}
 	
+	
+	//tries to connect this port to a forign port. Returns bool on success / fail.
 	connectPort(forignPort) {
-		if(this.type == forignPort.type || forignPort.type.WildcardType || this.type.WildcardType){
+		if((this.type == forignPort.type || forignPort.type.WildcardType || this.type.WildcardType) && this.facing != forignPort.facing){
 			this.connectedPort = forignPort;
 			forignPort.connectedPort = this;
+			return true;
 		}
 		else{
 			throw "Tried to connect ports which are incompatible.";
+			return false;
 		}
+	}
+	
+	//gets an array of compatible nodes objects (spawned from their classes)
+	getCompatibleNodes(){
+		//get an array of all the node classes that currently exist, removing webkit keys that cause warnings in the browser
+		let allNodeClasses = Object.keys(window).filter(key => !key.match("webkit")).map(key => window[key]).filter(key => key instanceof FilterNode);
+		//run the classes constructors to make them generate their port setups.
+		let nodeClassesAsObject = [];
+		allNodeClasses.forEach(nodeClass => nodeClassesAsObject.push(nodeClass.constructor()));
+		//filter the facing
+		if(this.facing == "input"){
+			//filter classes to those which have an output node
+			nodeClassesAsObject = nodeClassesAsObject.filter(NodeClass => NodeClass.outputPort != null);
+			if(!this.type.WildcardType){ //if this ports type isn't a wildcard and therefore needs to be checked
+				//check for compatible outputs
+				return nodeClassesAsObject.filter(NodeClass => NodeClass.outputNode.type == this.type || NodeClass.outputNode.type.type.WildcardType);
+			}
+			else{ //if it is a wildcard type, no type filtering needed
+				return nodeClassesAsObject;
+			}
+		}
+		if(this.facing == "output"){
+			//filter classes to those that have an input node
+			nodeClassesAsObject = nodeClassesAsObject.filter(NodeClass => NodeClass.inputPorts.length > 0);
+			if(!this.type.WildcardType){ //if this ports type isn't a wildcard and therefore needs to be checked
+				//check for compatible inputs
+				return nodeClassesAsObject.filter(NodeClass => NodeClass.inputPorts.filter(port => port.type == this.type || port.type.WildcardType).length > 0);
+			}
+			else{ //if it is a wildcard type, no type filtering needed
+				return nodeClassesAsObject;
+			}
+		}
+		throw "an unknown error happened in getCompatibleNodes(), facing: "+this.facing+", type: "+this.type;
+		return false;
 	}
 }
 
@@ -49,7 +95,7 @@ class FilterNode {
 			return false;
 		}
 		else{ //Success
-			this.outputPort = new Port(portName, this.getPortType(portTypeName), this);
+			this.outputPort = new Port(portName, this.getPortType(portTypeName), "output", this);
 			return true;
 		}
 	}
@@ -67,7 +113,7 @@ class FilterNode {
 			return false;
 		}
 		else{ //Success
-			this.inputPorts.push(new Port(portName, this.getPortType(portTypeName), this));
+			this.inputPorts.push(new Port(portName, this.getPortType(portTypeName), "input", this));
 			return true;
 		}
 	}
@@ -89,4 +135,3 @@ class OutputNode extends FilterNode{
 
 var allPattternsNode = new AllPatternsNode();
 var outputNode = new OutputNode();
-outputNode.inputPorts[0].connectPort(allPattternsNode.outputPort);
