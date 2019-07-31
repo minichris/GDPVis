@@ -1,6 +1,6 @@
 /*
 VISUAL BASED FILTERING RULES
-Nodes may only have one output port.
+Nodes only have exactly one output port.
 Port to port connections are one to one.
 Any port can connect to a wildcard type input port, but wildcard ports shouldn't be used as output ports.
 */
@@ -12,6 +12,40 @@ var portTypes = [
 	{Type: "Wildcard Array", WildcardType: true} //This type will accept a connection to any other type
 ]
 
+var listTypes = [
+	{Type: "Pattern Category", Content: function(){return PatternCategories}},
+	{Type: "Game Category", Content: function(){return GameCategories}},
+	{Type: "Game", Content: function(){return Games}},
+	{Type: "Pattern", Content: function(){return Patterns}},
+	{Type: "Relation Type", Content: function(){throw "not implemented yet"; return false;}}
+]
+
+class List {
+	constructor(name, type) {
+		this.name = name; //Friendly name of the port
+		this.type = type; //listType of the port
+		this.selectedItem = null;
+	}
+	
+	//shorthand for getting the possible selection of the list
+	getItems(){
+		return this.type.Content();
+	}
+	
+	//validates the input before setting the selected item
+	validatedSetItem(item){
+		//if the array actually contains this item
+		if(this.getItems().indexOf(item) > 0){
+			this.selectedItem = item;
+			return true;
+		}
+		else{
+			throw "List doesn't contain item given to set to";
+			return false;
+		}
+	}
+}
+
 class Port {
 	constructor(name, type, facing, owner) {
 		this.name = name; //Friendly name of the port
@@ -21,6 +55,22 @@ class Port {
 		this.connectedPort = null; //reference to the port we are connected to
 	}
 	
+	//if this is an input port, get the connected output port's data
+	connectedPortData(){
+		if(this.facing == "input"){
+			if(this.connectedPort){
+				return this.connectedPort.owner.getOutputData();
+			}
+			else{
+				throw "can only get connected port data if one is connected";
+				return false;
+			}
+		}
+		else{
+			throw "can only get the connected port data from an input port";
+			return false;
+		}
+	}
 	
 	//tries to connect this port to a forign port. Returns bool on success / fail.
 	connectPort(forignPort) {
@@ -68,11 +118,58 @@ class Port {
 		throw "an unknown error happened in getCompatibleNodes(), facing: "+this.facing+", type: "+this.type;
 		return false;
 	}
+	
+		
+	//utility method for getting the most appropriate input to attach to
+	getMatchingPort(forignFilterNode, connect){
+		if(this.facing == "input"){
+			if(this.type.WildcardType || forignFilterNode.outputPort.type.WildcardType){ //any output will do
+				if(connect){
+					this.connectPort(forignFilterNode.outputPort);
+				}
+				return forignFilterNode.outputPort;
+			}
+			if(forignFilterNode.outputPort.type == this.type){ //types match
+				if(connect){
+					this.connectPort(forignFilterNode.outputPort);
+				}
+				return forignFilterNode.outputPort;
+			}
+			return false; //failed to get matching port
+		}
+		if(this.facing == "output"){
+			let bestPort = forignFilterNode.inputPorts.find(port => port.type == this.type);
+			if(bestPort != null){
+				if(connect){
+					this.connectPort(bestPort);
+				}
+				return bestPort;
+			}
+			bestPort = forignFilterNode.inputPorts.find(port => port.type.WildcardType)
+			if(bestPort != null){
+				if(connect){
+					this.connectPort(bestPort);
+				}
+				return bestPort;
+			}
+			if(this.type.WildcardType){
+				if(connect){
+					this.connectPort(forignFilterNode.inputPorts[0]);
+				}
+				return forignFilterNode.inputPorts[0];
+			}
+			else{
+				//no matching ports
+				return false;
+			}
+		}
+	}
 }
 
 class FilterNode {
     constructor() {
 		this.inputPorts = [];
+		this.inputLists = [];
 		this.outputPort = null;
     }
 	
@@ -88,8 +185,8 @@ class FilterNode {
 		return portTypes.find(type => type.Type == portTypeName);
 	}
 	
-	//method for properly setting the output ports of a filter, returns true on success
-    setOutputPort(portTypeName, portName){
+	//method for properly setting the output ports of a filter, returns port on success
+    setOutputPort(portTypeName, portTitle){
 		//getting and checking the type of the port
 		if(this.getPortType(portTypeName) == null){
 			throw "Tried to add port with unknown portType.";
@@ -101,26 +198,46 @@ class FilterNode {
 			return false;
 		}
 		else{ //Success
-			this.outputPort = new Port(portName, this.getPortType(portTypeName), "output", this);
-			return true;
+			this.outputPort = new Port(portTitle, this.getPortType(portTypeName), "output", this);
+			return this.outputPort;
 		}
 	}
 
-	//method for properly adding input ports to a filter, returns true on success
-    addInputPort(portTypeName, portName){
+	//method for properly adding input ports to a filter, returns port on success
+    addInputPort(portTypeName, portTitle){
 		//getting and checking the type of the port
 		if(this.getPortType(portTypeName) == null){
 			throw "Tried to add port with unknown portType.";
 			return false;
 		}
 		//checking the name of the port doesn't already exist on this filter
-		if(this.inputPorts.filter(port => port.Name == portName).length > 0){
+		if(this.inputPorts.filter(port => port.Name == portTitle).length > 0){
 			throw "A port with the name given already exists."
 			return false;
 		}
 		else{ //Success
-			this.inputPorts.push(new Port(portName, this.getPortType(portTypeName), "input", this));
-			return true;
+			let newPort = new Port(portTitle, this.getPortType(portTypeName), "input", this);
+			this.inputPorts.push(newPort);
+			return newPort;
+		}
+	}
+	
+	//method for properly adding lists to a filter, returns list on success
+	addInputList(listTypeName, listTitle){
+		//getting and checking the type of the list
+		if(listTypes.find(type => type.Type == listTypeName) == null){
+			throw "Tried to add list with unknown portType.";
+			return false;
+		}
+		//checking the name of the list doesn't already exist on this filter
+		if(this.inputLists.filter(list => list.Name == listTitle).length > 0){
+			throw "A list with the name given already exists."
+			return false;
+		}
+		else{ //Success
+			let newList = new List(listTitle, listTypes.find(type => type.Type == listTypeName));
+			this.inputLists.push(newList);
+			return newList;
 		}
 	}
 }
@@ -135,6 +252,23 @@ class AllPatternsNode extends FilterNode{
 	getOutputData(){
 		super.getOutputData();
 		return Patterns; //global patterns set in load_data.js
+	}
+}
+
+class PatternsByPatternCategoryNode extends FilterNode{
+	constructor(){
+		super();
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.categoryList = this.addInputList("Pattern Category", "Pattern Category");
+		this.setOutputPort("Pattern Array", "Output Patterns");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		let inputPatterns = this.patternsPort.connectedPortData();
+		let inputCategory = this.categoryList.selectedItem;
+		let outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(cate => cate == inputCategory));
+		return outputPatterns;
 	}
 }
 
@@ -154,6 +288,14 @@ class OutputNode extends FilterNode{
 	}
 }
 
-var allPattternsNode = new AllPatternsNode();
-var outputNode = new OutputNode();
-outputNode.inputPorts[0].connectPort(allPattternsNode.outputPort);
+function doVisualFilterDebug(){
+	var allPattternsNode = new AllPatternsNode();
+	var patternsByPatternCategoryNode = new PatternsByPatternCategoryNode();
+	var outputNode = new OutputNode();
+
+	allPattternsNode.outputPort.getMatchingPort(patternsByPatternCategoryNode, true);
+	patternsByPatternCategoryNode.outputPort.getMatchingPort(outputNode, true);
+
+	patternsByPatternCategoryNode.inputLists[0].selectedItem = "Negative Patterns";
+	console.log(outputNode.getOutputData());
+}

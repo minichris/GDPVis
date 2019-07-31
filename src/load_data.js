@@ -20,6 +20,7 @@ $( document ).ready(function() {
 		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 		DisplayDocumentViewer(true);
+		doVisualFilterDebug(); //enable the testing of visualfilter.js
 	});
 });
 
