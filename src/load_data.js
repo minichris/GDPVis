@@ -11,6 +11,7 @@ $( document ).ready(function() {
 	graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	requiredDataLoadedPromise.then(function() {
+		createGameToPatternRelations();
 		loadFiltersorDefaults();
 		bindFilters();
 		applyFilters();
@@ -23,6 +24,13 @@ $( document ).ready(function() {
 		doVisualFilterDebug(); //enable the testing of visualfilter.js
 	});
 });
+
+//Adds members to the game array of associated patterns
+function createGameToPatternRelations(){
+	Games.forEach(function(game){
+		game.LinkedPatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == game.name))
+	});
+}
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
 function refreshGraph(filteredPatterns){
