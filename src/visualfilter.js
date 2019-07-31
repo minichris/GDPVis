@@ -76,13 +76,19 @@ class FilterNode {
 		this.outputPort = null;
     }
 	
+	//method called to get the output of this node,should be overridden in base classes
+	getOutputData(){
+		if(this.inputPorts.some(port => port.connectedPort == null)){
+			return false;
+		}
+	}
 	
-	//function for getting portType object from portTypeName
+	//method for getting portType object from portTypeName
 	getPortType(portTypeName){
 		return portTypes.find(type => type.Type == portTypeName);
 	}
 	
-	//function for properly setting the output ports of a filter, returns true on success
+	//method for properly setting the output ports of a filter, returns true on success
     setOutputPort(portTypeName, portName){
 		//getting and checking the type of the port
 		if(this.getPortType(portTypeName) == null){
@@ -100,7 +106,7 @@ class FilterNode {
 		}
 	}
 
-	//function for properly adding input ports to a filter, returns true on success
+	//method for properly adding input ports to a filter, returns true on success
     addInputPort(portTypeName, portName){
 		//getting and checking the type of the port
 		if(this.getPortType(portTypeName) == null){
@@ -119,19 +125,35 @@ class FilterNode {
 	}
 }
 
+//a filter node that just outputs all of the patterns in the system
 class AllPatternsNode extends FilterNode{
 	constructor(){
 		super();
 		this.setOutputPort("Pattern Array", "All Patterns");
 	}
+	
+	getOutputData(){
+		super.getOutputData();
+		return Patterns; //global patterns set in load_data.js
+	}
 }
 
+//a node which the GUI links to as the final output of the filtering system
 class OutputNode extends FilterNode{
 	constructor(){
 		super();
 		this.addInputPort("Wildcard Array", "Filtered Items");
 	}
+	
+	//although this node doesn't have an output port, it does need this method 
+	//as it is the final node in the graph, and the output of this method is
+	//what is displayed to the user
+	getOutputData(){
+		super.getOutputData();
+		return this.inputPorts[0].connectedPort.owner.getOutputData();
+	}
 }
 
 var allPattternsNode = new AllPatternsNode();
 var outputNode = new OutputNode();
+outputNode.inputPorts[0].connectPort(allPattternsNode.outputPort);
