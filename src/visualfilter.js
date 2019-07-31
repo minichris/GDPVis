@@ -255,6 +255,20 @@ class AllPatternsNode extends FilterNode{
 	}
 }
 
+//a filter node that just outputs all of the games in the system
+class AllGamesNode extends FilterNode{
+	constructor(){
+		super();
+		this.setOutputPort("Game Array", "All Games");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		return Games; //global game set in load_data.js
+	}
+}
+
+//a filter node that filters patterns by their pattern category
 class PatternsByPatternCategoryNode extends FilterNode{
 	constructor(){
 		super();
@@ -267,10 +281,76 @@ class PatternsByPatternCategoryNode extends FilterNode{
 		super.getOutputData();
 		let inputPatterns = this.patternsPort.connectedPortData();
 		let inputCategory = this.categoryList.selectedItem;
-		let outputPatterns = inputPatterns.filter(pattern => pattern.Categories.some(cate => cate == inputCategory));
-		return outputPatterns;
+		return inputPatterns.filter(pattern => pattern.Categories.some(cate => cate == inputCategory));
 	}
 }
+
+//a filter node that filters games by their game category
+class GamesByGameCategoryNode extends FilterNode{
+	constructor(){
+		super();
+		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.categoryList = this.addInputList("Game Category", "Game Category");
+		this.setOutputPort("Game Array", "Output Games");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		let inputGames = this.gamesPort.connectedPortData();
+		let inputCategory = this.categoryList.selectedItem;
+		return inputGames.filter(game => game.Categories.some(cate => cate == inputCategory));
+	}
+}
+
+//a filter node that filters patterns by those which are linked to a game
+class PatternsLinkedToGameNode extends FilterNode{
+	constructor(){
+		super();
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.gameList = this.addInputList("Game", "Game");
+		this.setOutputPort("Pattern Array", "Output Patterns");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		let inputPatterns = this.patternsPort.connectedPortData();
+		let inputGame = this.gameList.selectedItem;
+		return inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputGame)));
+	}
+}
+
+//a filter node that filters games by those which are linked to a pattern
+class GamesLinkedToPatternNode extends FilterNode{
+	constructor(){
+		super();
+		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.setOutputPort("Game Array", "Output Games");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		let inputGames = this.gamesPort.connectedPortData();
+		let inputPattern = this.patternList.selectedItem;
+		return inputGames.filter(game => (game.LinkedPatterns.some(pattern => pattern == inputPattern)));
+	}
+}
+
+//a filter node which filters patterns by those which have a relation to another pattern
+
+//a filter node which filters patterns by those which DON'T have a relation to another pattern
+
+//a filter node which filters games by those which share patterns with other games
+
+//a filter node which filters patterns by those found in games
+
+//a filter node which filters games by those that use patterns
+
+//a filter node which combines arrays
+
+//a filter node which intersects arrays
+
+//a filter node which finds the difference in arrays
 
 //a node which the GUI links to as the final output of the filtering system
 class OutputNode extends FilterNode{
