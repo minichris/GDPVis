@@ -17,7 +17,14 @@ var listTypes = [
 	{Type: "Game Category", Content: function(){return GameCategories}},
 	{Type: "Game", Content: function(){return Games}},
 	{Type: "Pattern", Content: function(){return Patterns}},
-	{Type: "Relation Type", Content: function(){throw "not implemented yet"; return false;}}
+	{Type: "Relation Type", Content: function(){throw "not implemented yet"; return false;}},
+	{Type: "Number", Content: function(){
+		var list = [];
+		for (var i = 0; i <= 99; i++) {
+			list.push(i);
+		}
+		return list;
+	}}
 ]
 
 class List {
@@ -337,20 +344,126 @@ class GamesLinkedToPatternNode extends FilterNode{
 }
 
 //a filter node which filters patterns by those which have a relation to another pattern
+class PatternsWithRelationToPatternNode extends FilterNode{
+	constructor(){
+		super();
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.setOutputPort("Pattern Array", "Output Patterns");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which filters patterns by those which DON'T have a relation to another pattern
+class PatternsWithoutRelationToPatternNode extends FilterNode{
+	constructor(){
+		super();
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.setOutputPort("Pattern Array", "Output Patterns");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which filters games by those which share patterns with other games
+class GamesSharingPatternsWithGameNode extends FilterNode{
+	constructor(){
+		super();
+		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.gameList = this.addInputList("Game", "Game");
+		this.minPatternsList = this.addInputList("Number", "Minimum Patterns To Share");
+		this.maxPatternsList = this.addInputList("Number", "Maximum Patterns To Share");
+		this.setOutputPort("Game Array", "Output Games");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which filters patterns by those found in games
+class PatternsByThoseFoundInGames extends FilterNode{
+	constructor(){
+		super();
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.setOutputPort("Pattern Array", "Output Patterns");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which filters games by those that use patterns
+class GamesByThoseWhichUsePatterns extends FilterNode{
+	constructor(){
+		super();
+		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.setOutputPort("Game Array", "Output Games");
+	}
+	
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which combines arrays
+class ArrayUnionNode extends FilterNode{
+	constructor(){
+		super();
+		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
+		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
+		this.setOutputPort("Wildcard Array", "Output Array");
+	}
+		
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which intersects arrays
+class ArrayIntersectionNode extends FilterNode{
+	constructor(){
+		super();
+		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
+		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
+		this.setOutputPort("Wildcard Array", "Output Array");
+	}
+		
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a filter node which finds the difference in arrays
+class ArrayDifferenceNode extends FilterNode{
+	constructor(){
+		super();
+		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
+		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
+		this.setOutputPort("Wildcard Array", "Output Array");
+	}
+		
+	getOutputData(){
+		super.getOutputData();
+		throw "getOutputData not implemented yet";
+	}
+}
 
 //a node which the GUI links to as the final output of the filtering system
 class OutputNode extends FilterNode{
