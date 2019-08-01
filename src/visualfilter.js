@@ -349,6 +349,7 @@ class PatternsWithRelationToPatternNode extends FilterNode{
 		super();
 		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
 		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.relationList = this.addInputList("Relation Type", "Relation Type");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
@@ -364,6 +365,7 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 		super();
 		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
 		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.relationList = this.addInputList("Relation Type", "Relation Type");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
