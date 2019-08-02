@@ -6,7 +6,8 @@ class DocumentViewer extends React.Component{
         super(props);
         this.state = {
             title: "Special:VGTropes",
-            prevtitle: "Special:VGTropes"
+            prevtitle: "Special:VGTropes",
+			openSize: "65%"
         };
 		this.internalPageRef = React.createRef();
     }
@@ -80,13 +81,17 @@ class DocumentResizer extends React.Component{
 		}
 
 		function Resize(e) {
-			document.getElementById("DocumentViewer").style.width = Math.max((window.innerWidth - e.clientX), 330) + 'px';
+			let newOpenWidth = Math.max((window.innerWidth - e.clientX), 330) + 'px';
+			docViewerComponent.state.openSize = newOpenWidth;
+			document.getElementById("DocumentViewer").style.width = newOpenWidth;
+			document.getElementById("DocumentViewer").style.transition = "none";
 		}
 
 		function stopResize(e) {
 			window.removeEventListener('mousemove', Resize, false);
 			window.removeEventListener('mouseup', stopResize, false);
 			window.removeEventListener('selectstart', disableSelect);
+			document.getElementById("DocumentViewer").style.transition = null;
 		}
 		
 		window.addEventListener('mousemove', Resize, false);
@@ -214,12 +219,12 @@ function DocumentViewerEventHandler(e){
 function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
-		document.getElementById("DocumentViewer").style.width = "65%"
+		document.getElementById("DocumentViewer").style.width = docViewerComponent.state.openSize;
 		document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
 	}
 	else{
-		document.getElementById("DocumentViewer").style.width = "0%"
+		document.getElementById("DocumentViewer").style.width = "0"
 		document.getElementById("DocumentViewer").style.padding = "0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "0px"
 		setTimeout(function(){
