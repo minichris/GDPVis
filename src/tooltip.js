@@ -34,8 +34,6 @@ class Tooltip extends React.Component{
 }
 
 function getRelationColorContribution(link){
-	console.log(link);
-	
 	let red = 0, green = 0, blue = 0;
 
 	if(checkForRelation("Potentially Conflicting With")){

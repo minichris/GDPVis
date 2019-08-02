@@ -155,14 +155,8 @@ class Graph extends React.Component{
 			return d.id;
 		});
 		
-		root.selectAll("rect").each(function(d){
-			console.log(this);
-			console.log(d);
-		});
-		
 		$(this.svg.current).click(function(e) { //clicking the background
 			if(e.target.parentNode.id == "GraphOuter"){
-				console.log(event);
 				DisplayDocumentViewer(false);
 			}
 		});

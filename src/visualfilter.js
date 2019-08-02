@@ -428,7 +428,6 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 }
 
 //a filter node which filters games by those which share patterns with other games
-//UNFINISHED
 class GamesSharingPatternsWithGameNode extends FilterNode{
 	constructor(){
 		super();
@@ -600,5 +599,6 @@ function doVisualFilterDebug(){
 	patternsByPatternCategoryNode.outputPort.getMatchingPort(outputNode, true);
 
 	patternsByPatternCategoryNode.inputLists[0].selectedItem = "Negative Patterns";
+	console.log("doVisualFilterDebug() output follows:");
 	console.log(outputNode.getOutputData());
 }

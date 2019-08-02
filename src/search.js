@@ -3,10 +3,6 @@ class SearchBox extends React.Component {
         super(props);
     }
 
-    handleFilterTypeChange(event) {
-        console.log(event);
-    }
-
     getOptions(){ //get all the options for the option text
         let options = [];
         Patterns.forEach((pattern, i) =>
