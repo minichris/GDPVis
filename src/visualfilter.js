@@ -56,6 +56,7 @@ class List {
 class Port {
 	constructor(name, type, facing, owner) {
 		this.name = name; //Friendly name of the port
+		this.initialType = type //portType to set this back to on disconnect, if connecting changed the type
 		this.type = type; //portType of the port
 		this.facing = facing; //The facing of the port, needed to find compatibilty
 		this.owner = owner; //reference to filter which owns this port
@@ -80,14 +81,54 @@ class Port {
 	}
 	
 	//tries to connect this port to a forign port. Returns bool on success / fail.
-	connectPort(forignPort) {
-		if((this.type == forignPort.type || forignPort.type.WildcardType || this.type.WildcardType) && this.facing != forignPort.facing){
-			this.connectedPort = forignPort;
-			forignPort.connectedPort = this;
+	connectPort(forignPort, force) {
+		if((this.type == forignPort.type || forignPort.type.WildcardType || this.type.WildcardType) //if the ports types are compatible
+		&& this.facing != forignPort.facing //if they are not facing the same direction
+		){
+			if(forignPort.connectedPort != null){ //if the forign port already has a connection
+				if(force){ //if we are forcing our connection
+					forignPort.disconnectPort(); //disconnect the forign port
+				}
+				else{
+					throw "tried to connect to a port that already has a connection with no force";
+					return false;
+				}
+			}
+			//at this point the forign port will be unconnected from any other port
+			//handle this side of the connection
+			this.connectedPort = forignPort; //connect this port to the forign port
+			this.owner.portConnectedEvent(this); //dispatch the connection event to our owning filter node
+			//handle the forign side of the connection
+			forignPort.connectedPort = this; //connect the forign port to this port
+			forignPort.owner.portConnectedEvent(forignPort); //dispatch the connection event to the forign owning filter node
 			return true;
 		}
 		else{
-			throw "Tried to connect ports which are incompatible.";
+			if(!(this.facing != forignPort.facing)){
+				throw "tried to connect ports which are facing the same direction.";
+			}
+			if(!(this.type == forignPort.type || forignPort.type.WildcardType || this.type.WildcardType)){
+				throw "tried to connect ports that aren't wildcard ports of different types";
+			}
+			if(!(forignPort.connectedPort == null)){
+				throw "tried to connect to a taken port";
+			}
+			return false;
+		}
+	}
+	
+	//disconnected this port from any forign ports
+	disconnectPort(){
+		let forignPort = this.connectedPort;
+		if(forignPort != null){
+			forignPort.connectedPort = null; //disconnect the forign side of the connection
+			forignPort.owner.portDisconnectedEvent(forignPort); //call event
+			this.connectedPort = null; //disconnect this side of the connection
+			this.owner.portDisconnectedEvent(this); //call event
+			return true;
+		}
+		else{
+			throw "tried to disconnect an unconnected port.";
 			return false;
 		}
 	}
@@ -95,10 +136,10 @@ class Port {
 	//gets an array of compatible nodes objects (spawned from their classes)
 	getCompatibleNodes(){
 		//get an array of all the node classes that currently exist, removing webkit keys that cause warnings in the browser
-		let allNodeClasses = Object.keys(window).filter(key => !key.match("webkit")).map(key => window[key]).filter(key => key instanceof FilterNode);
+		let nodeClasses = Object.keys(window).filter(key => !key.match("webkit")).map(key => window[key]).filter(key => typeof key == "function").map(key => key.prototype).filter(key => key instanceof FilterNode);
 		//run the classes constructors to make them generate their port setups.
 		let nodeClassesAsObject = [];
-		allNodeClasses.forEach(nodeClass => nodeClassesAsObject.push(nodeClass.constructor()));
+		nodeClasses.forEach(nodeClass => nodeClassesAsObject.push(new nodeClass.constructor()));
 		//filter the facing
 		if(this.facing == "input"){
 			//filter classes to those which have an output node
@@ -128,17 +169,17 @@ class Port {
 	
 		
 	//utility method for getting the most appropriate input to attach to
-	getMatchingPort(forignFilterNode, connect){
+	getMatchingPort(forignFilterNode, connect, force){
 		if(this.facing == "input"){
 			if(this.type.WildcardType || forignFilterNode.outputPort.type.WildcardType){ //any output will do
 				if(connect){
-					this.connectPort(forignFilterNode.outputPort);
+					this.connectPort(forignFilterNode.outputPort, force);
 				}
 				return forignFilterNode.outputPort;
 			}
 			if(forignFilterNode.outputPort.type == this.type){ //types match
 				if(connect){
-					this.connectPort(forignFilterNode.outputPort);
+					this.connectPort(forignFilterNode.outputPort, force);
 				}
 				return forignFilterNode.outputPort;
 			}
@@ -148,20 +189,20 @@ class Port {
 			let bestPort = forignFilterNode.inputPorts.find(port => port.type == this.type);
 			if(bestPort != null){
 				if(connect){
-					this.connectPort(bestPort);
+					this.connectPort(bestPort, force);
 				}
 				return bestPort;
 			}
 			bestPort = forignFilterNode.inputPorts.find(port => port.type.WildcardType)
 			if(bestPort != null){
 				if(connect){
-					this.connectPort(bestPort);
+					this.connectPort(bestPort, force);
 				}
 				return bestPort;
 			}
 			if(this.type.WildcardType){
 				if(connect){
-					this.connectPort(forignFilterNode.inputPorts[0]);
+					this.connectPort(forignFilterNode.inputPorts[0], force);
 				}
 				return forignFilterNode.inputPorts[0];
 			}
@@ -180,7 +221,16 @@ class FilterNode {
 		this.outputPort = null;
     }
 	
-	//method called to get the output of this node,should be overridden in base classes
+	//method called by ports when they are attached to other ports, can be overridden in base classes
+	portConnectedEvent(port){
+	}
+	
+	//method called by port when they are disconnected from other ports, can be ovridden in base classes
+	portDisconnectedEvent(port){
+		
+	}
+	
+	//method called to get the output of this node, should be overridden in base classes
 	getOutputData(){
 		if(this.inputPorts.some(port => port.connectedPort == null)){
 			return false;
@@ -393,7 +443,7 @@ class GamesSharingPatternsWithGameNode extends FilterNode{
 }
 
 //a filter node which filters patterns by those found in games
-class PatternsByThoseFoundInGames extends FilterNode{
+class PatternsByThoseFoundInGamesNode extends FilterNode{
 	constructor(){
 		super();
 		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
@@ -408,7 +458,7 @@ class PatternsByThoseFoundInGames extends FilterNode{
 }
 
 //a filter node which filters games by those that use patterns
-class GamesByThoseWhichUsePatterns extends FilterNode{
+class GamesByThoseWhichUsePatternsNode extends FilterNode{
 	constructor(){
 		super();
 		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
@@ -422,48 +472,85 @@ class GamesByThoseWhichUsePatterns extends FilterNode{
 	}
 }
 
-//a filter node which combines arrays
-class ArrayUnionNode extends FilterNode{
+//a sub-class that certain other classes will inherit from 
+class ArrayToolNode extends FilterNode{
 	constructor(){
 		super();
 		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
 		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
 		this.setOutputPort("Wildcard Array", "Output Array");
 	}
+	
+	getOutputData(){
+		super.getOutputData();
+	}
+		
+	portConnectedEvent(port){
+		super.portConnectedEvent(port);
+		if( //if we are still in the starting state
+			this.inputPort1.type == this.getPortType("Wildcard Array") &&
+			this.inputPort2.type == this.getPortType("Wildcard Array") &&
+			this.outputPort.type == this.getPortType("Wildcard Array")
+		){
+			this.inputPort1.type = port.connectedPort.type;
+			this.inputPort2.type = port.connectedPort.type;
+			this.outputPort.type = port.connectedPort.type;
+		}
+	}
+	
+	portDisconnectedEvent(port){
+		if( //check if all the ports are unconnected
+			this.inputPort1.connectedPort == null &&
+			this.inputPort2.connectedPort == null &&
+			this.outputPort.connectedPort == null
+		){ //reset them back to how they started
+			this.inputPort1.type = this.getPortType("Wildcard Array");
+			this.inputPort2.type = this.getPortType("Wildcard Array");
+			this.outputPort.type = this.getPortType("Wildcard Array");
+		}
+		
+	}
+}
+
+//a filter node which combines arrays
+class ArrayUnionNode extends ArrayToolNode{
+	constructor(){
+		super();
+	}
 		
 	getOutputData(){
 		super.getOutputData();
-		throw "getOutputData not implemented yet";
+		let arrA = this.inputPort1.connectedPortData();
+		let arrB = this.inputPort2.connectedPortData();
+		return arrA.concat(arrB);
 	}
 }
 
 //a filter node which intersects arrays
-class ArrayIntersectionNode extends FilterNode{
+class ArrayIntersectionNode extends ArrayToolNode{
 	constructor(){
 		super();
-		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
-		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
-		this.setOutputPort("Wildcard Array", "Output Array");
 	}
 		
 	getOutputData(){
 		super.getOutputData();
-		throw "getOutputData not implemented yet";
+		let arrA = this.inputPort1.connectedPortData();
+		let arrB = this.inputPort2.connectedPortData();
+		return arrA.filter(x => arrB.includes(x));
 	}
 }
 
 //a filter node which finds the difference in arrays
-class ArrayDifferenceNode extends FilterNode{
+class ArrayDifferenceNode extends ArrayToolNode{
 	constructor(){
 		super();
-		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
-		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
-		this.setOutputPort("Wildcard Array", "Output Array");
 	}
-		
+	
 	getOutputData(){
 		super.getOutputData();
-		throw "getOutputData not implemented yet";
+		let arrA = this.inputPort1.connectedPortData();
+		let arrB = this.inputPort2.connectedPortData();
+		return arrA.filter(x => !arrB.includes(x));
 	}
 }
 
@@ -471,7 +558,7 @@ class ArrayDifferenceNode extends FilterNode{
 class OutputNode extends FilterNode{
 	constructor(){
 		super();
-		this.addInputPort("Wildcard Array", "Filtered Items");
+		this.inputArray = this.addInputPort("Wildcard Array", "Filtered Items");
 	}
 	
 	//although this node doesn't have an output port, it does need this method 
@@ -479,14 +566,15 @@ class OutputNode extends FilterNode{
 	//what is displayed to the user
 	getOutputData(){
 		super.getOutputData();
-		return this.inputPorts[0].connectedPort.owner.getOutputData();
+		return this.inputArray.connectedPort.owner.getOutputData();
 	}
 }
 
+var allPattternsNode, patternsByPatternCategoryNode, outputNode;
 function doVisualFilterDebug(){
-	var allPattternsNode = new AllPatternsNode();
-	var patternsByPatternCategoryNode = new PatternsByPatternCategoryNode();
-	var outputNode = new OutputNode();
+	allPattternsNode = new AllPatternsNode();
+	patternsByPatternCategoryNode = new PatternsByPatternCategoryNode();
+	outputNode = new OutputNode();
 
 	allPattternsNode.outputPort.getMatchingPort(patternsByPatternCategoryNode, true);
 	patternsByPatternCategoryNode.outputPort.getMatchingPort(outputNode, true);
