@@ -101,30 +101,6 @@ a:hover {
 	position: relative;
 }
 
-#Content > #DocumentViewer{
-	/*flex: 2 1 50%;
-	padding: 0px;
-	height: 468px;
-	display: grid;*/
-	position: absolute;
-	width: 0%;
-	/*transition: width 0.5s, border-width 0.5s, padding 0.5s;
-	transition-timing-function: ease;*/
-    right: 0;
-	/*background: var(--bgColor2);
-	border: black solid;*/
-	height: 90%;
-	user-select: text;
-	resize: horizontal;
-	overflow-x: auto;
-	overflow-y: hidden;
-	direction: rtl;
-	transition: none;
-	display: flex;
-	flex-direction: column;
-	max-width: 100%;
-}
-
 iframe{
 	width: 100%;
 	height: inherit;
@@ -318,14 +294,6 @@ header > h1 {
     pointer-events: none;
 }
 
-#DocumentContainer{
-	overflow-y: scroll;
-	background: #666666;
-    border: black solid 2px;
-	display: flex;
-    flex-direction: row-reverse;
-}
-
 /* Tooltip Stuff */
 
 #Tooltip {
@@ -365,6 +333,49 @@ hr {
 	text-align: right;
 }
 
+/* Document Viewer Stuff */
+
+#Content > #DocumentViewer{
+	/*flex: 2 1 50%;
+	padding: 0px;
+	height: 468px;
+	display: grid;*/
+	position: absolute;
+	width: 0%;
+	/*transition: width 0.5s, border-width 0.5s, padding 0.5s;
+	transition-timing-function: ease;*/
+    right: 0;
+	/*background: var(--bgColor2);
+	border: black solid;*/
+	height: 90%;
+	user-select: text;
+	overflow-x: auto;
+	overflow-y: hidden;
+	transition: none;
+	display: flex;
+	flex-direction: column;
+	max-width: 100%;
+}
+
+#DocumentContainer{
+	overflow-y: scroll;
+	background: #666666;
+    border: black solid 2px;
+	display: flex;
+}
+
+#DocumentResizer{
+	display: inline-block;
+    border-left-color: #757575;
+    border-left-style: solid;
+    border-left-width: 6px;
+    cursor: ew-resize;
+    position: absolute;
+    top: 12px;
+    bottom: 55px;
+}
+
+
 /* Table of Content Stuff */
 
 #TableOfContents{
@@ -397,13 +408,11 @@ hr {
 #DocumentViewerToolbar{
 	margin-top: 5px;
 	display: flex;
-    flex-direction: row-reverse;
     justify-content: space-between;
 	pointer-events: none;
 }
 
 #ExternalLinkGroup {
-	flex-direction: row-reverse;
     display: flex;
 }
 

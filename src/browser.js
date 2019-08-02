@@ -59,13 +59,47 @@ class DocumentViewer extends React.Component{
         return(
 			<>
 				<div id="DocumentContainer">
-				<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
-				{pageToRender}
+					<DocumentResizer toResize={this} />
+					<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
+					{pageToRender}
 				</div>
 				<DocumentViewerToolbar pageTitle={this.state.title} />
 			</>
 		);
     }
+}
+
+class DocumentResizer extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	
+	initResize(e) {
+		function disableSelect(event) {
+			event.preventDefault();
+		}
+
+		function Resize(e) {
+			document.getElementById("DocumentViewer").style.width = Math.max((window.innerWidth - e.clientX), 330) + 'px';
+		}
+
+		function stopResize(e) {
+			window.removeEventListener('mousemove', Resize, false);
+			window.removeEventListener('mouseup', stopResize, false);
+			window.removeEventListener('selectstart', disableSelect);
+		}
+		
+		window.addEventListener('mousemove', Resize, false);
+		window.addEventListener('mouseup', stopResize, false);
+		window.addEventListener('selectstart', disableSelect);
+	}
+	
+	
+	render(){
+		return(
+			<div onMouseDown={this.initResize.bind()} id="DocumentResizer"></div>
+		);
+	}
 }
 
 class DocumentViewerTableOfContents extends React.Component{
@@ -181,8 +215,8 @@ function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
 		document.getElementById("DocumentViewer").style.width = "65%"
-		document.getElementById("DocumentViewer").style.padding = "10px"
-		document.getElementById("DocumentViewer").style.borderWidth = "2px";
+		document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
+		document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
 	}
 	else{
 		document.getElementById("DocumentViewer").style.width = "0%"
