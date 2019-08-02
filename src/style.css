@@ -429,7 +429,7 @@ button > img{
 
 /* Relationship Selector Stuff */
 #RelationshipSelector{
-    position: absolute;
+    position: fixed;
     bottom: 10px;
     border: black solid 2px;
     padding: 10px;
