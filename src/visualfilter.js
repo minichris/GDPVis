@@ -394,6 +394,7 @@ class GamesLinkedToPatternNode extends FilterNode{
 }
 
 //a filter node which filters patterns by those which have a relation to another pattern
+//UNFINISHED
 class PatternsWithRelationToPatternNode extends FilterNode{
 	constructor(){
 		super();
@@ -410,6 +411,7 @@ class PatternsWithRelationToPatternNode extends FilterNode{
 }
 
 //a filter node which filters patterns by those which DON'T have a relation to another pattern
+//UNFINISHED
 class PatternsWithoutRelationToPatternNode extends FilterNode{
 	constructor(){
 		super();
@@ -426,23 +428,39 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 }
 
 //a filter node which filters games by those which share patterns with other games
+//UNFINISHED
 class GamesSharingPatternsWithGameNode extends FilterNode{
 	constructor(){
 		super();
 		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
 		this.gameList = this.addInputList("Game", "Game");
-		this.minPatternsList = this.addInputList("Number", "Minimum Patterns To Share");
-		this.maxPatternsList = this.addInputList("Number", "Maximum Patterns To Share");
+		this.minPatternsSharedList = this.addInputList("Number", "Minimum Patterns To Share");
+		this.maxPatternsSharedList = this.addInputList("Number", "Maximum Patterns To Share");
 		this.setOutputPort("Game Array", "Output Games");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		throw "getOutputData not implemented yet";
+		let gamesArray = this.gamesPort.connectedPortData();
+		let gameQuery = this.gameList.selectedItem();
+		let minimumAmount = this.minPatternsSharedList.selectedItem();
+		let maximumAmount = this.maxPatternsSharedList.selectedItem();
+		
+		let minimumArray = gamesArray.filter(game => 
+			game.LinkedPatterns.filter(pattern => 
+				pattern.PatternsLinks.some(pLink => 
+					pLink.To == gameQuery.name)).length >= minimumAmount);
+		let maximumArray = gamesArray.filter(game => 
+			game.LinkedPatterns.filter(pattern => 
+				pattern.PatternsLinks.some(pLink => 
+					pLink.To == gameQuery.name)).length <= maximumAmount);
+		
+		return minimumArray.filter(value => -1 !== maximumArray.indexOf(value)); //find array intersection of minimum and maximum arrays
 	}
 }
 
 //a filter node which filters patterns by those found in games
+//UNFINISHED
 class PatternsByThoseFoundInGamesNode extends FilterNode{
 	constructor(){
 		super();
@@ -468,7 +486,9 @@ class GamesByThoseWhichUsePatternsNode extends FilterNode{
 	
 	getOutputData(){
 		super.getOutputData();
-		throw "getOutputData not implemented yet";
+		let gamesArray = this.gamesPort.connectedPortData();
+		let patternsArray = this.patternsPort.connectedPortData();
+		return gamesArray.filter(game => game.LinkedPatterns.some(pattern => patternsArray.indexOf(pattern) > 0));
 	}
 }
 
