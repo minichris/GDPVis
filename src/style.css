@@ -347,7 +347,8 @@ hr {
     right: 0;
 	/*background: var(--bgColor2);
 	border: black solid;*/
-	height: 90%;
+	bottom: 10px;
+    top: 0px;
 	user-select: text;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -372,7 +373,7 @@ hr {
     cursor: ew-resize;
     position: absolute;
     top: 12px;
-    bottom: 55px;
+    bottom: 56px;
 }
 
 
