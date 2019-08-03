@@ -153,6 +153,14 @@ svg{
 	overflow: visible;
 }
 
+#MainNodeGraph{
+	position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
 #ShowFiltersButton{
 	opacity: 0.99;  /*Hack to get it above the svg stuff because z-index doesn't work for some reason*/
 }
@@ -280,9 +288,11 @@ header > h1 {
 }
 
 #GraphItemCount {
-	bottom: 0;
+	bottom: 10px;
+    left: 0px;
+    right: 0px;
     text-align: center;
-    position: sticky;
+    position: fixed;
     display: block;
     pointer-events: none;
 }
@@ -349,7 +359,6 @@ hr {
 	display: flex;
 	flex-direction: column;
 	max-width: 100%;
-	height: 95%;
 	min-width: min-content;
 }
 
