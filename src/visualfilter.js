@@ -216,9 +216,12 @@ class Port {
 
 class FilterNode {
     constructor() {
-		this.inputPorts = [];
-		this.inputLists = [];
-		this.outputPort = null;
+		this.inputPorts = []; //place to store an array of input ports
+		this.inputLists = []; //place to store an array of input lists
+		this.outputPort = null; //place to store the one and only output port
+		this.canBeRemoved = true; //if the filter can be deleted from the graph by the user
+		this.posX = 0; //the filters x position on the graph
+		this.posY = 0; //the filters y position on the graph
     }
 	
 	//method called by ports when they are attached to other ports, can be overridden in base classes
@@ -304,6 +307,7 @@ class AllPatternsNode extends FilterNode{
 	constructor(){
 		super();
 		this.setOutputPort("Pattern Array", "All Patterns");
+		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
 	}
 	
 	getOutputData(){
@@ -317,6 +321,7 @@ class AllGamesNode extends FilterNode{
 	constructor(){
 		super();
 		this.setOutputPort("Game Array", "All Games");
+		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
 	}
 	
 	getOutputData(){
@@ -578,6 +583,7 @@ class OutputNode extends FilterNode{
 	constructor(){
 		super();
 		this.inputArray = this.addInputPort("Wildcard Array", "Filtered Items");
+		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
 	}
 	
 	//although this node doesn't have an output port, it does need this method 
@@ -589,9 +595,64 @@ class OutputNode extends FilterNode{
 	}
 }
 
+//object that wraps the entire backend for the filering system
+class FilterGraph{
+	constructor(){
+		this.graphNodes = [];
+	}
+	
+	//for when an empty filtering system is loaded
+	initialize(){
+		if(this.graphNodes.length > 0){
+			throw "trying to initialize an existing graph";
+			return false;
+		}
+		this.addFilter(OutputNode, 2, 0);
+		this.addFilter(AllPatternsNode, 0, 0);
+		this.addFilter(AllGamesNode, 0, 2);
+		return true;
+	}
+	
+	//function for adding to the array of filters
+	addFilter(filterClass, x, y){
+		let newFilterNode = new filterClass;
+		newFilterNode.posX = x;
+		newFilterNode.posY = y;
+		this.graphNodes.push(newFilterNode);
+		return newFilterNode;
+	}
+	
+	//function for removing from the array of filters
+	removeFilter(filterObject){
+		if(filterObject.canBeRemoved){
+			var index = this.graphNodes.indexOf(filterObject);
+			if (index > -1) {
+				this.graphNodes.splice(index, 1);
+				return true
+			}
+			else{
+				throw "tried to remove filter that doesn't exist";
+			}
+		}
+		else{
+			throw "tried to remove filter that is set non-removeable";
+		}
+	}
+
+	serializeArray(){
+		return Flatted.stringify(this.graphNodes);		
+	}
+}
+
 var allPattternsNode, patternsByPatternCategoryNode, outputNode;
 function doVisualFilterDebug(){
-	allPattternsNode = new AllPatternsNode();
+	let filterGraph = new FilterGraph();
+	filterGraph.initialize();
+	filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
+	console.log(filterGraph.serializeArray());
+	console.log(Flatted.parse(filterGraph.serializeArray()));
+	
+	/*allPattternsNode = new AllPatternsNode();
 	patternsByPatternCategoryNode = new PatternsByPatternCategoryNode();
 	outputNode = new OutputNode();
 
@@ -600,5 +661,5 @@ function doVisualFilterDebug(){
 
 	patternsByPatternCategoryNode.inputLists[0].selectedItem = "Negative Patterns";
 	console.log("doVisualFilterDebug() output follows:");
-	console.log(outputNode.getOutputData());
+	console.log(outputNode.getOutputData());*/
 }
