@@ -18,7 +18,8 @@ class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			patterns: []
+			patterns: [],
+			tooltipEventsEnabled: true
 		}
 		this.svg = React.createRef();
 	}
@@ -162,29 +163,38 @@ class Graph extends React.Component{
 		});
 
 		var tooltip = d3.select("#Tooltip");
+		let selfGraph = this;
 		circle.on("mouseover", function(d) {
-			tooltip.transition() //add the tooltip when the user mouses over the node
-				.duration(200).style("opacity", .9);
-			tooltip.style("left", (d3.event.pageX + 15) + "px")
-				.style("top", (d3.event.pageY - 28) + "px");
-			toolTipComponent.setState({d: d, type: "Pattern"});
-			})
+			if(selfGraph.state.tooltipEventsEnabled){
+				tooltip.transition() //add the tooltip when the user mouses over the node
+					.duration(200).style("opacity", .9);
+				tooltip.style("left", (d3.event.pageX + 15) + "px")
+					.style("top", (d3.event.pageY - 28) + "px");
+				toolTipComponent.setState({d: d, type: "Pattern"});
+			}
+		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-	      tooltip.transition().duration(500).style("opacity", 0);
+			if(selfGraph.state.tooltipEventsEnabled){
+				tooltip.transition().duration(500).style("opacity", 0);
+			}
 	    })
 		.on("click", function(d) { //Click to open the relevent article
 			ChangePatternSelection(d.id);
 		});
 
 		link.on("mouseover", function(d) {
-			tooltip.transition() //add the tooltip when the user mouses over the node
-				.duration(200).style("opacity", .9);
-			tooltip.style("left", (d3.event.pageX + 15) + "px")
-				.style("top", (d3.event.pageY - 28) + "px");
-			toolTipComponent.setState({d: d, type: "Link"});
+			if(selfGraph.state.tooltipEventsEnabled){
+				tooltip.transition() //add the tooltip when the user mouses over the node
+					.duration(200).style("opacity", .9);
+				tooltip.style("left", (d3.event.pageX + 15) + "px")
+					.style("top", (d3.event.pageY - 28) + "px");
+				toolTipComponent.setState({d: d, type: "Link"});
+			}
 		})
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-	      tooltip.transition().duration(500).style("opacity", 0);
+			if(selfGraph.state.tooltipEventsEnabled){
+				tooltip.transition().duration(500).style("opacity", 0);
+			}
 	    });
 		
 		$("#GraphItemCount").text("Displaying " + nodesData.length + " nodes and " + linksData.length + " links.");
@@ -274,7 +284,7 @@ class Graph extends React.Component{
 		return(
 			<div id="GraphOuter">
 				<FilterModule ref="FilterModule" />
-				<svg ref={this.svg} width="100%" height="auto" viewBox="0 0 300 300">
+				<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
 				</svg>
 				<span id="GraphItemCount"></span>

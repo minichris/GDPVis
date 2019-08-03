@@ -124,13 +124,6 @@ iframe{
 	top: -73px;
 }
 
-.insertedPage{
-	padding: 10px;
-	height: 100%;
-	direction: ltr;
-	width: 100%;
-}
-
 #Content > #GraphLayout{
 	padding: 0px;
 }
@@ -356,13 +349,27 @@ hr {
 	display: flex;
 	flex-direction: column;
 	max-width: 100%;
+	height: 95%;
+	min-width: min-content;
 }
 
 #DocumentContainer{
-	overflow-y: scroll;
 	background: #666666;
     border: black solid 2px;
+    display: flex;
+    flex: 1 0 90%;
+}
+
+.insertedPage{
+	padding: 10px;
+	overflow-y: auto;
+}
+
+#InsertedPageOuter{
 	display: flex;
+    height: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
 #DocumentResizer{
@@ -371,9 +378,9 @@ hr {
     border-left-style: solid;
     border-left-width: 6px;
     cursor: ew-resize;
-    position: absolute;
-    top: 12px;
-    bottom: 56px;
+    position: sticky;
+    bottom: 0px;
+    top: 0px;
 }
 
 
@@ -411,6 +418,8 @@ hr {
 	display: flex;
     justify-content: space-between;
 	pointer-events: none;
+	flex: 0 1 38px;
+	z-index: 10;
 }
 
 #ExternalLinkGroup {

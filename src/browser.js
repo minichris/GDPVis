@@ -60,9 +60,11 @@ class DocumentViewer extends React.Component{
         return(
 			<>
 				<div id="DocumentContainer">
-					<DocumentResizer toResize={this} />
 					<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
-					{pageToRender}
+					<div id ="InsertedPageOuter">
+						<DocumentResizer toResize={this} />
+						{pageToRender}
+					</div>
 				</div>
 				<DocumentViewerToolbar pageTitle={this.state.title} />
 			</>
@@ -84,7 +86,6 @@ class DocumentResizer extends React.Component{
 			let newOpenWidth = Math.max((window.innerWidth - e.clientX), 330) + 'px';
 			docViewerComponent.state.openSize = newOpenWidth;
 			document.getElementById("DocumentViewer").style.width = newOpenWidth;
-			document.getElementById("DocumentViewer").style.transition = "none";
 		}
 
 		function stopResize(e) {
@@ -92,11 +93,15 @@ class DocumentResizer extends React.Component{
 			window.removeEventListener('mouseup', stopResize, false);
 			window.removeEventListener('selectstart', disableSelect);
 			document.getElementById("DocumentViewer").style.transition = null;
+			graphComponent.state.tooltipEventsEnabled = true;
 		}
 		
 		window.addEventListener('mousemove', Resize, false);
 		window.addEventListener('mouseup', stopResize, false);
 		window.addEventListener('selectstart', disableSelect);
+		
+		document.getElementById("DocumentViewer").style.transition = "none";
+		graphComponent.state.tooltipEventsEnabled = false;
 	}
 	
 	
@@ -220,11 +225,13 @@ function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
 		document.getElementById("DocumentViewer").style.width = docViewerComponent.state.openSize;
+		document.getElementById("DocumentViewer").style.minWidth = null;
 		document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
 	}
 	else{
 		document.getElementById("DocumentViewer").style.width = "0"
+		document.getElementById("DocumentViewer").style.minWidth = "0"
 		document.getElementById("DocumentViewer").style.padding = "0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "0px"
 		setTimeout(function(){
