@@ -128,7 +128,6 @@ class FilterModule extends React.Component {
 		return (
 		<>
 			<button id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
-			<div id="GraphOuter"></div>
 			<div id="FilterPanel" className="collapse">
 				<div id="FilterPanelHeading">
 					<h2>Filters</h2>

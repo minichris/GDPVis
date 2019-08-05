@@ -158,26 +158,29 @@ svg{
 }
 
 #ShowFiltersButton{
-	opacity: 0.99;  /*Hack to get it above the svg stuff because z-index doesn't work for some reason*/
+	z-index: 10;
+    pointer-events: all;
+    position: absolute;
 }
 
 #FilterPanel.show, #FilterPanel.collapsing{
-	position: absolute;
+    position: fixed;
     top: 50px;
-	bottom: 20px;
-	left: 10px;
-    right: 0px;
-	display: flex;
-	flex-direction: column;
-	background: #67676780;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #676767d6;
     border-radius: 8px;
-	padding: 2px;
+    padding: 2px;
+    z-index: 100;
 }
 
 #FiltersList{
 	list-style-type: none;
     padding: 0;
-	overflow-y: scroll;
+	overflow-y: auto;
 	height: 100%;
 }
 

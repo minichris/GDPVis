@@ -5,6 +5,8 @@ Port to port connections are one to one.
 Any port can connect to a wildcard type input port, but wildcard ports shouldn't be used as output ports.
 */
 
+var filterGraph; //this is the filterGraph used by the entire system, gobal reference
+
 //This is where all the possible types of links will be stored for the entire visual filtering systemLanguage
 var portTypes = [
 	{Type: "Pattern Array"},
@@ -752,14 +754,14 @@ class FilterGraph{
 }
 
 //var allPattternsNode, patternsByPatternCategoryNode, outputNode;
-var filterGraph;
+var testFilterGraph;
 function doVisualFilterDebug(){
-	filterGraph = new FilterGraph();
-	filterGraph.initialize();
-	filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
-	let orginalData = filterGraph.graphNodes;
+	testFilterGraph = new testFilterGraph();
+	testFilterGraph.initialize();
+	testFilterGraph.graphNodes[1].outputPort.connectPort(testFilterGraph.graphNodes[0].inputPorts[0]);
+	let orginalData = testFilterGraph.graphNodes;
 	console.log(orginalData);
-	let newData = filterGraph.deserializeArray(filterGraph.serializeArray());
+	let newData = testFilterGraph.deserializeArray(testFilterGraph.serializeArray());
 	console.log(newData);
 	console.log(orginalData == newData);
 	orginalData.forEach(function(arrayEle, i){
@@ -780,4 +782,32 @@ function doVisualFilterDebug(){
 	patternsByPatternCategoryNode.inputLists[0].selectedItem = "Negative Patterns";
 	console.log("doVisualFilterDebug() output follows:");
 	console.log(outputNode.getOutputData());*/
+}
+
+class VisualFilterNode extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			inputFilter: null
+		}
+	}
+	
+	render(){
+		return(
+			<div className="node"></div>
+		);
+	}
+}
+
+class VisualFilterViewer extends React.Component{
+	constructor(props){
+		super(props);
+		//this.props.attachedFilterGraph is where the filter graph system will attach
+	}
+	
+	render(){
+		return(
+			<div id="VisualFilterViewer"></div>
+		);
+	}
 }
