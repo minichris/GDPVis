@@ -12,6 +12,11 @@ var portTypes = [
 	{Type: "Wildcard Array", WildcardType: true} //This type will accept a connection to any other type
 ]
 
+//static method for getting portType object from portTypeName
+function getPortType(portTypeName){
+	return portTypes.find(type => type.Type == portTypeName);
+}
+
 var listTypes = [
 	{Type: "Pattern Category", Content: function(){return PatternCategories}},
 	{Type: "Game Category", Content: function(){return GameCategories}},
@@ -33,6 +38,7 @@ class List {
 		this.type = type; //listType of the port
 		this.selectedItem = null;
 	}
+	
 	
 	//shorthand for getting the possible selection of the list
 	getItems(){
@@ -224,6 +230,18 @@ class FilterNode {
 		this.posY = 0; //the filters y position on the graph
     }
 	
+	toJSON(){
+		return ({
+			inputPorts: this.inputPorts,
+			inputLists: this.inputLists,
+			outputPort: this.outputPort,
+			canBeRemoved: this.canBeRemoved,
+			posX: this.posX,
+			posY: this.posY,
+			className: this.constructor.name
+		})
+	}
+	
 	//method called by ports when they are attached to other ports, can be overridden in base classes
 	portConnectedEvent(port){
 	}
@@ -240,15 +258,10 @@ class FilterNode {
 		}
 	}
 	
-	//method for getting portType object from portTypeName
-	getPortType(portTypeName){
-		return portTypes.find(type => type.Type == portTypeName);
-	}
-	
 	//method for properly setting the output ports of a filter, returns port on success
     setOutputPort(portTypeName, portTitle){
 		//getting and checking the type of the port
-		if(this.getPortType(portTypeName) == null){
+		if(getPortType(portTypeName) == null){
 			throw "Tried to add port with unknown portType.";
 			return false;
 		}
@@ -258,7 +271,7 @@ class FilterNode {
 			return false;
 		}
 		else{ //Success
-			this.outputPort = new Port(portTitle, this.getPortType(portTypeName), "output", this);
+			this.outputPort = new Port(portTitle, getPortType(portTypeName), "output", this);
 			return this.outputPort;
 		}
 	}
@@ -266,7 +279,7 @@ class FilterNode {
 	//method for properly adding input ports to a filter, returns port on success
     addInputPort(portTypeName, portTitle){
 		//getting and checking the type of the port
-		if(this.getPortType(portTypeName) == null){
+		if(getPortType(portTypeName) == null){
 			throw "Tried to add port with unknown portType.";
 			return false;
 		}
@@ -276,7 +289,7 @@ class FilterNode {
 			return false;
 		}
 		else{ //Success
-			let newPort = new Port(portTitle, this.getPortType(portTypeName), "input", this);
+			let newPort = new Port(portTitle, getPortType(portTypeName), "input", this);
 			this.inputPorts.push(newPort);
 			return newPort;
 		}
@@ -334,15 +347,15 @@ class AllGamesNode extends FilterNode{
 class PatternsByPatternCategoryNode extends FilterNode{
 	constructor(){
 		super();
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.categoryList = this.addInputList("Pattern Category", "Pattern Category");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputList("Pattern Category", "Pattern Category");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let inputPatterns = this.patternsPort.connectedPortData();
-		let inputCategory = this.categoryList.selectedItem;
+		let inputPatterns = this.inputPorts[0].connectedPortData();
+		let inputCategory = this.inputPorts[0].selectedItem;
 		return inputPatterns.filter(pattern => pattern.Categories.some(cate => cate == inputCategory));
 	}
 }
@@ -351,15 +364,15 @@ class PatternsByPatternCategoryNode extends FilterNode{
 class GamesByGameCategoryNode extends FilterNode{
 	constructor(){
 		super();
-		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
-		this.categoryList = this.addInputList("Game Category", "Game Category");
+		this.addInputPort("Game Array", "Games to Filter");
+		this.addInputList("Game Category", "Game Category");
 		this.setOutputPort("Game Array", "Output Games");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let inputGames = this.gamesPort.connectedPortData();
-		let inputCategory = this.categoryList.selectedItem;
+		let inputGames = this.inputPorts[0].connectedPortData();
+		let inputCategory = this.inputLists[0].selectedItem;
 		return inputGames.filter(game => game.Categories.some(cate => cate == inputCategory));
 	}
 }
@@ -368,15 +381,15 @@ class GamesByGameCategoryNode extends FilterNode{
 class PatternsLinkedToGameNode extends FilterNode{
 	constructor(){
 		super();
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.gameList = this.addInputList("Game", "Game");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputList("Game", "Game");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let inputPatterns = this.patternsPort.connectedPortData();
-		let inputGame = this.gameList.selectedItem;
+		let inputPatterns = this.inputPorts[0].connectedPortData();
+		let inputGame = this.inputLists[0].selectedItem;
 		return inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputGame)));
 	}
 }
@@ -385,15 +398,15 @@ class PatternsLinkedToGameNode extends FilterNode{
 class GamesLinkedToPatternNode extends FilterNode{
 	constructor(){
 		super();
-		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
-		this.patternList = this.addInputList("Pattern", "Pattern");
+		this.addInputPort("Game Array", "Games to Filter");
+		this.addInputList("Pattern", "Pattern");
 		this.setOutputPort("Game Array", "Output Games");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let inputGames = this.gamesPort.connectedPortData();
-		let inputPattern = this.patternList.selectedItem;
+		let inputGames = this.inputPorts[0].connectedPortData();
+		let inputPattern = this.inputLists[0].selectedItem;
 		return inputGames.filter(game => (game.LinkedPatterns.some(pattern => pattern == inputPattern)));
 	}
 }
@@ -403,9 +416,9 @@ class GamesLinkedToPatternNode extends FilterNode{
 class PatternsWithRelationToPatternNode extends FilterNode{
 	constructor(){
 		super();
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.patternList = this.addInputList("Pattern", "Pattern");
-		this.relationList = this.addInputList("Relation Type", "Relation Type");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputList("Pattern", "Pattern");
+		this.addInputList("Relation Type", "Relation Type");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
@@ -420,9 +433,9 @@ class PatternsWithRelationToPatternNode extends FilterNode{
 class PatternsWithoutRelationToPatternNode extends FilterNode{
 	constructor(){
 		super();
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.patternList = this.addInputList("Pattern", "Pattern");
-		this.relationList = this.addInputList("Relation Type", "Relation Type");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputList("Pattern", "Pattern");
+		this.addInputList("Relation Type", "Relation Type");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
@@ -436,19 +449,19 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 class GamesSharingPatternsWithGameNode extends FilterNode{
 	constructor(){
 		super();
-		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
-		this.gameList = this.addInputList("Game", "Game");
-		this.minPatternsSharedList = this.addInputList("Number", "Minimum Patterns To Share");
-		this.maxPatternsSharedList = this.addInputList("Number", "Maximum Patterns To Share");
+		this.addInputPort("Game Array", "Games to Filter");
+		this.addInputList("Game", "Game");
+		this.addInputList("Number", "Minimum Patterns To Share");
+		this.addInputList("Number", "Maximum Patterns To Share");
 		this.setOutputPort("Game Array", "Output Games");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let gamesArray = this.gamesPort.connectedPortData();
-		let gameQuery = this.gameList.selectedItem();
-		let minimumAmount = this.minPatternsSharedList.selectedItem();
-		let maximumAmount = this.maxPatternsSharedList.selectedItem();
+		let gamesArray = this.inputPorts[0].connectedPortData();
+		let gameQuery = this.inputLists[0].selectedItem();
+		let minimumAmount = this.inputLists[1].selectedItem();
+		let maximumAmount = this.inputLists[2].selectedItem();
 		
 		let minimumArray = gamesArray.filter(game => 
 			game.LinkedPatterns.filter(pattern => 
@@ -468,8 +481,8 @@ class GamesSharingPatternsWithGameNode extends FilterNode{
 class PatternsByThoseFoundInGamesNode extends FilterNode{
 	constructor(){
 		super();
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputPort("Game Array", "Games to Filter");
 		this.setOutputPort("Pattern Array", "Output Patterns");
 	}
 	
@@ -483,15 +496,15 @@ class PatternsByThoseFoundInGamesNode extends FilterNode{
 class GamesByThoseWhichUsePatternsNode extends FilterNode{
 	constructor(){
 		super();
-		this.gamesPort = this.addInputPort("Game Array", "Games to Filter");
-		this.patternsPort = this.addInputPort("Pattern Array", "Patterns to Filter");
+		this.addInputPort("Game Array", "Games to Filter");
+		this.addInputPort("Pattern Array", "Patterns to Filter");
 		this.setOutputPort("Game Array", "Output Games");
 	}
 	
 	getOutputData(){
 		super.getOutputData();
-		let gamesArray = this.gamesPort.connectedPortData();
-		let patternsArray = this.patternsPort.connectedPortData();
+		let gamesArray = this.inputPorts[0].connectedPortData();
+		let patternsArray = this.inputPorts[1].connectedPortData();
 		return gamesArray.filter(game => game.LinkedPatterns.some(pattern => patternsArray.indexOf(pattern) > 0));
 	}
 }
@@ -500,8 +513,8 @@ class GamesByThoseWhichUsePatternsNode extends FilterNode{
 class ArrayToolNode extends FilterNode{
 	constructor(){
 		super();
-		this.inputPort1 = this.addInputPort("Wildcard Array", "Array 1");
-		this.inputPort2 = this.addInputPort("Wildcard Array", "Array 2");
+		this.addInputPort("Wildcard Array", "Array 1");
+		this.addInputPort("Wildcard Array", "Array 2");
 		this.setOutputPort("Wildcard Array", "Output Array");
 	}
 	
@@ -511,26 +524,27 @@ class ArrayToolNode extends FilterNode{
 		
 	portConnectedEvent(port){
 		super.portConnectedEvent(port);
+		
 		if( //if we are still in the starting state
-			this.inputPort1.type == this.getPortType("Wildcard Array") &&
-			this.inputPort2.type == this.getPortType("Wildcard Array") &&
-			this.outputPort.type == this.getPortType("Wildcard Array")
+			this.inputPorts[0].type == getPortType("Wildcard Array") &&
+			this.inputPorts[1].type == getPortType("Wildcard Array") &&
+			this.outputPort.type == getPortType("Wildcard Array")
 		){
-			this.inputPort1.type = port.connectedPort.type;
-			this.inputPort2.type = port.connectedPort.type;
+			this.inputPorts[0].type = port.connectedPort.type;
+			this.inputPorts[1].type = port.connectedPort.type;
 			this.outputPort.type = port.connectedPort.type;
 		}
 	}
 	
 	portDisconnectedEvent(port){
 		if( //check if all the ports are unconnected
-			this.inputPort1.connectedPort == null &&
-			this.inputPort2.connectedPort == null &&
+			this.inputPorts[0].connectedPort == null &&
+			this.inputPorts[1].connectedPort == null &&
 			this.outputPort.connectedPort == null
 		){ //reset them back to how they started
-			this.inputPort1.type = this.getPortType("Wildcard Array");
-			this.inputPort2.type = this.getPortType("Wildcard Array");
-			this.outputPort.type = this.getPortType("Wildcard Array");
+			this.inputPorts[0].type = getPortType("Wildcard Array");
+			this.inputPorts[1].type = getPortType("Wildcard Array");
+			this.outputPort.type = getPortType("Wildcard Array");
 		}
 		
 	}
@@ -544,8 +558,8 @@ class ArrayUnionNode extends ArrayToolNode{
 		
 	getOutputData(){
 		super.getOutputData();
-		let arrA = this.inputPort1.connectedPortData();
-		let arrB = this.inputPort2.connectedPortData();
+		let arrA = this.inputPorts[0].connectedPortData();
+		let arrB = this.inputPorts[1].connectedPortData();
 		return arrA.concat(arrB);
 	}
 }
@@ -558,8 +572,8 @@ class ArrayIntersectionNode extends ArrayToolNode{
 		
 	getOutputData(){
 		super.getOutputData();
-		let arrA = this.inputPort1.connectedPortData();
-		let arrB = this.inputPort2.connectedPortData();
+		let arrA = this.inputPorts[0].connectedPortData();
+		let arrB = this.inputPorts[1].connectedPortData();
 		return arrA.filter(x => arrB.includes(x));
 	}
 }
@@ -572,8 +586,8 @@ class ArrayDifferenceNode extends ArrayToolNode{
 	
 	getOutputData(){
 		super.getOutputData();
-		let arrA = this.inputPort1.connectedPortData();
-		let arrB = this.inputPort2.connectedPortData();
+		let arrA = this.inputPorts[0].connectedPortData();
+		let arrB = this.inputPorts[1].connectedPortData();
 		return arrA.filter(x => !arrB.includes(x));
 	}
 }
@@ -582,7 +596,7 @@ class ArrayDifferenceNode extends ArrayToolNode{
 class OutputNode extends FilterNode{
 	constructor(){
 		super();
-		this.inputArray = this.addInputPort("Wildcard Array", "Filtered Items");
+		this.addInputPort("Wildcard Array", "Filtered Items");
 		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
 	}
 	
@@ -591,7 +605,7 @@ class OutputNode extends FilterNode{
 	//what is displayed to the user
 	getOutputData(){
 		super.getOutputData();
-		return this.inputArray.connectedPort.owner.getOutputData();
+		return this.inputPorts[0].connectedPort.owner.getOutputData();
 	}
 }
 
@@ -640,17 +654,111 @@ class FilterGraph{
 	}
 
 	serializeArray(){
-		return Flatted.stringify(this.graphNodes);		
+		return Flatted.stringify(this.graphNodes); //stringyify the copy
+	}
+	
+	deserializeArray(input){
+		let parsedInput = Flatted.parse(input, function(k,v){
+			//console.log(k);
+			//console.log(v);
+			if(v == null){
+				return null;
+			}
+			if(v.hasOwnProperty("facing")){ //its probably a Port
+				let newPortObj = new Port();
+				copyProperties(v, newPortObj);
+				return newPortObj;
+			}
+			if(v.hasOwnProperty("posX")){ //its probably a FilterNode
+				let newFilterInstance = new window[v.className]; //create a new object of the correct class
+				copyProperties(v, newFilterInstance);
+				return newFilterInstance;
+			}
+			if(v.hasOwnProperty("selectedItem")){ //its probably a List
+				let newListObj = new List();
+				copyProperties(v, newListObj);
+				return newListObj;
+			}
+			else{
+				return v;
+			}
+		}); //parse the input
+		return parsedInput;
+		let outputObjects = []; //create a new array for after we have re-classed all the object data
+		
+		function copyProperties(sourceObj, targetObj){
+			for(var propertyName in sourceObj) {
+				if(propertyName != "className"){
+					targetObj[propertyName] = sourceObj[propertyName];
+				}
+			}
+		}
+		
+		/*parsedInput.forEach(function(filterData, i){ //we know this will just be an array of filters
+			let newFilterInstance = new window[filterData.className]; //create a new object of the correct class
+			for(var propertyName in filterData) {
+				switch(propertyName){
+					case "className":
+						//don't do anything with this
+						break;
+					case "inputPorts":
+						let inportPortsAsPortClass = [];
+						filterData["inputPorts"].forEach(function(e, i){
+							let newPortObj = new Port();
+							copyProperties(e, newPortObj);
+							newPortObj.owner = newFilterInstance;
+							inportPortsAsPortClass.push(newPortObj);
+						});
+						newFilterInstance["inputPorts"] = inportPortsAsPortClass;
+						break;
+					case "inputLists":
+						let inportListsAsListClass = [];
+						filterData["inputLists"].forEach(function(e, i){
+							let newListObj = new List();
+							copyProperties(e, newListObj);
+							inportListsAsListClass.push(newListObj);
+						});
+						newFilterInstance["inputLists"] = inportListsAsListClass;
+						break;
+					case "outputPort":
+						if(filterData["outputPort"] != null){
+							let newPortObj = new Port();
+							copyProperties(filterData["outputPort"], newPortObj);
+							newPortObj.owner = newFilterInstance;
+							newFilterInstance["outputPort"] = newPortObj;
+						}
+						else{
+							newFilterInstance["outputPort"] = null;
+						}
+						break;
+					default:
+						newFilterInstance[propertyName] = filterData[propertyName];				
+				}
+			}
+			outputObjects[i] = newFilterInstance;
+		});*/
+		
+		return outputObjects;
 	}
 }
 
-var allPattternsNode, patternsByPatternCategoryNode, outputNode;
+//var allPattternsNode, patternsByPatternCategoryNode, outputNode;
+var filterGraph;
 function doVisualFilterDebug(){
-	let filterGraph = new FilterGraph();
+	filterGraph = new FilterGraph();
 	filterGraph.initialize();
 	filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
-	console.log(filterGraph.serializeArray());
-	console.log(Flatted.parse(filterGraph.serializeArray()));
+	let orginalData = filterGraph.graphNodes;
+	console.log(orginalData);
+	let newData = filterGraph.deserializeArray(filterGraph.serializeArray());
+	console.log(newData);
+	console.log(orginalData == newData);
+	orginalData.forEach(function(arrayEle, i){
+		for(var propertyName in orginalData[i]) {
+			console.log(propertyName);
+			console.log(orginalData[i][propertyName] == newData[i][propertyName]);
+		}
+	});
 	
 	/*allPattternsNode = new AllPatternsNode();
 	patternsByPatternCategoryNode = new PatternsByPatternCategoryNode();
