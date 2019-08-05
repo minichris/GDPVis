@@ -658,6 +658,14 @@ class FilterGraph{
 	}
 	
 	deserializeArray(input){
+		function copyProperties(sourceObj, targetObj){
+			for(var propertyName in sourceObj) {
+				if(propertyName != "className"){
+					targetObj[propertyName] = sourceObj[propertyName];
+				}
+			}
+		}
+		
 		let parsedInput = Flatted.parse(input, function(k,v){
 			//console.log(k);
 			//console.log(v);
@@ -679,21 +687,22 @@ class FilterGraph{
 				copyProperties(v, newListObj);
 				return newListObj;
 			}
-			else{
-				return v;
-			}
+			return v;
 		}); //parse the input
-		return parsedInput;
-		let outputObjects = []; //create a new array for after we have re-classed all the object data
 		
-		function copyProperties(sourceObj, targetObj){
-			for(var propertyName in sourceObj) {
-				if(propertyName != "className"){
-					targetObj[propertyName] = sourceObj[propertyName];
-				}
+		function fixUpPorts(port){ //rebuilds the circular reference
+			if(port != null && port.connectedPort != null){ //if the port and its connection are not null
+				port.connectedPort.connectedPort = port;
 			}
 		}
 		
+		parsedInput.forEach(node => fixUpPorts(node.outputPort));
+		parsedInput.forEach(node => node.inputPorts.forEach(port => fixUpPorts(port)));
+		
+		return parsedInput;
+		
+		
+		let outputObjects = []; //create a new array for after we have re-classed all the object data
 		/*parsedInput.forEach(function(filterData, i){ //we know this will just be an array of filters
 			let newFilterInstance = new window[filterData.className]; //create a new object of the correct class
 			for(var propertyName in filterData) {
@@ -754,6 +763,7 @@ function doVisualFilterDebug(){
 	console.log(newData);
 	console.log(orginalData == newData);
 	orginalData.forEach(function(arrayEle, i){
+		console.log(arrayEle.constructor.name)
 		for(var propertyName in orginalData[i]) {
 			console.log(propertyName);
 			console.log(orginalData[i][propertyName] == newData[i][propertyName]);
