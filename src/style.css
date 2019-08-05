@@ -145,10 +145,6 @@ iframe{
 	user-select: text;
 }
 
-#Info{
-	width: 100%;
-}
-
 svg{
 	overflow: visible;
 }
