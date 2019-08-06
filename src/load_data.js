@@ -189,7 +189,7 @@ function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //
 	let targetPattern = getPatternData(targetPatternName);
 	let relationsTexts = null;
 	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
-		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).AssociatedRelations;
+		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).Type;
 		
 		if(!relationsTexts){ //if it only hyperlinks without a "named relation"
 			relationsTexts = ["Hyperlinks To"];
@@ -259,7 +259,7 @@ function pageFilter(inputPatterns, inputPage){
 
 //filters a list of patterns to only ones that link to a specific page with a relation
 function reverseRelationLookupFilter(inputPatterns, inputPage, relationString){
-	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.AssociatedRelations && pLink.To == inputPage && pLink.AssociatedRelations.some(relation => relation == relationString))));
+	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.AssociatedRelations && pLink.To == inputPage && pLink.Type.some(relation => relation == relationString))));
 	outputPatterns.push(Patterns.filter(pattern => pattern.Title == inputPage)[0]); //also include the original page
 	return outputPatterns;
 }
