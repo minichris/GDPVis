@@ -18,6 +18,9 @@ class Tooltip extends React.Component{
 				case "Link":
 					subcomponent = (<LinkTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
 					break;
+				case "LinkExpanded":
+					subcomponent = (<LinkExpandedTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
+					break;
 				case "Pattern":
 					subcomponent = (<PatternTooltip Pattern={this.state.d.id} />);
 					break;
@@ -61,17 +64,6 @@ function getRelationColorContribution(link){
 }
 
 class LinkTooltip extends React.Component{
-	getPatternLinksHTML(sourcePattern, targetPattern){
-		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
-			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
-			var linksToTargetPattern = ($(linkDOM).text() == targetPattern.Title);
-			return linksToTargetPattern && afterRelations;
-		});
-		$(targetLink).parent().find("a").not(targetLink).contents().unwrap();
-		$(targetLink).addClass("TooltipHighlighted");
-		return targetLink.parent().html();
-	}
-
 	formatRelationTexts(sourcePattern, targetPattern){
 		let oneWayRelationTexts = getPatternOneWayRelationTexts(sourcePattern.Title, targetPattern.Title);
 		
@@ -128,6 +120,49 @@ class LinkTooltip extends React.Component{
 		var pattern2 = Patterns.find(pattern => pattern.Title == this.props.TargetPattern);
 		return(
 			<div id="TooltipInner" dangerouslySetInnerHTML={{__html: this.generateLinkTooltipHTML(pattern1, pattern2)}}></div>
+		);
+	}
+}
+
+class LinkExpandedTooltip extends LinkTooltip{
+	getPatternLinksHTML(sourcePattern, targetPattern){
+		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
+			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
+			var linksToTargetPattern = ($(linkDOM).text() == targetPattern.Title);
+			return linksToTargetPattern && afterRelations;
+		});
+		$(targetLink).parent().find("a").not(targetLink).contents().unwrap();
+		$(targetLink).addClass("TooltipHighlighted").removeAttr("href");
+		return targetLink.parent().html();
+	}
+	
+	generateExpandedLinkTooltipHTML(pattern1, pattern2){
+		//get all the relation texts		
+		var relationTexts = [this.formatRelationTexts(pattern1, pattern2), this.formatRelationTexts(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
+		
+		//get both possible sides of the relevent paragraphs, then remove any which are blank
+		var releventParagraphs = [this.getPatternLinksHTML(pattern1, pattern2), this.getPatternLinksHTML(pattern2, pattern1)].filter(function(para) { return para != null; }).join('<hr>');
+
+		return(
+			`<span class="TooltipTitle">Relation Types</span></br>
+			<span class="TooltipBrief Relation">
+				${relationTexts}
+			</span>
+			<hr>
+			<span class="TooltipTitle">Relevent Paragraphs</span></br>
+			<span class="TooltipBrief">
+				${releventParagraphs}
+			</span>
+			<div class='FindOutMoreText'>Click anywhere to close...</div>
+			`
+		);
+	}
+
+	render(){
+		var pattern1 = Patterns.find(pattern => pattern.Title == this.props.SourcePattern);
+		var pattern2 = Patterns.find(pattern => pattern.Title == this.props.TargetPattern);
+		return(
+			<div id="TooltipInner" dangerouslySetInnerHTML={{__html: this.generateExpandedLinkTooltipHTML(pattern1, pattern2)}}></div>
 		);
 	}
 }

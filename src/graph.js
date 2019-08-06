@@ -19,7 +19,8 @@ class Graph extends React.Component{
 		super(props);
 		this.state = {
 			patterns: [],
-			tooltipEventsEnabled: true
+			tooltipEventsEnabled: true,
+			tooltipRequiresClickClose: false
 		}
 		this.svg = React.createRef();
 	}
@@ -158,24 +159,38 @@ class Graph extends React.Component{
 		
 		$(this.svg.current).click(function(e) { //clicking the background
 			if(e.target.parentNode.id == "GraphOuter"){
-				DisplayDocumentViewer(false);
+				ChangePatternSelection(false); //clear pattern selection
 			}
 		});
-
+		
+		
 		var tooltip = d3.select("#Tooltip");
+		
+		function showToolTip(show){
+			if(show){
+				tooltip.style("display", "block");
+				tooltip.transition().duration(100).style("opacity", .9);
+			}
+			else{
+				tooltip.transition().duration(250).style("opacity", 0);
+				setTimeout(function(){ 
+					tooltip.style("display", "none");	
+				}, 250);
+			}
+		}
+
 		let selfGraph = this;
 		circle.on("mouseover", function(d) {
-			if(selfGraph.state.tooltipEventsEnabled){
-				tooltip.transition() //add the tooltip when the user mouses over the node
-					.duration(200).style("opacity", .9);
+			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
 				toolTipComponent.setState({d: d, type: "Pattern"});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-			if(selfGraph.state.tooltipEventsEnabled){
-				tooltip.transition().duration(500).style("opacity", 0);
+			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+				showToolTip(false);
 			}
 	    })
 		.on("click", function(d) { //Click to open the relevent article
@@ -183,19 +198,35 @@ class Graph extends React.Component{
 		});
 
 		link.on("mouseover", function(d) {
-			if(selfGraph.state.tooltipEventsEnabled){
-				tooltip.transition() //add the tooltip when the user mouses over the node
-					.duration(200).style("opacity", .9);
+			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
 				toolTipComponent.setState({d: d, type: "Link"});
 			}
 		})
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-			if(selfGraph.state.tooltipEventsEnabled){
-				tooltip.transition().duration(500).style("opacity", 0);
+			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+				showToolTip(false);
 			}
-	    });
+	    })
+		.on("click", function(d) {
+			d3.event.stopPropagation();
+			if(selfGraph.state.tooltipEventsEnabled){
+				selfGraph.state.tooltipRequiresClickClose = true; //require click to close
+				showToolTip(true);
+				tooltip.style("left", (d3.event.pageX + 15) + "px")
+					.style("top", (d3.event.pageY - 28) + "px");
+				toolTipComponent.setState({d: d, type: "LinkExpanded"});
+			}
+		});
+		
+		svg.on("click", function(d){
+			if(selfGraph.state.tooltipRequiresClickClose && selfGraph.state.tooltipEventsEnabled){
+				selfGraph.state.tooltipRequiresClickClose = false;
+				showToolTip(false);
+			}
+		});
 		
 		$("#GraphItemCount").text("Displaying " + nodesData.length + " nodes and " + linksData.length + " links.");
 
@@ -429,16 +460,23 @@ class RelationshipSelector extends React.Component{
 
 //function which handles changing the currently selected pattern
 function ChangePatternSelection(newSelectionID){
-	//handle the document DocumentViewer
-	docViewerComponent.setState({title: newSelectionID});
-	DisplayDocumentViewer(true);
-	//handle the search box
-	graphSelectBoxComponent.setState({value: newSelectionID});
+	if(newSelectionID != false){
+		//handle the document DocumentViewer
+		docViewerComponent.setState({title: newSelectionID});
+		DisplayDocumentViewer(true);
+		//handle the search box
+		graphSelectBoxComponent.setState({value: newSelectionID});
 
-	//handle the highlighted node
-	var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
-	$(".SelectedNode").removeClass('SelectedNode');
-	$(nodeIDToHighlight).addClass('SelectedNode');
+		//handle the highlighted node
+		var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
+		$(".SelectedNode").removeClass('SelectedNode');
+		$(nodeIDToHighlight).addClass('SelectedNode');
+	}
+	else{
+		DisplayDocumentViewer(false);
+		graphSelectBoxComponent.setState({value: false});
+		$(".SelectedNode").removeClass('SelectedNode');
+	}
 }
 
 

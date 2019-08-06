@@ -42,7 +42,8 @@
 	--acColor: #4F0147;
 	--acColor2: #FFE2E2;
 	--textColor: #FFF8F0;
-	--linkBlue: #816dd2;
+	--linkBlue: #a6b5ff;
+	--linkBlueSelf: #adb6e1;
 }
 
 body {
@@ -83,7 +84,7 @@ h1{
 }
 
 a{
-	color: #a6b5ff;
+	color: var(--linkBlueSelf) !important;
 }
 
 a:hover {
@@ -307,15 +308,27 @@ header > h1 {
     pointer-events: none;
 	max-width: 350px;
 	border: black solid 2px;
+	z-index: 20;
+    overflow-y: auto;
+	max-height: 500px;
+    pointer-events: all;
 }
 
 
-#Tooltip > .TooltipHighlighted, #Tooltip > .selflink{
-	color: var(--linkBlue);
+.TooltipHighlighted, .selflink{
+	color: var(--linkBlueSelf) !important;
+}
+
+.TooltipTitle > .TooltipHighlighted, .TooltipTitle > .selflink{
+	color: white !important;
+}
+
+.TooltipBrief.Relation > .TooltipHighlighted, .TooltipBrief.Relation > .selflink{
+	color: white !important;
 }
 
 hr {
-	border-top: 2.5px solid black;
+	border-top: 2.5px solid var(--linkBlue);
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     margin-right: 20%;
