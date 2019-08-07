@@ -9,9 +9,9 @@ var filterGraph; //this is the filterGraph used by the entire system, gobal refe
 
 //This is where all the possible types of links will be stored for the entire visual filtering systemLanguage
 var portTypes = [
-	{Type: "Pattern Array"},
-	{Type: "Game Array"},
-	{Type: "Wildcard Array", WildcardType: true} //This type will accept a connection to any other type
+	{Type: "Pattern Array", Color: "purple"},
+	{Type: "Game Array", Color: "green"},
+	{Type: "Wildcard Array", Color: "gray", WildcardType: true} //This type will accept a connection to any other type
 ]
 
 //static method for getting portType object from portTypeName
@@ -623,9 +623,15 @@ class FilterGraph{
 			throw "trying to initialize an existing graph";
 			return false;
 		}
-		this.addFilter(OutputNode, 2, 0);
-		this.addFilter(AllPatternsNode, 0, 0);
-		this.addFilter(AllGamesNode, 0, 2);
+		let outputNode = this.addFilter(OutputNode, 2, 0);
+		outputNode.posX = 540;
+		outputNode.posY = 350;
+		let patternsNode = this.addFilter(AllPatternsNode, 0, 0);
+		patternsNode.posX = 150;
+		patternsNode.posY = 220;
+		let gamesNode = this.addFilter(AllGamesNode, 0, 2);
+		gamesNode.posX = 150;
+		gamesNode.posY = 460;
 		return true;
 	}
 	
@@ -784,17 +790,97 @@ function doVisualFilterDebug(){
 	console.log(outputNode.getOutputData());*/
 }
 
-class VisualFilterNode extends React.Component{
+class VisualFilterPort extends React.Component{
 	constructor(props){
 		super(props);
-		this.state = {
-			inputFilter: null
-		}
 	}
 	
 	render(){
+		let port = this.props.port;
 		return(
-			<div className="node"></div>
+			<div className={"nodePort " + port.facing}>
+				<span style={{color: port.type.Color}} className="portCircle"></span>
+				<span className="portLabel">{port.name}</span>
+			</div>
+		);
+	}
+}
+
+class VisualFilterNode extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	
+	onNodeMouseDown(event){
+		event.persist();
+		console.log(event);
+		
+		let selfFilter = this.props.filterObj;
+		
+		document.addEventListener("mousemove", function(event){
+			selfFilter.posX = 
+			console.log(event);
+		});
+		document.addEventListener("mouseup", function(event){
+			console.log(event);
+		});
+	}
+	
+	componentDidMount() {
+		interact(ReactDOM.findDOMNode(this))
+		.draggable({
+			modifiers: [ // keep the element within the area of it's parent
+				interact.modifiers.restrictRect({ 
+					restriction: 'parent',
+					endOnly: true
+				})
+			],
+			// call this function on every dragmove event
+			onmove: function dragMoveListener (event) {
+				var target = event.target;
+				// keep the dragged position in the data-x/data-y attributes
+				var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+				var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+				// translate the element
+				target.style.webkitTransform =
+					target.style.transform = 
+						'translate(' + x + 'px, ' + y + 'px)';
+
+				// update the posiion attributes
+				target.setAttribute('data-x', x);
+				target.setAttribute('data-y', y);
+			}
+		})
+	}
+	
+	render(){
+		let thisFilter = this.props.filterObj;
+		let inputPortComponents = thisFilter.inputPorts.map((port, i) => <VisualFilterPort key={i} port={port} /> );
+		
+		let outputSide = null;
+		if(thisFilter.outputPort != null){
+			outputSide = (
+				<div className="nodeOutputsSide">
+					<VisualFilterPort port={thisFilter.outputPort} />
+				</div>
+			);
+		}
+		
+		let nodeStyle = {
+			transform: 'translate(' + thisFilter.posX + 'px, ' + thisFilter.posY + 'px)'
+		};
+		
+		return(
+			<div data-x={thisFilter.posX} data-y={thisFilter.posY} style={nodeStyle} className="node">
+				<div className="nodeTitle">{thisFilter.constructor.name}</div>
+				<div className="nodeContent">
+					<div className="nodeInputSide">
+						{inputPortComponents}
+					</div>
+					{outputSide}
+				</div>
+			</div>
 		);
 	}
 }
@@ -806,8 +892,26 @@ class VisualFilterViewer extends React.Component{
 	}
 	
 	render(){
+		let nodesToShow = this.props.attachedFilterGraph.graphNodes;
+		let filterNodes = nodesToShow.map((node, i) => <VisualFilterNode filterObj={node} key={i} />);
+		
 		return(
-			<div id="VisualFilterViewer"></div>
+			<div id="VisualFilterViewer">
+			{filterNodes}
+			</div>
+		);
+	}
+}
+
+class VisualFilterModule extends React.Component {
+	render(){
+		return (
+		<>
+			<button id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
+			<div id="FilterPanel" className="collapse">
+				<VisualFilterViewer attachedFilterGraph={this.props.FilterGraphObject} />
+			</div>
+		</>
 		);
 	}
 }

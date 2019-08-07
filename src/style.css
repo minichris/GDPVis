@@ -506,3 +506,54 @@ Items removed from the new design version
 #ShowFiltersButton{
 	display: none;
 }
+
+/*----------------------------------------------
+New Visual filtering system styling
+----------------------------------------------*/
+#VisualFilterViewer{
+	top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+.node{
+	display: inline-block;
+    min-width: 200px;
+    padding: 0px;
+    background: darkgray;
+    border: 2px solid black;
+	position: absolute;
+}
+
+.nodeTitle{
+	border-bottom: 2px solid black;
+	padding-left: 5px;
+}
+/*--------------------
+Visual filter node ports
+--------------------*/
+.nodePort{
+	display: flex;
+}
+
+.nodePort.input{
+	flex-direction: row;
+}
+
+.nodePort.output{
+	flex-direction: row-reverse;
+}
+
+.portCircle{
+	height: 15px;
+    width: 15px;
+    border-style: solid;
+	border-width: 3px;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+	vertical-align: middle;
+    margin: 5px;
+}

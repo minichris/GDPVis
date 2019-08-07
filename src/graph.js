@@ -314,7 +314,6 @@ class Graph extends React.Component{
 	render(){
 		return(
 			<div id="GraphOuter">
-				<FilterModule ref="FilterModule" />
 				<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
 				</svg>

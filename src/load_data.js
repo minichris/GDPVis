@@ -2,7 +2,7 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
-var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent;
+var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
@@ -13,8 +13,8 @@ $( document ).ready(function() {
 	requiredDataLoadedPromise.then(function() {
 		createGameToPatternRelations();
 		loadFiltersorDefaults();
-		bindFilters();
-		applyFilters();
+		//bindFilters();
+		//applyFilters();
 		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
@@ -25,6 +25,7 @@ $( document ).ready(function() {
 		//set up the filter graph stuff
 		filterGraph = new FilterGraph();
 		filterGraph.initialize();
+		visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
 		
 	});
 });
