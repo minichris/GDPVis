@@ -518,6 +518,13 @@ New Visual filtering system styling
     position: absolute;
 }
 
+#VisualFilterViewer > svg > path{
+	stroke-width: 8;
+    stroke: #000;
+    stroke-linecap: round;
+    fill: none;
+}
+
 .node{
 	display: inline-block;
     min-width: 200px;
@@ -525,6 +532,7 @@ New Visual filtering system styling
     background: darkgray;
     border: 2px solid black;
 	position: absolute;
+	z-index: 1;
 }
 
 .nodeTitle{

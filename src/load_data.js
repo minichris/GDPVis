@@ -2,7 +2,7 @@ var Patterns;
 var Games;
 var PatternCategories;
 var GameCategories;
-var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent;
+var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
@@ -25,8 +25,8 @@ $( document ).ready(function() {
 		//set up the filter graph stuff
 		filterGraph = new FilterGraph();
 		filterGraph.initialize();
+		filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
 		visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
-		
 	});
 });
 

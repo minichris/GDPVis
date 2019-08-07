@@ -5,8 +5,6 @@ Port to port connections are one to one.
 Any port can connect to a wildcard type input port, but wildcard ports shouldn't be used as output ports.
 */
 
-var filterGraph; //this is the filterGraph used by the entire system, gobal reference
-
 //This is where all the possible types of links will be stored for the entire visual filtering systemLanguage
 var portTypes = [
 	{Type: "Pattern Array", Color: "purple"},
@@ -790,6 +788,39 @@ function doVisualFilterDebug(){
 	console.log(outputNode.getOutputData());*/
 }
 
+class VisualFilterConnection extends React.Component{
+	allFilterComponentsMounted() {
+		let outputDOM = ReactDOM.findDOMNode(this.props.output);
+		let inputDOM = ReactDOM.findDOMNode(this.props.input);
+		let outputCircle = $(outputDOM).find(".nodePort.output > .portCircle")[0];
+		let inputCircle = $(inputDOM).find(".nodePort.input > .portCircle")[0];
+		let posX1 = outputCircle.getBoundingClientRect().x - $("#VisualFilterViewer")[0].getBoundingClientRect().x;
+		let posY1 = outputCircle.getBoundingClientRect().y - $("#VisualFilterViewer")[0].getBoundingClientRect().y + 10;
+		let posX2 = inputCircle.getBoundingClientRect().x - $("#VisualFilterViewer")[0].getBoundingClientRect().x;
+		let posY2 = inputCircle.getBoundingClientRect().y - $("#VisualFilterViewer")[0].getBoundingClientRect().y;
+		let width = (posX2 - posX1);
+		let height = (posY2 - posY1);
+		let self = ReactDOM.findDOMNode(this);
+		self.style.webkitTransform =
+			self.style.transform = 
+				'translate(' + posX1 + 'px, ' + posY1 + 'px)';
+		self.style.width = width + "px";
+		self.style.height = height + "px";
+		self.setAttribute("viewBox", "0 0 " + width + " " + height);
+		self.children[0].setAttribute("d", "M0,0 C"+ width +",0 0,"+height+" "+ width +","+height);
+	}
+	
+	render(){
+		return(
+			<svg id="VisualFilterConnections" viewBox="0 0 100 100">
+				<path d="M0,0 C100,0 0,100 100,100 Z" />
+			</svg>
+		);
+	}
+}
+
+
+
 class VisualFilterPort extends React.Component{
 	constructor(props){
 		super(props);
@@ -811,21 +842,6 @@ class VisualFilterNode extends React.Component{
 		super(props);
 	}
 	
-	onNodeMouseDown(event){
-		event.persist();
-		console.log(event);
-		
-		let selfFilter = this.props.filterObj;
-		
-		document.addEventListener("mousemove", function(event){
-			selfFilter.posX = 
-			console.log(event);
-		});
-		document.addEventListener("mouseup", function(event){
-			console.log(event);
-		});
-	}
-	
 	componentDidMount() {
 		interact(ReactDOM.findDOMNode(this))
 		.draggable({
@@ -836,7 +852,7 @@ class VisualFilterNode extends React.Component{
 				})
 			],
 			// call this function on every dragmove event
-			onmove: function dragMoveListener (event) {
+			onmove: function(event) {
 				var target = event.target;
 				// keep the dragged position in the data-x/data-y attributes
 				var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
@@ -850,6 +866,9 @@ class VisualFilterNode extends React.Component{
 				// update the posiion attributes
 				target.setAttribute('data-x', x);
 				target.setAttribute('data-y', y);
+			},
+			onend: function(event){
+				visualFilterComponent.forceUpdate();
 			}
 		})
 	}
@@ -858,8 +877,8 @@ class VisualFilterNode extends React.Component{
 		let thisFilter = this.props.filterObj;
 		let inputPortComponents = thisFilter.inputPorts.map((port, i) => <VisualFilterPort key={i} port={port} /> );
 		
-		let outputSide = null;
-		if(thisFilter.outputPort != null){
+		let outputSide;
+		if(thisFilter.outputPort){ //if we have an output port
 			outputSide = (
 				<div className="nodeOutputsSide">
 					<VisualFilterPort port={thisFilter.outputPort} />
@@ -888,26 +907,72 @@ class VisualFilterNode extends React.Component{
 class VisualFilterViewer extends React.Component{
 	constructor(props){
 		super(props);
-		//this.props.attachedFilterGraph is where the filter graph system will attach
+		
+		this.renderedFilterComponentRefs = [];
+		this.renderedConnectionComponentRefs = [];
+		
+		this.setfilterComponentRef = component => {
+			this.renderedFilterComponentRefs.push(component);
+		};
+		
+		this.setConnectionComponentRef = component => {
+			this.renderedConnectionComponentRefs.push(component);
+		};
+	}
+	
+	componentDidUpdate(){
+		this.renderedConnectionComponentRefs.forEach(function(connectionComp, i){
+			connectionComp.allFilterComponentsMounted();
+		});
+	}
+	
+	
+	componentDidMount(){
+		this.forceUpdate();
 	}
 	
 	render(){
-		let nodesToShow = this.props.attachedFilterGraph.graphNodes;
-		let filterNodes = nodesToShow.map((node, i) => <VisualFilterNode filterObj={node} key={i} />);
+		//creating the fitler components
+		let filtersToShow = this.props.attachedFilterGraph.graphNodes;
+		let filterComponents = filtersToShow.map((filterObject, i) => <VisualFilterNode filterObj={filterObject} key={i} ref={this.setfilterComponentRef}/>);
+		let self = this;
+		//get all the connections between nodes needed
+		let connections = [];
+		filterComponents.forEach(function(filterComponent){
+			//get this components filterObj
+			let selfFilterObj = filterComponent.props.filterObj;
+			//if this components filterObj has a connected output port
+			if(selfFilterObj.outputPort && selfFilterObj.outputPort.connectedPort){
+				//find the component which displays the forign port
+				let filterComponentIndex = filterComponents.indexOf(filterComponent);
+				let forignComponentIndex = filterComponents.findIndex((component) => component.props.filterObj == selfFilterObj.outputPort.connectedPort.owner);
+				connections.push({
+					input: self.renderedFilterComponentRefs[forignComponentIndex], 
+					output: self.renderedFilterComponentRefs[filterComponentIndex]
+				});
+			}
+		});
+		//create the connection components
+		let connectionComponents = connections.map((connection, i) => <VisualFilterConnection ref={this.setConnectionComponentRef} input={connection.input} output={connection.output} key={i} />);
 		
 		return(
 			<div id="VisualFilterViewer">
-			{filterNodes}
+				{filterComponents}
+				{connectionComponents}
 			</div>
 		);
 	}
 }
 
 class VisualFilterModule extends React.Component {
+	filtersButtonClick(event){
+		visualFilterComponent.forceUpdate();
+	}
+	
 	render(){
 		return (
 		<>
-			<button id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
+			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
 			<div id="FilterPanel" className="collapse">
 				<VisualFilterViewer attachedFilterGraph={this.props.FilterGraphObject} />
 			</div>
