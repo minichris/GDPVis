@@ -791,15 +791,16 @@ function doVisualFilterDebug(){
 class VisualFilterConnection extends React.Component{
 	allFilterComponentsMounted() {
 		let outputDOM = ReactDOM.findDOMNode(this.props.output);
+		//console.log(outputDOM);
 		let inputDOM = ReactDOM.findDOMNode(this.props.input);
 		let outputCircle = $(outputDOM).find(".nodePort.output > .portCircle")[0];
-		let inputCircle = $(inputDOM).find(".nodePort.input > .portCircle")[0];
+		let inputCircle = $(inputDOM).find(".nodePort.input > .portCircle")[this.props.connectedPortNumber];
 		let posX1 = outputCircle.getBoundingClientRect().x - $("#VisualFilterViewer")[0].getBoundingClientRect().x;
 		let posY1 = outputCircle.getBoundingClientRect().y - $("#VisualFilterViewer")[0].getBoundingClientRect().y + 10;
 		let posX2 = inputCircle.getBoundingClientRect().x - $("#VisualFilterViewer")[0].getBoundingClientRect().x;
 		let posY2 = inputCircle.getBoundingClientRect().y - $("#VisualFilterViewer")[0].getBoundingClientRect().y;
 		let width = (posX2 - posX1);
-		let height = (posY2 - posY1);
+		let height = (posY2 - posY1) + 10;
 		let self = ReactDOM.findDOMNode(this);
 		self.style.webkitTransform =
 			self.style.transform = 
@@ -807,7 +808,9 @@ class VisualFilterConnection extends React.Component{
 		self.style.width = width + "px";
 		self.style.height = height + "px";
 		self.setAttribute("viewBox", "0 0 " + width + " " + height);
-		self.children[0].setAttribute("d", "M0,0 C"+ width +",0 0,"+height+" "+ width +","+height);
+		let path = self.children[0];
+		path.setAttribute("d", "M0,0 C"+ width +",0 0,"+height+" "+ width +","+height);
+		path.style.stroke = this.props.output.props.filterObj.outputPort.type.Color;
 	}
 	
 	render(){
@@ -946,14 +949,18 @@ class VisualFilterViewer extends React.Component{
 				//find the component which displays the forign port
 				let filterComponentIndex = filterComponents.indexOf(filterComponent);
 				let forignComponentIndex = filterComponents.findIndex((component) => component.props.filterObj == selfFilterObj.outputPort.connectedPort.owner);
+				//get the connected port number
+				let connectedPortNumber = selfFilterObj.outputPort.connectedPort.owner.inputPorts.findIndex(port => port == selfFilterObj.outputPort.connectedPort);
+				//push to array of connections
 				connections.push({
 					input: self.renderedFilterComponentRefs[forignComponentIndex], 
-					output: self.renderedFilterComponentRefs[filterComponentIndex]
+					output: self.renderedFilterComponentRefs[filterComponentIndex],
+					connectedPortNumber:connectedPortNumber
 				});
 			}
 		});
 		//create the connection components
-		let connectionComponents = connections.map((connection, i) => <VisualFilterConnection ref={this.setConnectionComponentRef} input={connection.input} output={connection.output} key={i} />);
+		let connectionComponents = connections.map((connection, i) => <VisualFilterConnection ref={this.setConnectionComponentRef} input={connection.input} output={connection.output} connectedPortNumber={connection.connectedPortNumber} key={i} />);
 		
 		return(
 			<div id="VisualFilterViewer">
