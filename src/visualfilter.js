@@ -822,11 +822,62 @@ class VisualFilterConnection extends React.Component{
 	}
 }
 
+var fakeConnectionData = {
+	x: 0,
+	y: 0,
+	color: "black"
+};
+class FakeConnection extends React.Component{
+	constructor(props){
+		super(props);
+	}
+	
+	componentDidMount(){
+		let comp = this;
+		document.addEventListener("mousemove", function(event){			
+			let posX1 = fakeConnectionData.x;
+			let posY1 = fakeConnectionData.y;
+			let posX2 = event.x;
+			let posY2 = event.y - 100;
+			
+			let width = (posX2 - posX1);
+			let height = (posY2 - posY1);
+			let selfDom = ReactDOM.findDOMNode(comp);
+			selfDom.style.webkitTransform =
+				selfDom.style.transform = 
+					'translate(' + posX1 + 'px, ' + posY1 + 'px)';
+			selfDom.style.width = width + "px";
+			selfDom.style.height = height + "px";
+			selfDom.setAttribute("viewBox", "0 0 " + width + " " + height);
+			let path = selfDom.children[0];
+			path.setAttribute("d", "M0,0 C"+ width +",0 0,"+height+" "+ width +","+height);
+			path.style.stroke = fakeConnectionData.color;
+		});
+	}
+	
+	render(){
+		return(
+			<svg className="fake" id="VisualFilterConnections" viewBox="0 0 100 100">
+				<path d="M0,0 C100,0 0,100 100,100 Z" />
+			</svg>
+		);
+	}
+}
+
 
 
 class VisualFilterPort extends React.Component{
 	constructor(props){
 		super(props);
+	}
+	
+	componentDidMount(){
+		let self = this;
+		$(ReactDOM.findDOMNode(this)).find(".portCircle").on("click", function(event){
+			fakeConnectionData.x = event.pageX - $('#VisualFilterViewer').offset().left;
+			fakeConnectionData.y = event.pageY - $('#VisualFilterViewer').offset().top;
+			fakeConnectionData.color = self.props.port.port.type.Color;
+		});
 	}
 	
 	render(){
@@ -962,10 +1013,12 @@ class VisualFilterViewer extends React.Component{
 		//create the connection components
 		let connectionComponents = connections.map((connection, i) => <VisualFilterConnection ref={this.setConnectionComponentRef} input={connection.input} output={connection.output} connectedPortNumber={connection.connectedPortNumber} key={i} />);
 		
+		
 		return(
 			<div id="VisualFilterViewer">
 				{filterComponents}
 				{connectionComponents}
+				<FakeConnection />
 			</div>
 		);
 	}

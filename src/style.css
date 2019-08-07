@@ -518,6 +518,10 @@ New Visual filtering system styling
     position: absolute;
 }
 
+#VisualFilterViewer > svg{
+	position: absolute;
+}
+
 #VisualFilterViewer > svg > path{
 	stroke-width: 8;
     stroke: #000;
@@ -564,4 +568,5 @@ Visual filter node ports
     box-sizing: border-box;
 	vertical-align: middle;
     margin: 5px;
+	cursor: pointer;
 }
