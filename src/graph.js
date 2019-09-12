@@ -1,3 +1,10 @@
+import $ from 'jquery';
+import 'select2';
+import 'select2/dist/css/select2.css';
+import React from "react";
+import * as d3 from 'd3';
+import { schemeCategory20 } from 'd3-scale-chromatic';
+
 var RelationshipColors = {
 	//goes R, G, B
 	"Potentially Conflicting With": [255, 30, 30],
@@ -14,7 +21,7 @@ function getRelationshipColor(relationshipText){
 	return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 }
 
-class Graph extends React.Component{
+export class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -105,7 +112,7 @@ class Graph extends React.Component{
 		}));
 
 
-		var color = d3.scaleOrdinal(d3.schemeCategory20); //set the color scheme
+		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
 
 		var simulation = d3.forceSimulation()
 			.force("link", d3.forceLink().id(function(d) { return d.id; }).strength(0.05)) //sets up the links to use the nodes ID, rather then its index in the list
@@ -324,7 +331,7 @@ class Graph extends React.Component{
 	}
 }
 
-class GraphSelectBox extends React.Component{
+export class GraphSelectBox extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {

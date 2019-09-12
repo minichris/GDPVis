@@ -1,4 +1,7 @@
-class WarningDialog extends React.Component{
+import $ from 'jquery';
+import React from "react";
+
+export default class WarningDialog extends React.Component{
 	constructor(props) {
     	super(props);
     	this.state = {

@@ -4,8 +4,8 @@
   "description": "",
   "main": "script-compiled.js",
   "scripts": {
-    "babel": "babel src --out-dir build --copy-files --source-maps",
-    "server": "C:/tools/php73/PHP -S localhost:8000 -t build"
+    "build": "webpack",
+    "start": "webpack-dev-server"
   },
   "babel": {
     "presets": [
@@ -24,7 +24,32 @@
     "@babel/core": "^7.1.6",
     "@babel/plugin-transform-react-jsx": "^7.1.6",
     "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-minify": "^0.4.3"
+    "@babel/runtime": "^7.6.0",
+    "babel-loader": "^8.0.6",
+    "babel-minify": "^0.4.3",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-runtime": "^6.26.0",
+    "css-loader": "^3.2.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8",
+    "webpack-dev-server": "^3.8.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "d3": "^5.12.0",
+    "d3-scale-chromatic": "^1.5.0",
+    "flatted": "^2.0.1",
+    "interactjs": "^1.6.2",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "select2": "^4.0.10"
   }
 }

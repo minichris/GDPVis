@@ -1,3 +1,8 @@
+import $ from 'jquery';
+import 'select2';
+import 'select2/dist/css/select2.css';
+import React from "react";
+
 var filterlistComponent;
 
 function OptionList(props) {

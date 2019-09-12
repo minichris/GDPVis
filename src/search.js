@@ -1,4 +1,9 @@
-class SearchBox extends React.Component {
+import $ from 'jquery';
+import 'select2';
+import 'select2/dist/css/select2.css';
+import React from "react";
+
+export default class SearchBox extends React.Component {
     constructor(props){
         super(props);
     }

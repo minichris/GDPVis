@@ -1,7 +1,10 @@
+import $ from 'jquery';
+import React from "react";
+
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
-class DocumentViewer extends React.Component{
+export class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -11,6 +14,29 @@ class DocumentViewer extends React.Component{
         };
 		this.internalPageRef = React.createRef();
     }
+	
+	//function for handling link clicks in the document browser
+	DocumentViewerEventHandler(e){
+		//prevent the link from acutally working
+		e.stopPropagation();
+		e.preventDefault();
+		//get where the link was going to
+		var linkClicked = e.target.attributes['title'].value;
+		//get some new filters based on the selected link and update the filter list
+		Filters = generateReleventFilters(linkClicked);
+		refreshGraph(performFiltering());
+
+		//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
+		if(checkPatternCurrentlyFiltered(linkClicked)){
+			ChangePatternSelection(linkClicked); //select the pattern
+		}
+		else{
+			//handle the document viewer
+			docViewerComponent.setState({title: linkClicked});
+			graphSelectBoxComponent.setState({filters: Filters, value: null});
+		}
+		updateFiltersGUI();
+	}
 
     componentDidUpdate(){
 		let scrollableElement = document.querySelector(".insertedPage");
@@ -18,7 +44,7 @@ class DocumentViewer extends React.Component{
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
     	$(".insertedPage").find("a[href]").click(function(e){
-    		DocumentViewerEventHandler(e);
+    		this.DocumentViewerEventHandler(e);
     	});
         setWindowHistory(docViewerComponent.state.title);
     }
@@ -75,7 +101,7 @@ class DocumentViewer extends React.Component{
     }
 }
 
-class DocumentResizer extends React.Component{
+export class DocumentResizer extends React.Component{
 	constructor(props){
 		super(props);
 	}
@@ -115,7 +141,7 @@ class DocumentResizer extends React.Component{
 	}
 }
 
-class DocumentViewerTableOfContents extends React.Component{
+export class DocumentViewerTableOfContents extends React.Component{
 	componentDidMount(){
 		document.getElementById("TableOfContents").style.display = "none";
 	}
@@ -144,7 +170,7 @@ class DocumentViewerTableOfContents extends React.Component{
 	}
 }
 
-class DocumentViewerToolbar extends React.Component{
+export class DocumentViewerToolbar extends React.Component{
 	constructor(props) {
         super(props);
     }
@@ -201,30 +227,7 @@ class DocumentViewerToolbar extends React.Component{
 	}
 }
 
-//function for handling link clicks in the document browser
-function DocumentViewerEventHandler(e){
-	//prevent the link from acutally working
-	e.stopPropagation();
-	e.preventDefault();
-	//get where the link was going to
-	var linkClicked = e.target.attributes['title'].value;
-	//get some new filters based on the selected link and update the filter list
-	Filters = generateReleventFilters(linkClicked);
-	refreshGraph(performFiltering());
-
-	//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-	if(checkPatternCurrentlyFiltered(linkClicked)){
-		ChangePatternSelection(linkClicked); //select the pattern
-	}
-    else{
-        //handle the document viewer
-        docViewerComponent.setState({title: linkClicked});
-        graphSelectBoxComponent.setState({filters: Filters, value: null});
-    }
-    updateFiltersGUI();
-}
-
-function DisplayDocumentViewer(show){
+export function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
 		document.getElementById("DocumentViewer").style.width = docViewerComponent.state.openSize;
@@ -243,7 +246,7 @@ function DisplayDocumentViewer(show){
 	}
 }
 
-class CategoryPage extends React.Component{
+export class CategoryPage extends React.Component{
     render(){
         let categoryTitle = this.props.title;
         let pageTitlesInCategory = []; //generic array to hold all the page titles
@@ -269,7 +272,7 @@ class CategoryPage extends React.Component{
     }
 }
 
-class GamePage extends React.Component {
+export class GamePage extends React.Component {
     getPatternLink(title){
         return ('http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_'));
     }
@@ -315,7 +318,7 @@ class GamePage extends React.Component {
     }
 }
 
-class PatternPage extends React.Component {
+export class PatternPage extends React.Component {
     render(){
         let pattern = Patterns.find(pat => pat.Title == this.props.title);
         console.log("Generating page for the following pattern object:");

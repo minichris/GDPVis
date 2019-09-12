@@ -1,3 +1,9 @@
+import $ from 'jquery';
+import React from "react";
+import ReactDOM from "react-dom";
+import {parse, stringify} from 'flatted/esm';
+import interact from 'interactjs';
+
 /*
 VISUAL BASED FILTERING RULES
 Nodes only have exactly one output port.
@@ -660,7 +666,7 @@ class FilterGraph{
 	}
 
 	serializeArray(){
-		return Flatted.stringify(this.graphNodes); //stringyify the copy
+		return stringify(this.graphNodes); //stringyify the copy
 	}
 	
 	deserializeArray(input){
@@ -672,7 +678,7 @@ class FilterGraph{
 			}
 		}
 		
-		let parsedInput = Flatted.parse(input, function(k,v){
+		let parsedInput = parse(input, function(k,v){
 			//console.log(k);
 			//console.log(v);
 			if(v == null){

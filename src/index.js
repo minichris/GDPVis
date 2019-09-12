@@ -1,3 +1,16 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import $ from 'jquery';
+import React from "react";
+import ReactDOM from "react-dom";
+import './style.css';
+
+import WarningDialog from './warningdialog.js';
+import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './tooltip.js';
+import {DocumentViewer, DocumentResizer, DocumentViewerTableOfContents, DocumentViewerToolbar, DisplayDocumentViewer, CategoryPage, GamePage, PatternPage} from './browser.js';
+import {Graph, GraphSelectBox} from './graph.js';
+import SearchBox from './search.js';
+
 var Patterns;
 var Games;
 var PatternCategories;

@@ -1,8 +1,11 @@
+import $ from 'jquery';
+import React from "react";
+
 //-------------------------------------------------------------------------
 //The following section contains the Tooltip react components
 //-------------------------------------------------------------------------
 
-class Tooltip extends React.Component{
+export class Tooltip extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -63,7 +66,7 @@ function getRelationColorContribution(link){
 	}
 }
 
-class LinkTooltip extends React.Component{
+export class LinkTooltip extends React.Component{
 	formatRelationTexts(sourcePattern, targetPattern){
 		let oneWayRelationTexts = getPatternOneWayRelationTexts(sourcePattern.Title, targetPattern.Title);
 		
@@ -124,7 +127,7 @@ class LinkTooltip extends React.Component{
 	}
 }
 
-class LinkExpandedTooltip extends LinkTooltip{
+export class LinkExpandedTooltip extends LinkTooltip{
 	getPatternLinksHTML(sourcePattern, targetPattern){
 		var targetLink = $(sourcePattern.Content).find("a[href]").filter(function(linkIndex, linkDOM){ //for each link
 			var afterRelations = $(linkDOM).parent().prevAll("h2").find("#Relations").length == 0;
@@ -167,7 +170,7 @@ class LinkExpandedTooltip extends LinkTooltip{
 	}
 }
 
-class PatternTooltip extends React.Component{
+export class PatternTooltip extends React.Component{
 	render(){
 		let parser = new DOMParser();
 		let patternObj = Patterns.find(pattern => pattern.Title == this.props.Pattern);
