@@ -7,7 +7,7 @@ import './style.css';
 
 import WarningDialog from './warningdialog.js';
 import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './tooltip.js';
-import {DocumentViewer, DocumentResizer, DocumentViewerTableOfContents, DocumentViewerToolbar, DisplayDocumentViewer, CategoryPage, GamePage, PatternPage} from './browser.js';
+import {getPageType, DocumentViewer, DocumentResizer, DocumentViewerTableOfContents, DocumentViewerToolbar, DisplayDocumentViewer, CategoryPage, GamePage, PatternPage} from './browser.js';
 import {Graph, GraphSelectBox} from './graph.js';
 import SearchBox from './search.js';
 
@@ -119,73 +119,6 @@ function checkPatternCurrentlyFiltered(patternName){
 	var currentlyFilteredPatterns = performFiltering();
 	//check if the page we are looking for is in the current patterns
 	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
-}
-
-//Give a page title, find the type of the page
-function getPageType(pageTitle){
-	if(pageTitle.includes("Special:")){
-		return "Special";
-	}
-	if(Patterns.find(pattern => pattern.Title == pageTitle) != null){
-		return "Pattern";
-	}
-	if(Games.find(game => game.name == pageTitle) != null){
-		return "Game";
-	}
-	//pattern category names may contain this string, remove it before next tests, but not before
-	pageTitle = pageTitle.replace('Category:', '');
-	if(PatternCategories.find(cat => cat == pageTitle) != null){
-		return "Pattern Category";
-	}
-	if(GameCategories.find(cat => cat == pageTitle) != null){
-		return "Game Category";
-	}
-	return "Other";
-}
-
-
-//given a page's title, returns the orginal page location
-function getOrginalPageLocation(pageTitle){
-	let pageType = getPageType(pageTitle);
-	if(pageType == "Game Category" || pageType == "Pattern Category"){
-		return "http://virt10.itu.chalmers.se/index.php/Category:" + pageTitle.replace(/ /g,"_");
-	}
-	if(pageType == "Special"){
-		return false; //lets just ignore special pages for now
-		//return "http://virt10.itu.chalmers.se/index.php/Special:" + pageTitle.replace(/ /g,"_");
-	}
-	return "http://virt10.itu.chalmers.se/index.php/" + pageTitle.replace(/ /g,"_");
-}
-
-function getEditPageLocation(pageTitle){
-	if(getPageType(pageTitle) == "Game Category" || getPageType(pageTitle) == "Pattern Category"){
-		return "http://virt10.itu.chalmers.se/index.php?title=Category:" + pageTitle + "&action=edit";
-	}
-	if(getPageType(pageTitle) == "Special"){
-		return false;
-	}
-	return "http://virt10.itu.chalmers.se/index.php?title=" + pageTitle + "&action=edit";
-}
-
-function getDiscussionPageLocation(pageTitle){
-	let pageType = getPageType(pageTitle);
-	if(pageType == "Game Category" || pageType == "Pattern Category"){
-		return "http://virt10.itu.chalmers.se/index.php/Category_talk:" + pageTitle.replace(/ /g,"_");
-	}
-	if(pageType == "Special"){
-		return false;
-	}
-	return "http://virt10.itu.chalmers.se/index.php/Talk:" + pageTitle.replace(/ /g,"_");
-}
-
-function getHistoryPageLocation(pageTitle){
-	if(getPageType(pageTitle) == "Game Category" || getPageType(pageTitle) == "Pattern Category"){
-		return "http://virt10.itu.chalmers.se/index.php?title=Category:" + pageTitle + "&action=history";
-	}
-	if(getPageType(pageTitle) == "Special"){
-		return false;
-	}
-	return "http://virt10.itu.chalmers.se/index.php?title=" + pageTitle + "&action=history";
 }
 
 //Given a pattern name, gets the pattern's data
