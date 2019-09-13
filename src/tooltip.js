@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import React from "react";
+import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import {getPatternOneWayRelationTexts, RelationshipColors} from './graph.js';
 
 //-------------------------------------------------------------------------
 //The following section contains the Tooltip react components

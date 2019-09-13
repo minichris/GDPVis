@@ -63,7 +63,7 @@ export class SearchBox extends React.Component {
         global.Filters = generateReleventFilters(articleSelected);
     	global.refreshGraph(performFiltering(global.Filters));
         getBrowserComponentSingleton().setState({title: articleSelected});
-        updateFiltersGUI();
+        //updateFiltersGUI();
     }
 
     render(){

@@ -5,10 +5,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import {getBrowserComponentSingleton} from './browser.js';
+import {getBrowserComponentSingleton, DisplayDocumentViewer} from './browser.js';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 
-var RelationshipColors = {
+export var RelationshipColors = {
 	//goes R, G, B
 	"Potentially Conflicting With": [255, 30, 30],
 	"Possible Closure Effects": [100, 30, 30],
@@ -195,7 +195,7 @@ class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				toolTipComponent.setState({d: d, type: "Pattern"});
+				global.toolTipComponent.setState({d: d, type: "Pattern"});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -212,7 +212,7 @@ class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				toolTipComponent.setState({d: d, type: "Link"});
+				global.toolTipComponent.setState({d: d, type: "Link"});
 			}
 		})
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -227,7 +227,7 @@ class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				toolTipComponent.setState({d: d, type: "LinkExpanded"});
+				global.toolTipComponent.setState({d: d, type: "LinkExpanded"});
 			}
 		});
 		
@@ -499,7 +499,7 @@ function getPatternData(patternName){
 }
 
 //Given a source pattern name and a target pattern name, find relation from the source to the target
-function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //get the relation between a pattern
+export function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //get the relation between a pattern
 	let sourcePattern = getPatternData(sourcePatternName);
 	let targetPattern = getPatternData(targetPatternName);
 	let relationsTexts = null;

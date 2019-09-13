@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
-import './style.css';
 
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
@@ -13,14 +12,17 @@ import {getGraphComponentSingleton} from './graph.js';
 import {SearchBox} from './search.js';
 import {FilterGraph, VisualFilterModule} from './visualfilter.js';
 import {performFiltering, generateReleventFilters} from './oldfilters.js';
+import {loadFiltersorDefaults, setWindowHistory} from './saving.js';
 
-var docViewerComponent, toolTipComponent, seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
+import './style.css';
+
+var seachBoxComponent, graphComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
 
 global.Filters = [];
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
-	docViewerComponent = getBrowserComponentSingleton(document.getElementById("DocumentViewer"));
+	global.docViewerComponent = getBrowserComponentSingleton(document.getElementById("DocumentViewer"));
 	graphComponent = getGraphComponentSingleton(document.getElementById("Graph"));
 	//graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
@@ -33,7 +35,7 @@ $( document ).ready(function() {
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
 		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
-		toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
+		global.toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 		DisplayDocumentViewer(true);
 		
 		//set up the filter graph stuff
@@ -55,39 +57,5 @@ function createGameToPatternRelations(){
 global.refreshGraph = function(filteredPatterns){
 	graphComponent.setState({patterns: filteredPatterns});
 	//graphSelectBoxComponent.setState({patterns: filteredPatterns});
-	setWindowHistory(docViewerComponent.state.title);
-}
-
-//Function to find if a pattern is in the list of currently filtered patterns
-function checkPatternCurrentlyFiltered(patternName){
-	//get the currently filtered patterns
-	var currentlyFilteredPatterns = performFiltering(global.Filters);
-	//check if the page we are looking for is in the current patterns
-	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
-}
-
-//-------------------------------------------------------------------------
-//The following section controls the saving and loading Filters from the URL
-//-------------------------------------------------------------------------
-function loadFiltersorDefaults(){
-	var urlParams = new URLSearchParams( new URL(window.location).search);
-	if(urlParams.has('data')) { //if the url has Filters in the GET request
-		global.Filters = JSON.parse(atob(urlParams.get('data')))["filters"]; //parse the Filters
-		let pageToDisplay = JSON.parse(atob(urlParams.get('data')))["currentPage"];
-		docViewerComponent.setState({title: pageToDisplay});
-	}
-	else {
-		//set example Filters
-		global.Filters = [{Type: "game", Value: "World of Warcraft"},
-		{Type: "pattern_category", Value: "Negative Patterns"}];
-	}
-}
-
-function setWindowHistory(currentPage){
-	let saveData = {
-		filters: global.Filters, //current Filters
-		currentPage: currentPage //current browser page
-	}
-	let encoded = btoa(JSON.stringify(saveData));
-	window.history.pushState('VGTropes', 'VGTropes', '?data=' + encoded);
+	setWindowHistory(global.docViewerComponent.state.title);
 }

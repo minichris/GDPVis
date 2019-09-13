@@ -18,7 +18,7 @@ function gameCategoryFilter(inputPatterns, inputGameSubcategory){
 }
 
 //filters a list of patterns to only ones that link to a specific page (game or pattern), including that page
-function pageFilter(inputPatterns, inputPage){ 
+export function pageFilter(inputPatterns, inputPage){ 
 	var outputPatterns = inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage)) || (pattern.Title == inputPage));
 	return outputPatterns;
 }
@@ -36,6 +36,14 @@ function patternsLinkedToByPattern(inputPatterns, inputPattern){
 	var outputPatterns = inputPatterns.filter(pattern => inputPatternObject.PatternsLinks.map(pLink => pLink.To).includes(pattern.Title));
 	outputPatterns.push(inputPatternObject); //also include the original page
 	return outputPatterns;
+}
+
+//Function to find if a pattern is in the list of currently filtered patterns
+export function checkPatternCurrentlyFiltered(patternName){
+	//get the currently filtered patterns
+	var currentlyFilteredPatterns = performFiltering(global.Filters);
+	//check if the page we are looking for is in the current patterns
+	return (currentlyFilteredPatterns.find(fPattern => fPattern.Title == patternName) != null);
 }
 
 //Performs filtering on the global list of patterns with the global current filter setup

@@ -3,7 +3,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {getGraphComponentSingleton} from './graph.js';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
-import {performFiltering, generateReleventFilters} from './oldfilters.js';
+import {performFiltering, generateReleventFilters, pageFilter, checkPatternCurrentlyFiltered} from './oldfilters.js';
+import {setWindowHistory} from './saving.js';
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
@@ -20,37 +21,46 @@ class DocumentViewer extends React.Component{
 		this.internalPageRef = React.createRef();
     }
 	
-	//function for handling link clicks in the document browser
-	DocumentViewerEventHandler(e){
-		//prevent the link from acutally working
-		e.stopPropagation();
-		e.preventDefault();
-		//get where the link was going to
-		var linkClicked = e.target.attributes['title'].value;
-		//get some new Filters based on the selected link and update the filter list
-		Filters = generateReleventFilters(linkClicked);
-		global.refreshGraph(performFiltering());
-
-		//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-		if(checkPatternCurrentlyFiltered(linkClicked)){
-			ChangePatternSelection(linkClicked); //select the pattern
-		}
-		else{
-			//handle the document viewer
-			getBrowserComponentSingleton().setState({title: linkClicked});
-			//graphSelectBoxComponent.setState({filters: Filters, value: null});
-		}
-		updateFiltersGUI();
-	}
-
     componentDidUpdate(){
+		function documentViewerLinkClickEventHandler(linkElement){
+			if(linkElement.attributes['title']){ //if the title isn't undefined
+				var linkClickedTitle = linkElement.attributes['title'].value;
+				//get some new Filters based on the selected link and update the filter list
+				Filters = generateReleventFilters(linkClickedTitle);
+				global.refreshGraph(performFiltering());
+
+				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
+				if(checkPatternCurrentlyFiltered(linkClickedTitle)){
+					ChangePatternSelection(linkClickedTitle); //select the pattern
+				}
+				else{
+					//handle the document viewer
+					getBrowserComponentSingleton().setState({title: linkClickedTitle});
+					//graphSelectBoxComponent.setState({filters: Filters, value: null});
+				}
+				//updateFiltersGUI();
+			}
+		}
+		
 		let scrollableElement = document.querySelector(".insertedPage");
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
-    	$(".insertedPage").find("a[href]").click(function(e){
+		var elements = document.getElementsByTagName('a');
+		for(var i = 0, len = elements.length; i < len; i++) {
+			if(elements[i].host == "virt10.itu.chalmers.se"){
+				elements[i].setAttribute("data-originallink", elements[i].attributes["href"]);
+				elements[i].setAttribute("href", "javascript:;");
+				
+				
+				elements[i].onclick = function () {
+					documentViewerLinkClickEventHandler(this);
+				}				
+			}
+		}
+    	/*$(".insertedPage").find("a[href]").click(function(e){
     		this.DocumentViewerEventHandler(e);
-    	});
+    	});*/
         setWindowHistory(getBrowserComponentSingleton().state.title);
     }
 
