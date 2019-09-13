@@ -1,16 +1,21 @@
 import $ from 'jquery';
 import React from "react";
+import ReactDOM from "react-dom";
+import {getGraphComponentSingleton} from './graph.js';
+import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import {performFiltering, generateReleventFilters} from './oldfilters.js';
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
-export class DocumentViewer extends React.Component{
+let openSize = "65%"; //sets the default open size
+
+class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
             title: "Special:VGTropes",
-            prevtitle: "Special:VGTropes",
-			openSize: "65%"
+            prevtitle: "Special:VGTropes"
         };
 		this.internalPageRef = React.createRef();
     }
@@ -22,9 +27,9 @@ export class DocumentViewer extends React.Component{
 		e.preventDefault();
 		//get where the link was going to
 		var linkClicked = e.target.attributes['title'].value;
-		//get some new filters based on the selected link and update the filter list
+		//get some new Filters based on the selected link and update the filter list
 		Filters = generateReleventFilters(linkClicked);
-		refreshGraph(performFiltering());
+		global.refreshGraph(performFiltering());
 
 		//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
 		if(checkPatternCurrentlyFiltered(linkClicked)){
@@ -32,8 +37,8 @@ export class DocumentViewer extends React.Component{
 		}
 		else{
 			//handle the document viewer
-			docViewerComponent.setState({title: linkClicked});
-			graphSelectBoxComponent.setState({filters: Filters, value: null});
+			getBrowserComponentSingleton().setState({title: linkClicked});
+			//graphSelectBoxComponent.setState({filters: Filters, value: null});
 		}
 		updateFiltersGUI();
 	}
@@ -46,7 +51,7 @@ export class DocumentViewer extends React.Component{
     	$(".insertedPage").find("a[href]").click(function(e){
     		this.DocumentViewerEventHandler(e);
     	});
-        setWindowHistory(docViewerComponent.state.title);
+        setWindowHistory(getBrowserComponentSingleton().state.title);
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
@@ -55,7 +60,7 @@ export class DocumentViewer extends React.Component{
         }
         return null;
     }
-
+	
     render(){
         let pageTitle = this.state.title;
         if(pageTitle == null){
@@ -91,7 +96,7 @@ export class DocumentViewer extends React.Component{
 				<div id="DocumentContainer">
 					<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
 					<div id ="InsertedPageOuter">
-						<DocumentResizer toResize={this} />
+						<DocumentResizer Parent={this} />
 						{pageToRender}
 					</div>
 				</div>
@@ -101,7 +106,7 @@ export class DocumentViewer extends React.Component{
     }
 }
 
-export class DocumentResizer extends React.Component{
+class DocumentResizer extends React.Component{
 	constructor(props){
 		super(props);
 	}
@@ -113,7 +118,7 @@ export class DocumentResizer extends React.Component{
 
 		function Resize(e) {
 			let newOpenWidth = Math.max((window.innerWidth - e.clientX), 330) + 'px';
-			docViewerComponent.state.openSize = newOpenWidth;
+			openSize = newOpenWidth;
 			document.getElementById("DocumentViewer").style.width = newOpenWidth;
 		}
 
@@ -122,7 +127,7 @@ export class DocumentResizer extends React.Component{
 			window.removeEventListener('mouseup', stopResize, false);
 			window.removeEventListener('selectstart', disableSelect);
 			document.getElementById("DocumentViewer").style.transition = null;
-			graphComponent.state.tooltipEventsEnabled = true;
+			getGraphComponentSingleton().state.tooltipEventsEnabled = true;
 		}
 		
 		window.addEventListener('mousemove', Resize, false);
@@ -130,7 +135,7 @@ export class DocumentResizer extends React.Component{
 		window.addEventListener('selectstart', disableSelect);
 		
 		document.getElementById("DocumentViewer").style.transition = "none";
-		graphComponent.state.tooltipEventsEnabled = false;
+		getGraphComponentSingleton().state.tooltipEventsEnabled = false;
 	}
 	
 	
@@ -141,7 +146,7 @@ export class DocumentResizer extends React.Component{
 	}
 }
 
-export class DocumentViewerTableOfContents extends React.Component{
+class DocumentViewerTableOfContents extends React.Component{
 	componentDidMount(){
 		document.getElementById("TableOfContents").style.display = "none";
 	}
@@ -272,6 +277,14 @@ export class DocumentViewerToolbar extends React.Component{
 }
 
 
+let componentSingleton = null;
+export function getBrowserComponentSingleton(element = null){
+	if(!componentSingleton){
+		componentSingleton = ReactDOM.render(<DocumentViewer />, element);
+	}
+	return componentSingleton;
+}
+
 //Give a page title, find the type of the page
 export function getPageType(pageTitle){
 	if(pageTitle.includes("Special:")){
@@ -297,7 +310,7 @@ export function getPageType(pageTitle){
 export function DisplayDocumentViewer(show){
 	if(show){
 		document.getElementById("DocumentViewer").style.display = "flex";
-		document.getElementById("DocumentViewer").style.width = docViewerComponent.state.openSize;
+		document.getElementById("DocumentViewer").style.width = openSize;
 		document.getElementById("DocumentViewer").style.minWidth = null;
 		document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
@@ -313,7 +326,7 @@ export function DisplayDocumentViewer(show){
 	}
 }
 
-export class CategoryPage extends React.Component{
+class CategoryPage extends React.Component{
     render(){
         let categoryTitle = this.props.title;
         let pageTitlesInCategory = []; //generic array to hold all the page titles
@@ -339,7 +352,7 @@ export class CategoryPage extends React.Component{
     }
 }
 
-export class GamePage extends React.Component {
+class GamePage extends React.Component {
     getPatternLink(title){
         return ('http://virt10.itu.chalmers.se/index.php/' + title.replace(' ', '_'));
     }
@@ -385,7 +398,7 @@ export class GamePage extends React.Component {
     }
 }
 
-export class PatternPage extends React.Component {
+class PatternPage extends React.Component {
     render(){
         let pattern = Patterns.find(pat => pat.Title == this.props.title);
         console.log("Generating page for the following pattern object:");
@@ -425,19 +438,19 @@ class SpecialPage extends React.Component {
         				<li>Hovering over a node will show its name.</li>
         				<li>The graph can be zoomed using the mouse wheel and can be panned by clicking and dragging the background.</li>
         				<li>The nodes can be tugged about by click-dragging a node.</li>
-        				<li>Clicking the "Filters" button will display the currently enabled filters.</li>
-        				<li>In the filters menu, the filters are appiled in order, top to bottom. There is currently no way to do "OR" logic.</li>
-        				<li>The filters only update when you press "Apply Filters".</li>
+        				<li>Clicking the "Filters" button will display the currently enabled Filters.</li>
+        				<li>In the Filters menu, the Filters are appiled in order, top to bottom. There is currently no way to do "OR" logic.</li>
+        				<li>The Filters only update when you press "Apply Filters".</li>
         				<li>Not applying enough filtering will cause a message to come up warning you that you are trying to display too many nodes. It is highly recomended you heed this warning.</li>
-                        <li>The visualization starts with example filters which only show <b>patterns found in the game <i>"World of Warcraft"</i></b> and <b>patterns in the <i>Negative Patterns</i> category</b>.</li>
+                        <li>The visualization starts with example Filters which only show <b>patterns found in the game <i>"World of Warcraft"</i></b> and <b>patterns in the <i>Negative Patterns</i> category</b>.</li>
                         <li>Hovering over the links between nodes shows a tooltip which explains the context of the link from the articles and any "relations" the articles have.</li>
-                        <li>The current filters (but not the current page) are saved to the URL. Copy / bookmark the url to save your filters.</li>
+                        <li>The current Filters (but not the current page) are saved to the URL. Copy / bookmark the url to save your Filters.</li>
                         <li>Game and Category pages are generated in-browser.</li>
         			</ul>
         			<h2>Planned</h2>
         			<ul>
         				<li>Currently, the nodes on the graph have random colours and links have random strengths. At some point these will be given meaning.</li>
-                        <li>The currently appiled filters should be shown at the bottom of the graph in a human readable format.</li>
+                        <li>The currently appiled Filters should be shown at the bottom of the graph in a human readable format.</li>
                         <li>NOT gates, OR gates and multi-selects should be added to filtering.</li>
                         <li>Clicking on nodes should "magnetise" connected nodes around it.</li>
                         <li>A "Creator mode".</li>
@@ -464,7 +477,7 @@ class OtherPage extends React.Component{
 
     handleGoToPrevPage(e){
         e.preventDefault();
-        docViewerComponent.setState({title: this.props.prevtitle});
+        getBrowserComponentSingleton().setState({title: this.props.prevtitle});
     }
 
     render(){

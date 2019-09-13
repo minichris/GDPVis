@@ -2,8 +2,11 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
+import ReactDOM from "react-dom";
 import * as d3 from 'd3';
-import { schemeCategory20 } from 'd3-scale-chromatic';
+import { schemeCategory10 } from 'd3-scale-chromatic';
+import {getBrowserComponentSingleton} from './browser.js';
+import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 
 var RelationshipColors = {
 	//goes R, G, B
@@ -21,7 +24,7 @@ function getRelationshipColor(relationshipText){
 	return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 }
 
-export class Graph extends React.Component{
+class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -325,13 +328,13 @@ export class Graph extends React.Component{
 					<g id="stillHere"></g>
 				</svg>
 				<span id="GraphItemCount"></span>
-				<RelationshipSelector ref="RelationshipSelector" />
+				<RelationshipSelector owner={this} ref="RelationshipSelector" />
 			</div>
 		);
 	}
 }
 
-export class GraphSelectBox extends React.Component{
+class GraphSelectBox extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -406,7 +409,7 @@ class RelationshipSelector extends React.Component{
 		  [name]: value
 		});
 		
-		graphComponent.forceUpdate();
+		this.props.owner.forceUpdate();
 	}
 	
 	render(){
@@ -468,10 +471,10 @@ class RelationshipSelector extends React.Component{
 function ChangePatternSelection(newSelectionID){
 	if(newSelectionID != false){
 		//handle the document DocumentViewer
-		docViewerComponent.setState({title: newSelectionID});
+		getBrowserComponentSingleton().setState({title: newSelectionID});
 		DisplayDocumentViewer(true);
 		//handle the search box
-		graphSelectBoxComponent.setState({value: newSelectionID});
+		//graphSelectBoxComponent.setState({value: newSelectionID});
 
 		//handle the highlighted node
 		var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
@@ -480,9 +483,79 @@ function ChangePatternSelection(newSelectionID){
 	}
 	else{
 		DisplayDocumentViewer(false);
-		graphSelectBoxComponent.setState({value: false});
+		//graphSelectBoxComponent.setState({value: false});
 		$(".SelectedNode").removeClass('SelectedNode');
 	}
 }
 
+//------------------------------
+//PATTERN RELATIONSHIP FUNCTIONS
+//------------------------------
+
+
+//Given a pattern name, gets the pattern's data
+function getPatternData(patternName){
+	return Patterns.find(pattern => pattern.Title == patternName);
+}
+
+//Given a source pattern name and a target pattern name, find relation from the source to the target
+function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //get the relation between a pattern
+	let sourcePattern = getPatternData(sourcePatternName);
+	let targetPattern = getPatternData(targetPatternName);
+	let relationsTexts = null;
+	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
+		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).Type;
+		
+		if(!relationsTexts){ //if it only hyperlinks without a "named relation"
+			relationsTexts = ["Hyperlinks To"];
+		}
+	}
+	return relationsTexts;
+}
+
+//Given two pattern names and a relation text, returns if the 
+function checkForRelation(patternNames, relationText){
+	if(getPatternOneWayRelationTexts(patternNames[0], patternNames[1]) != null){
+		return getPatternOneWayRelationTexts(patternNames[0], patternNames[1]).includes(relationText);
+	}
+	
+	else if(getPatternOneWayRelationTexts(patternNames[1], patternNames[0]) != null){
+		return getPatternOneWayRelationTexts(patternNames[1], patternNames[0]).includes(relationText);
+	}
+	
+	else{
+		return false;
+	}
+}
+
+//Given two pattern names, Function to get a list of relationships between two patterns
+function getSharedPatternRelationships(patternNames){
+	let hasModulates = checkForRelation(patternNames, "Can Modulate") || checkForRelation(patternNames, "Can Be Modulated By");
+	let hasInstantiates = checkForRelation(patternNames, "Can Instantiate") || checkForRelation(patternNames, "Can Be Instantiated By");
+	let hasConflicting = checkForRelation(patternNames, "Potentially Conflicting With");
+	let hasClorsureEffects = checkForRelation(patternNames, "Possible Closure Effects");
+	let hasHyperlinked = checkForRelation(patternNames, "Hyperlinks To");
+	
+	let relationships = {
+		modulates: hasModulates,
+		instantiates: hasInstantiates,
+		conflicts: hasConflicting,
+		closureeffects: hasClorsureEffects,
+		hyperlinked: hasHyperlinked
+	}
+	
+	return(relationships);
+}
+
+//---------------
+//-EXPORTS-------
+//---------------
+
+let componentSingleton = null;
+export function getGraphComponentSingleton(element = null){
+	if(!componentSingleton){
+		componentSingleton = ReactDOM.render(<Graph />, element);
+	}
+	return componentSingleton;
+}
 

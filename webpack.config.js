@@ -72,7 +72,9 @@ module.exports = {
 	},
 
 	devServer: {
-		open: true
+		contentBase: __dirname + "/dist/",
+		open: true,
+		inline: true
 	},
 	
 	devtool: "eval-source-map"

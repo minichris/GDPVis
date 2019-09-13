@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import React from "react";
 
-export default class WarningDialog extends React.Component{
+export class WarningDialog extends React.Component{
 	constructor(props) {
     	super(props);
     	this.state = {
@@ -11,14 +11,14 @@ export default class WarningDialog extends React.Component{
 	
 	handleShowAnywayButtonClick(event){
 		$("#TooManyDialogModal").hide();
-		refreshGraph(performFiltering());
+		global.refreshGraph(performFiltering());
 	}
 	
 	handleAddLimiterButtonClick(event){
 		$("#TooManyDialogModal").hide();
-		Filters.push({Type: "count", Value: 50});
+		global.Filters.push({Type: "count", Value: 50});
 		updateFiltersGUI();
-		refreshGraph(performFiltering());
+		global.refreshGraph(performFiltering());
 	}
 	
 	handleCancelButtonClick(event){

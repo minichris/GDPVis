@@ -232,8 +232,8 @@ class FilterNode {
 		this.inputLists = []; //place to store an array of input lists
 		this.outputPort = null; //place to store the one and only output port
 		this.canBeRemoved = true; //if the filter can be deleted from the graph by the user
-		this.posX = 0; //the filters x position on the graph
-		this.posY = 0; //the filters y position on the graph
+		this.posX = 0; //the Filters x position on the graph
+		this.posY = 0; //the Filters y position on the graph
     }
 	
 	toJSON(){
@@ -349,7 +349,7 @@ class AllGamesNode extends FilterNode{
 	}
 }
 
-//a filter node that filters patterns by their pattern category
+//a filter node that Filters patterns by their pattern category
 class PatternsByPatternCategoryNode extends FilterNode{
 	constructor(){
 		super();
@@ -366,7 +366,7 @@ class PatternsByPatternCategoryNode extends FilterNode{
 	}
 }
 
-//a filter node that filters games by their game category
+//a filter node that Filters games by their game category
 class GamesByGameCategoryNode extends FilterNode{
 	constructor(){
 		super();
@@ -383,7 +383,7 @@ class GamesByGameCategoryNode extends FilterNode{
 	}
 }
 
-//a filter node that filters patterns by those which are linked to a game
+//a filter node that Filters patterns by those which are linked to a game
 class PatternsLinkedToGameNode extends FilterNode{
 	constructor(){
 		super();
@@ -400,7 +400,7 @@ class PatternsLinkedToGameNode extends FilterNode{
 	}
 }
 
-//a filter node that filters games by those which are linked to a pattern
+//a filter node that Filters games by those which are linked to a pattern
 class GamesLinkedToPatternNode extends FilterNode{
 	constructor(){
 		super();
@@ -417,7 +417,7 @@ class GamesLinkedToPatternNode extends FilterNode{
 	}
 }
 
-//a filter node which filters patterns by those which have a relation to another pattern
+//a filter node which Filters patterns by those which have a relation to another pattern
 //UNFINISHED
 class PatternsWithRelationToPatternNode extends FilterNode{
 	constructor(){
@@ -434,7 +434,7 @@ class PatternsWithRelationToPatternNode extends FilterNode{
 	}
 }
 
-//a filter node which filters patterns by those which DON'T have a relation to another pattern
+//a filter node which Filters patterns by those which DON'T have a relation to another pattern
 //UNFINISHED
 class PatternsWithoutRelationToPatternNode extends FilterNode{
 	constructor(){
@@ -451,7 +451,7 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 	}
 }
 
-//a filter node which filters games by those which share patterns with other games
+//a filter node which Filters games by those which share patterns with other games
 class GamesSharingPatternsWithGameNode extends FilterNode{
 	constructor(){
 		super();
@@ -482,7 +482,7 @@ class GamesSharingPatternsWithGameNode extends FilterNode{
 	}
 }
 
-//a filter node which filters patterns by those found in games
+//a filter node which Filters patterns by those found in games
 //UNFINISHED
 class PatternsByThoseFoundInGamesNode extends FilterNode{
 	constructor(){
@@ -498,7 +498,7 @@ class PatternsByThoseFoundInGamesNode extends FilterNode{
 	}
 }
 
-//a filter node which filters games by those that use patterns
+//a filter node which Filters games by those that use patterns
 class GamesByThoseWhichUsePatternsNode extends FilterNode{
 	constructor(){
 		super();
@@ -616,7 +616,7 @@ class OutputNode extends FilterNode{
 }
 
 //object that wraps the entire backend for the filering system
-class FilterGraph{
+export class FilterGraph{
 	constructor(){
 		this.graphNodes = [];
 	}
@@ -639,7 +639,7 @@ class FilterGraph{
 		return true;
 	}
 	
-	//function for adding to the array of filters
+	//function for adding to the array of Filters
 	addFilter(filterClass, x, y){
 		let newFilterNode = new filterClass;
 		newFilterNode.posX = x;
@@ -648,7 +648,7 @@ class FilterGraph{
 		return newFilterNode;
 	}
 	
-	//function for removing from the array of filters
+	//function for removing from the array of Filters
 	removeFilter(filterObject){
 		if(filterObject.canBeRemoved){
 			var index = this.graphNodes.indexOf(filterObject);
@@ -715,7 +715,7 @@ class FilterGraph{
 		
 		
 		let outputObjects = []; //create a new array for after we have re-classed all the object data
-		/*parsedInput.forEach(function(filterData, i){ //we know this will just be an array of filters
+		/*parsedInput.forEach(function(filterData, i){ //we know this will just be an array of Filters
 			let newFilterInstance = new window[filterData.className]; //create a new object of the correct class
 			for(var propertyName in filterData) {
 				switch(propertyName){
@@ -846,8 +846,8 @@ class FakeConnection extends React.Component{
 			let posX2 = event.x;
 			let posY2 = event.y - 100;
 			
-			let width = (posX2 - posX1);
-			let height = (posY2 - posY1);
+			let width = Math.max((posX2 - posX1), 0);
+			let height = Math.max((posY2 - posY1), 0);
 			let selfDom = ReactDOM.findDOMNode(comp);
 			selfDom.style.webkitTransform =
 				selfDom.style.transform = 
@@ -928,7 +928,7 @@ class VisualFilterNode extends React.Component{
 				target.setAttribute('data-y', y);
 			},
 			onend: function(event){
-				visualFilterComponent.forceUpdate();
+				//visualFilterComponent.forceUpdate();
 			}
 		})
 	}
@@ -993,8 +993,8 @@ class VisualFilterViewer extends React.Component{
 	
 	render(){
 		//creating the fitler components
-		let filtersToShow = this.props.attachedFilterGraph.graphNodes;
-		let filterComponents = filtersToShow.map((filterObject, i) => <VisualFilterNode filterObj={filterObject} key={i} ref={this.setfilterComponentRef}/>);
+		let FiltersToShow = this.props.attachedFilterGraph.graphNodes;
+		let filterComponents = FiltersToShow.map((filterObject, i) => <VisualFilterNode filterObj={filterObject} key={i} ref={this.setfilterComponentRef}/>);
 		let self = this;
 		//get all the connections between nodes needed
 		let connections = [];
@@ -1030,7 +1030,7 @@ class VisualFilterViewer extends React.Component{
 	}
 }
 
-class VisualFilterModule extends React.Component {
+export class VisualFilterModule extends React.Component {
 	filtersButtonClick(event){
 		visualFilterComponent.forceUpdate();
 	}
