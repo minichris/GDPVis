@@ -50,6 +50,14 @@
     "popper.js": "^1.15.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "select2": "^4.0.10"
+    "rete": "^1.4.1",
+    "rete-alight-render-plugin": "^0.1.5",
+    "rete-area-plugin": "^0.2.1",
+    "rete-connection-plugin": "^0.8.3",
+    "rete-context-menu-plugin": "^0.5.0",
+    "rete-task-plugin": "^0.2.0-rc.2",
+    "rete-vue-render-plugin": "^0.4.0",
+    "select2": "^4.0.10",
+    "vue-select": "^3.1.0"
   }
 }

@@ -10,13 +10,14 @@ import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './toolt
 import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
 import {Graph} from './graph.js';
 import {SearchBox} from './search.js';
-import {FilterGraph, VisualFilterModule} from './visualfilter.js';
+//import {FilterGraph, VisualFilterModule} from './visualfilter.js';
 import {performFiltering, generateReleventFilters} from './oldfilters.js';
 import {loadFiltersorDefaults, setWindowHistory} from './saving.js';
+import {ReteFilterModule} from './rete/retefilters.js';
 
 import './style.css';
 
-var seachBoxComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
+var seachBoxComponent, reteFilterComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
 
 global.Filters = [];
 
@@ -39,10 +40,11 @@ $( document ).ready(function() {
 		DisplayDocumentViewer(true);
 		
 		//set up the filter graph stuff
-		filterGraph = new FilterGraph();
-		filterGraph.initialize();
-		filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
-		visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
+		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule")); 
+		//filterGraph = new FilterGraph();
+		//filterGraph.initialize();
+		//filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
+		//visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
 	});
 });
 
