@@ -1,42 +1,45 @@
+import React from "react";
 import Rete from "rete";
-import $ from 'jquery';
+import Select from 'react-select';
 
-export default class DropDownControl extends Rete.Control {
+class DropDownReactComponent extends React.Component {
 	
-	constructor(emitter, key, idName, listData) {
-		super(key);
-		this.emitter = emitter;
-		this.key = key; //storage key
-		this.idName = idName; //ID in dom
-		this.listData = listData;
-		this.template = `
-			<select @input="change($event)" al-value="selectedId" al-select="selected">
-				<option value="">No selected</option>
-				<option value={{item.value}} al-repeat="item in listData" >{{item.name}}</option>
-			</select>`
-		
-		this.scope = {
-			value: null,
-			listData,
-			change: this.change.bind(this)
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedOption: this.props.getData(this.props.id)
 		};
 	}
 	
-	change(e) {
-		this.scope.value = e.target.value;
-		this.putData(this.key, e.target.value);
-		this.update();
+	componentDidUpdate(prevProps, prevState, snapshot){
+		this.props.putData(this.props.id, this.state.selectedOption);
 	}
 	
-	update() {
-		this.putData(this.key, this.scope.value);
-		this.emitter.trigger('process');
-		this._alight.scan();
-		console.log
-	}
+	handleChange(selectedOption) {
+		this.setState({ selectedOption });
+		this.props.emitter.trigger("process");
+	};
 	
-	mounted() {
-		this.scope.value = this.getData(this.key);
-		this.update();
+	render() {
+		const { selectedOption } = this.state;
+
+		return (
+			<Select value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
+		);
+	}
+}
+
+export default class DropDownControl extends Rete.Control {
+	constructor(emitter, key, options) {
+		super(key);
+		this.render = "react";
+		this.component = DropDownReactComponent;
+		this.props = { 
+			emitter: emitter, 
+			id: key,
+			options: options,
+			putData: this.putData.bind(this),
+			getData: this.getData.bind(this)
+		};
 	}
 }

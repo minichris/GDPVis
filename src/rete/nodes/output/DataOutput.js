@@ -5,7 +5,7 @@ export default class DataOutputComponent extends Rete.Component {
 
 	constructor() {
 		super('Display Patterns');
-		this.finalOutput = null;
+		this.render = 'alight';
 	}
 
 	builder(node) {

@@ -6,6 +6,7 @@ import ConnectionPlugin from 'rete-connection-plugin';
 import AlightRenderPlugin from 'rete-alight-render-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 import AreaPlugin from 'rete-area-plugin';
+import ReactRenderPlugin from 'rete-react-render-plugin';
 
 import components from './nodes';
 
@@ -36,7 +37,7 @@ var exampleData = {
 	"2": {
 	  "id": 2,
 	  "data": {
-		"PatternCategory": "Patterns"
+		"PatternCategory": {value: "Patterns", label: "Patterns"}
 	  },
 	  "inputs": {
 		"patternsInput": {
@@ -104,6 +105,7 @@ export class ReteFilterModule extends React.Component {
 		editor.use(ConnectionPlugin);
 		editor.use(ContextMenuPlugin);
 		editor.use(AreaPlugin);
+		editor.use(ReactRenderPlugin);
 
 		var engine = new Rete.Engine('tasksample@0.1.0');
 
