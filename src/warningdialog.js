@@ -17,7 +17,7 @@ export class WarningDialog extends React.Component{
 	handleAddLimiterButtonClick(event){
 		$("#TooManyDialogModal").hide();
 		global.Filters.push({Type: "count", Value: 50});
-		updateFiltersGUI();
+		//updateFiltersGUI();
 		global.refreshGraph(performFiltering());
 	}
 	

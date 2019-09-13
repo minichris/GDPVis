@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
-import {getGraphComponentSingleton} from './graph.js';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 import {performFiltering, generateReleventFilters, pageFilter, checkPatternCurrentlyFiltered} from './oldfilters.js';
 import {setWindowHistory} from './saving.js';
@@ -11,7 +10,7 @@ import {setWindowHistory} from './saving.js';
 //-------------------------------------------------------------------------
 let openSize = "65%"; //sets the default open size
 
-class DocumentViewer extends React.Component{
+export class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -35,7 +34,7 @@ class DocumentViewer extends React.Component{
 				}
 				else{
 					//handle the document viewer
-					getBrowserComponentSingleton().setState({title: linkClickedTitle});
+					global.docViewerComponent.setState({title: linkClickedTitle});
 					//graphSelectBoxComponent.setState({filters: Filters, value: null});
 				}
 				//updateFiltersGUI();
@@ -61,7 +60,7 @@ class DocumentViewer extends React.Component{
     	/*$(".insertedPage").find("a[href]").click(function(e){
     		this.DocumentViewerEventHandler(e);
     	});*/
-        setWindowHistory(getBrowserComponentSingleton().state.title);
+        setWindowHistory(global.docViewerComponent.state.title);
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
@@ -137,7 +136,7 @@ class DocumentResizer extends React.Component{
 			window.removeEventListener('mouseup', stopResize, false);
 			window.removeEventListener('selectstart', disableSelect);
 			document.getElementById("DocumentViewer").style.transition = null;
-			getGraphComponentSingleton().state.tooltipEventsEnabled = true;
+			global.graphComponent.state.tooltipEventsEnabled = true;
 		}
 		
 		window.addEventListener('mousemove', Resize, false);
@@ -145,7 +144,7 @@ class DocumentResizer extends React.Component{
 		window.addEventListener('selectstart', disableSelect);
 		
 		document.getElementById("DocumentViewer").style.transition = "none";
-		getGraphComponentSingleton().state.tooltipEventsEnabled = false;
+		global.graphComponent.state.tooltipEventsEnabled = false;
 	}
 	
 	
@@ -284,15 +283,6 @@ export class DocumentViewerToolbar extends React.Component{
 			</div>
 		);
 	}
-}
-
-
-let componentSingleton = null;
-export function getBrowserComponentSingleton(element = null){
-	if(!componentSingleton){
-		componentSingleton = ReactDOM.render(<DocumentViewer />, element);
-	}
-	return componentSingleton;
 }
 
 //Give a page title, find the type of the page
@@ -487,7 +477,7 @@ class OtherPage extends React.Component{
 
     handleGoToPrevPage(e){
         e.preventDefault();
-        getBrowserComponentSingleton().setState({title: this.props.prevtitle});
+        global.docViewerComponent.setState({title: this.props.prevtitle});
     }
 
     render(){

@@ -5,7 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import {getBrowserComponentSingleton, DisplayDocumentViewer} from './browser.js';
+import {DisplayDocumentViewer} from './browser.js';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 
 export var RelationshipColors = {
@@ -24,7 +24,7 @@ function getRelationshipColor(relationshipText){
 	return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 }
 
-class Graph extends React.Component{
+export class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -471,7 +471,7 @@ class RelationshipSelector extends React.Component{
 function ChangePatternSelection(newSelectionID){
 	if(newSelectionID != false){
 		//handle the document DocumentViewer
-		getBrowserComponentSingleton().setState({title: newSelectionID});
+		global.docViewerComponent.setState({title: newSelectionID});
 		DisplayDocumentViewer(true);
 		//handle the search box
 		//graphSelectBoxComponent.setState({value: newSelectionID});
@@ -546,16 +546,3 @@ function getSharedPatternRelationships(patternNames){
 	
 	return(relationships);
 }
-
-//---------------
-//-EXPORTS-------
-//---------------
-
-let componentSingleton = null;
-export function getGraphComponentSingleton(element = null){
-	if(!componentSingleton){
-		componentSingleton = ReactDOM.render(<Graph />, element);
-	}
-	return componentSingleton;
-}
-
