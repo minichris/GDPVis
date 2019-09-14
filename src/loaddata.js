@@ -67,6 +67,17 @@ export function createPatternToGameRelation(){
 	});
 }
 
+//fixes "Can Instantiate With ..." relations to also have "Can Instantiate"
+export function fixCanInstantiatepLinks(){
+	Patterns.forEach(function(pattern){
+		pattern.PatternsLinks.forEach(function(pLink){
+			if(pLink.Type && pLink.Type.find(type => type.startsWith("Can Instantiate with"))){ 
+				pLink.Type.push("Can Instantiate");
+			}
+		});
+	});
+}
+
 //Loads and transforms the Games from the json format
 export function loadGames(){
 	var request = loadViaAjax("AllGames.json");

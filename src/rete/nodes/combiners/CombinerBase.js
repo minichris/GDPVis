@@ -32,7 +32,6 @@ export default class CombinerBase extends Rete.Component {
 		else{
 			return;
 		}
-		console.log(self);
 		let connectionCount = Array.from(self.inputs).map(input => input[1].connections.length).reduce((a, b) => a + b, 0) + Array.from(self.outputs).map(output => output[1].connections.length).reduce((a, b) => a + b, 0);
 		if(connectionCount == 0){
 			self.inputs.forEach(function(input){
@@ -57,8 +56,8 @@ export default class CombinerBase extends Rete.Component {
 	}
 
 	builder(node) {
-		node.addInput(new Rete.Input('array1', 'Array 1', sockets.wildcard));
-		node.addInput(new Rete.Input('array2', 'Array 2', sockets.wildcard));
+		node.addInput(new Rete.Input('array1', 'Array A', sockets.wildcard));
+		node.addInput(new Rete.Input('array2', 'Array B', sockets.wildcard));
 		node.addOutput(new Rete.Output('output', 'Output (array)', sockets.wildcard));
 		
 		return node;

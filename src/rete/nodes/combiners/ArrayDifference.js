@@ -3,7 +3,7 @@ import CombinerBase from './CombinerBase.js'
 export default class ArrayDifferenceNode extends CombinerBase {
 	
 	constructor() {
-		super('Array Difference');
+		super('Array Difference (B\\ A)');
 	}
 	
 	async worker(node, inputs, outputs) {

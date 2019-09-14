@@ -3,7 +3,7 @@ import CombinerBase from './CombinerBase.js'
 export default class ArrayIntersectionNode extends CombinerBase {
 	
 	constructor() {
-		super('Array Intersection');
+		super('Array Intersection (A∩B)');
 	}
 	
 	async worker(node, inputs, outputs) {
