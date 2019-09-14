@@ -3,11 +3,14 @@ import AllGames from './generators/AllGames.js';
 
 import FilterPatternsByCategory from './filters/FilterPatternsByCategory.js';
 import FilterGamesByCategory from './filters/FilterGamesByCategory.js';
+
 import FilterPatternsByLinkedToGame from './filters/FilterPatternsByLinkedToGame.js';
 import FilterGamesByLinkedToPattern from './filters/FilterGamesByLinkedToPattern.js';
 
 import FilterPatternsByThoseFoundInGames from './filters/FilterPatternsByThoseFoundInGames.js';
 import FilterGamesByThoseWhichUsePatterns from './filters/FilterGamesByThoseWhichUsePatterns.js';
+
+import FilterGamesToThoseWhichSharePatternsWithAGame from './filters/FilterGamesToThoseWhichSharePatternsWithAGame.js';
 
 import ArrayUnion from './combiners/ArrayUnion.js';
 import ArrayIntersection from './combiners/ArrayIntersection.js';
@@ -25,6 +28,7 @@ export default {
 		new FilterGamesByLinkedToPattern,
 		new FilterPatternsByThoseFoundInGames,
 		new FilterGamesByThoseWhichUsePatterns,
+		new FilterGamesToThoseWhichSharePatternsWithAGame,
 		new ArrayUnion,
 		new ArrayIntersection,
 		new ArrayDifference,

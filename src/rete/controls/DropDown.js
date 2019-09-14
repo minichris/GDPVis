@@ -25,13 +25,16 @@ class DropDownReactComponent extends React.Component {
 		const { selectedOption } = this.state;
 
 		return (
-			<Select classNamePrefix="react-select" value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
+			<>
+				<label>{this.props.title}</label>
+				<Select classNamePrefix="react-select" value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
+			</>
 		);
 	}
 }
 
 export default class DropDownControl extends Rete.Control {
-	constructor(emitter, key, options) {
+	constructor(emitter, key, options, title) {
 		super(key);
 		this.render = "react";
 		this.component = DropDownReactComponent;
@@ -39,6 +42,7 @@ export default class DropDownControl extends Rete.Control {
 			emitter: emitter, 
 			id: key,
 			options: options,
+			title: title,
 			putData: this.putData.bind(this),
 			getData: this.getData.bind(this)
 		};

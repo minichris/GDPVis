@@ -15,7 +15,7 @@ export default class FilterPatternsByLinkedToGameComponent extends Rete.Componen
 		node.addOutput(new Rete.Output('patterns', 'Patterns (array)', sockets.patterns));
 		
 		const nodeDropDownList = Games.map(function(game){return ({value: game.name, label: game.name})});
-		node.addControl(new DropDownControl(this.editor, "Game", nodeDropDownList));
+		node.addControl(new DropDownControl(this.editor, "Game", nodeDropDownList, "Game"));
 		
 		node.info = "A filter node that filters patterns by those which are linked to a game.";
 		

@@ -9,3 +9,14 @@
 .react-select__option--is-selected{
 	color: white !important;
 }
+
+.node .control{
+	border: 1px white solid;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.node .control label {
+	font-size: 14px;
+}

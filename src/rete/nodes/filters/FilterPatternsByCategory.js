@@ -15,7 +15,7 @@ export default class FilterPatternsByCategoryComponent extends Rete.Component {
 		node.addOutput(new Rete.Output('patterns', 'Patterns (array)', sockets.patterns));
 		
 		const nodeDropDownList = PatternCategories.map(function(cat){return ({value: cat, label: cat})});
-		node.addControl(new DropDownControl(this.editor, "PatternCategory", nodeDropDownList));
+		node.addControl(new DropDownControl(this.editor, "PatternCategory", nodeDropDownList, "Pattern Category"));
 		
 		node.info = "A filter node that filters patterns by a pattern category";
 		

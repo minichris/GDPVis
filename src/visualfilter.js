@@ -355,54 +355,6 @@ class PatternsWithoutRelationToPatternNode extends FilterNode{
 	}
 }
 
-//a filter node which Filters games by those which share patterns with other games
-class GamesSharingPatternsWithGameNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Game Array", "Games to Filter");
-		this.addInputList("Game", "Game");
-		this.addInputList("Number", "Minimum Patterns To Share");
-		this.addInputList("Number", "Maximum Patterns To Share");
-		this.setOutputPort("Game Array", "Output Games");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let gamesArray = this.inputPorts[0].connectedPortData();
-		let gameQuery = this.inputLists[0].selectedItem();
-		let minimumAmount = this.inputLists[1].selectedItem();
-		let maximumAmount = this.inputLists[2].selectedItem();
-		
-		let minimumArray = gamesArray.filter(game => 
-			game.LinkedPatterns.filter(pattern => 
-				pattern.PatternsLinks.some(pLink => 
-					pLink.To == gameQuery.name)).length >= minimumAmount);
-		let maximumArray = gamesArray.filter(game => 
-			game.LinkedPatterns.filter(pattern => 
-				pattern.PatternsLinks.some(pLink => 
-					pLink.To == gameQuery.name)).length <= maximumAmount);
-		
-		return minimumArray.filter(value => -1 !== maximumArray.indexOf(value)); //find array intersection of minimum and maximum arrays
-	}
-}
-
-//a filter node which Filters patterns by those found in games
-//UNFINISHED
-class PatternsByThoseFoundInGamesNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.addInputPort("Game Array", "Games to Filter");
-		this.setOutputPort("Pattern Array", "Output Patterns");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		throw "getOutputData not implemented yet";
-	}
-}
-
-
 //object that wraps the entire backend for the filering system
 export class FilterGraph{
 	constructor(){
