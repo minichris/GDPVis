@@ -7,6 +7,7 @@ export default class AllPatternsComponent extends Rete.Component {
 	constructor() {
 		super('All Patterns');
 		this.render = 'alight';
+		this.info = "A filter node that just outputs all of the patterns in the system.";
 	}
 
 	builder(node) {

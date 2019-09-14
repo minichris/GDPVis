@@ -321,102 +321,6 @@ class FilterNode {
 	}
 }
 
-//a filter node that just outputs all of the patterns in the system
-class AllPatternsNode extends FilterNode{
-	constructor(){
-		super();
-		this.setOutputPort("Pattern Array", "All Patterns");
-		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		return Patterns; //global patterns set in load_data.js
-	}
-}
-
-//a filter node that just outputs all of the games in the system
-class AllGamesNode extends FilterNode{
-	constructor(){
-		super();
-		this.setOutputPort("Game Array", "All Games");
-		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		return Games; //global game set in load_data.js
-	}
-}
-
-//a filter node that Filters patterns by their pattern category
-class PatternsByPatternCategoryNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.addInputList("Pattern Category", "Pattern Category");
-		this.setOutputPort("Pattern Array", "Output Patterns");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let inputPatterns = this.inputPorts[0].connectedPortData();
-		let inputCategory = this.inputPorts[0].selectedItem;
-		return inputPatterns.filter(pattern => pattern.Categories.some(cate => cate == inputCategory));
-	}
-}
-
-//a filter node that Filters games by their game category
-class GamesByGameCategoryNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Game Array", "Games to Filter");
-		this.addInputList("Game Category", "Game Category");
-		this.setOutputPort("Game Array", "Output Games");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let inputGames = this.inputPorts[0].connectedPortData();
-		let inputCategory = this.inputLists[0].selectedItem;
-		return inputGames.filter(game => game.Categories.some(cate => cate == inputCategory));
-	}
-}
-
-//a filter node that Filters patterns by those which are linked to a game
-class PatternsLinkedToGameNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.addInputList("Game", "Game");
-		this.setOutputPort("Pattern Array", "Output Patterns");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let inputPatterns = this.inputPorts[0].connectedPortData();
-		let inputGame = this.inputLists[0].selectedItem;
-		return inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputGame)));
-	}
-}
-
-//a filter node that Filters games by those which are linked to a pattern
-class GamesLinkedToPatternNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Game Array", "Games to Filter");
-		this.addInputList("Pattern", "Pattern");
-		this.setOutputPort("Game Array", "Output Games");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let inputGames = this.inputPorts[0].connectedPortData();
-		let inputPattern = this.inputLists[0].selectedItem;
-		return inputGames.filter(game => (game.LinkedPatterns.some(pattern => pattern == inputPattern)));
-	}
-}
-
 //a filter node which Filters patterns by those which have a relation to another pattern
 //UNFINISHED
 class PatternsWithRelationToPatternNode extends FilterNode{
@@ -595,23 +499,6 @@ class ArrayDifferenceNode extends ArrayToolNode{
 		let arrA = this.inputPorts[0].connectedPortData();
 		let arrB = this.inputPorts[1].connectedPortData();
 		return arrA.filter(x => !arrB.includes(x));
-	}
-}
-
-//a node which the GUI links to as the final output of the filtering system
-class OutputNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Wildcard Array", "Filtered Items");
-		this.canBeRemoved = false; //prevent removal of allpatterns, allgames and output node
-	}
-	
-	//although this node doesn't have an output port, it does need this method 
-	//as it is the final node in the graph, and the output of this method is
-	//what is displayed to the user
-	getOutputData(){
-		super.getOutputData();
-		return this.inputPorts[0].connectedPort.owner.getOutputData();
 	}
 }
 

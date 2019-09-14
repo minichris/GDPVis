@@ -4,7 +4,7 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
+import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
 import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './tooltip.js';
 import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
@@ -47,13 +47,6 @@ $( document ).ready(function() {
 		//visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
 	});
 });
-
-//Adds members to the game array of associated patterns
-function createGameToPatternRelations(){
-	Games.forEach(function(game){
-		game.LinkedPatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == game.name))
-	});
-}
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
 global.refreshGraph = function(filteredPatterns){

@@ -6,6 +6,7 @@ export default class DataOutputComponent extends Rete.Component {
 	constructor() {
 		super('Output Data');
 		this.render = 'alight';
+		this.info = "The final node in any filtering graph.";
 	}
 
 	builder(node) {

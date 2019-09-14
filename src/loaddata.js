@@ -33,7 +33,6 @@ function loadViaAjax(inputURL){
 	return request;
 }
 
-
 //Loads and transforms the patterns from the json format
 export function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
@@ -46,6 +45,14 @@ export function loadPatterns(){
 		PatternCategories = Array.from(PatternCategories);
 	});
 	return request;
+}
+
+
+//Adds members to the game array of associated patterns
+export function createGameToPatternRelations(){
+	Games.forEach(function(game){
+		game.LinkedPatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == game.name))
+	});
 }
 
 //Loads and transforms the Games from the json format
