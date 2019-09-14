@@ -8,7 +8,6 @@ export default class FilterPatternsByLinkedToGameComponent extends Rete.Componen
 	constructor() {
 		super('Filter Patterns to Those Linked To A Game');
 		this.render = 'alight';
-		this.info = "A filter node that filters patterns by those which are linked to a game.";
 	}
 
 	builder(node) {
@@ -17,6 +16,8 @@ export default class FilterPatternsByLinkedToGameComponent extends Rete.Componen
 		
 		const nodeDropDownList = Games.map(function(game){return ({value: game.name, label: game.name})});
 		node.addControl(new DropDownControl(this.editor, "Game", nodeDropDownList));
+		
+		node.info = "A filter node that filters patterns by those which are linked to a game.";
 		
 		return node;
 	}

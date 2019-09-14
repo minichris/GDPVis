@@ -1,0 +1,23 @@
+.patterns-array{
+	background: #c033d2 !important;
+}
+
+.games-array{
+	background: #44d233 !important;
+}
+
+.wildcard-array{
+	background: gray !important;
+}
+
+.connection > .main-path{
+	stroke: gray !important;
+}
+
+.socket-output-patterns-array > .main-path{
+	stroke: #c033d2 !important;
+}
+
+.socket-output-games-array > .main-path{
+	stroke: #44d233 !important;
+}

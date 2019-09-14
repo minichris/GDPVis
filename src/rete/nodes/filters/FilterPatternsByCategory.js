@@ -8,7 +8,6 @@ export default class FilterPatternsByCategoryComponent extends Rete.Component {
 	constructor() {
 		super('Filter Patterns by Category');
 		this.render = 'alight';
-		this.info = "A filter node that filters patterns by a pattern category";
 	}
 
 	builder(node) {
@@ -17,6 +16,8 @@ export default class FilterPatternsByCategoryComponent extends Rete.Component {
 		
 		const nodeDropDownList = PatternCategories.map(function(cat){return ({value: cat, label: cat})});
 		node.addControl(new DropDownControl(this.editor, "PatternCategory", nodeDropDownList));
+		
+		node.info = "A filter node that filters patterns by a pattern category";
 		
 		return node;
 	}

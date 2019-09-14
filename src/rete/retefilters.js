@@ -7,8 +7,10 @@ import AlightRenderPlugin from 'rete-alight-render-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 import AreaPlugin from 'rete-area-plugin';
 import ReactRenderPlugin from 'rete-react-render-plugin';
+import LifecyclePlugin from 'rete-lifecycle-plugin';
 
 import components from './nodes';
+import './style.css';
 
 var exampleData = {
   "id": "tasksample@0.1.0",
@@ -105,7 +107,12 @@ export class ReteFilterModule extends React.Component {
 			this.editor.use(AlightRenderPlugin);
 			this.editor.use(ConnectionPlugin);
 			this.editor.use(ContextMenuPlugin);
-			this.editor.use(AreaPlugin);
+			this.editor.use(LifecyclePlugin);
+			this.editor.use(AreaPlugin, {
+				snap: false,
+				scaleExtent: { min: 0.25, max: 1 },
+				translateExtent: { width: 6000, height: 3500 }
+			});
 			this.editor.use(ReactRenderPlugin);
 			
 			components.list.map(c => {

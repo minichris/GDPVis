@@ -8,7 +8,6 @@ export default class FilterGamesByCategoryComponent extends Rete.Component {
 	constructor() {
 		super('Filter Games by Category');
 		this.render = 'alight';
-		this.info = "A filter node that filters games by a game category.";
 	}
 
 	builder(node) {
@@ -17,6 +16,8 @@ export default class FilterGamesByCategoryComponent extends Rete.Component {
 		
 		const nodeDropDownList = GameCategories.map(function(cat){return ({value: cat, label: cat})});
 		node.addControl(new DropDownControl(this.editor, "GameCategory", nodeDropDownList));
+		
+		node.info = "A filter node that filters games by a game category.";
 		
 		return node;
 	}

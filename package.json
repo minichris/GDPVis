@@ -56,6 +56,7 @@
     "rete-area-plugin": "^0.2.1",
     "rete-connection-plugin": "^0.8.3",
     "rete-context-menu-plugin": "^0.5.0",
+    "rete-lifecycle-plugin": "^0.2.1",
     "rete-react-render-plugin": "^0.2.0",
     "rete-task-plugin": "^0.2.0-rc.2",
     "rete-vue-render-plugin": "^0.4.0",

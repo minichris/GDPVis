@@ -1,4 +1,5 @@
 import { Socket } from 'rete';
+import './sockets.css';
 
 const patterns = new Socket('Patterns Array');
 const games = new Socket('Games Array');

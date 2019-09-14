@@ -6,11 +6,11 @@ export default class DataOutputComponent extends Rete.Component {
 	constructor() {
 		super('Output Data');
 		this.render = 'alight';
-		this.info = "The final node in any filtering graph.";
 	}
 
 	builder(node) {
 		node.addInput(new Rete.Input('patternsInput', 'Patterns to output', sockets.wildcard));
+		node.info = "The final node in any filtering graph.";
 		return node;
 	}
 	

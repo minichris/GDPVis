@@ -6,6 +6,8 @@ import FilterGamesByCategory from './filters/FilterGamesByCategory.js';
 import FilterPatternsByLinkedToGame from './filters/FilterPatternsByLinkedToGame.js';
 import FilterGamesByLinkedToPattern from './filters/FilterGamesByLinkedToPattern.js';
 
+import ArrayUnion from './combiners/ArrayUnion.js';
+
 import DataOutput from './output/DataOutput.js';
 
 export default {
@@ -16,6 +18,7 @@ export default {
 		new FilterGamesByCategory,
 		new FilterPatternsByLinkedToGame,
 		new FilterGamesByLinkedToPattern,
+		new ArrayUnion,
         new DataOutput
     ],
     get(name) {
