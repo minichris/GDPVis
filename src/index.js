@@ -17,7 +17,7 @@ import {ReteFilterModule} from './rete/retefilters.js';
 
 import './style.css';
 
-var seachBoxComponent, reteFilterComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
+var seachBoxComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
 
 global.Filters = [];
 
@@ -43,7 +43,7 @@ $( document ).ready(function() {
 		DisplayDocumentViewer(true);
 		
 		//set up the filter graph stuff
-		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule")); 
+		global.reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule")); 
 		//filterGraph = new FilterGraph();
 		//filterGraph.initialize();
 		//filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
