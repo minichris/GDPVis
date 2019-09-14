@@ -4,12 +4,12 @@ import sockets from '../../sockets.js';
 export default class DataOutputComponent extends Rete.Component {
 
 	constructor() {
-		super('Display Patterns');
+		super('Output Data');
 		this.render = 'alight';
 	}
 
 	builder(node) {
-		node.addInput(new Rete.Input('patternsInput', 'Patterns to output', sockets.patterns));
+		node.addInput(new Rete.Input('patternsInput', 'Patterns to output', sockets.wildcard));
 		return node;
 	}
 	

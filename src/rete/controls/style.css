@@ -1,0 +1,11 @@
+.react-select__option{
+	color: black !important;
+}
+
+.react-select__option--is-focused{
+	color: black !important;
+}
+
+.react-select__option--is-selected{
+	color: white !important;
+}

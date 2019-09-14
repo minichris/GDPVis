@@ -26,7 +26,6 @@ export default class FilterPatternsByCategoryComponent extends Rete.Component {
     }
 	
 	async worker(node, inputs, outputs) {
-		console.log(node);
-		outputs['patterns'] = inputs['patternsInput'];
+		outputs['patterns'] = inputs['patternsInput'][0].filter(pattern => pattern.Categories.some(cate => cate == node.data['PatternCategory'].value));
 	}
 }

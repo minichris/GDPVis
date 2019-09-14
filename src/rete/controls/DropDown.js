@@ -1,6 +1,7 @@
 import React from "react";
 import Rete from "rete";
 import Select from 'react-select';
+import './style.css'
 
 class DropDownReactComponent extends React.Component {
 	
@@ -24,7 +25,7 @@ class DropDownReactComponent extends React.Component {
 		const { selectedOption } = this.state;
 
 		return (
-			<Select value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
+			<Select classNamePrefix="react-select" value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
 		);
 	}
 }
