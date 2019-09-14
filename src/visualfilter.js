@@ -402,22 +402,6 @@ class PatternsByThoseFoundInGamesNode extends FilterNode{
 	}
 }
 
-//a filter node which Filters games by those that use patterns
-class GamesByThoseWhichUsePatternsNode extends FilterNode{
-	constructor(){
-		super();
-		this.addInputPort("Game Array", "Games to Filter");
-		this.addInputPort("Pattern Array", "Patterns to Filter");
-		this.setOutputPort("Game Array", "Output Games");
-	}
-	
-	getOutputData(){
-		super.getOutputData();
-		let gamesArray = this.inputPorts[0].connectedPortData();
-		let patternsArray = this.inputPorts[1].connectedPortData();
-		return gamesArray.filter(game => game.LinkedPatterns.some(pattern => patternsArray.indexOf(pattern) > 0));
-	}
-}
 
 //object that wraps the entire backend for the filering system
 export class FilterGraph{
@@ -830,23 +814,6 @@ class VisualFilterViewer extends React.Component{
 				{connectionComponents}
 				<FakeConnection />
 			</div>
-		);
-	}
-}
-
-export class VisualFilterModule extends React.Component {
-	filtersButtonClick(event){
-		visualFilterComponent.forceUpdate();
-	}
-	
-	render(){
-		return (
-		<>
-			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
-			<div id="FilterPanel" className="collapse">
-				<VisualFilterViewer attachedFilterGraph={this.props.FilterGraphObject} />
-			</div>
-		</>
 		);
 	}
 }

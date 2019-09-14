@@ -4,7 +4,7 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations} from './loaddata.js';
+import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations, createPatternToGameRelation} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
 import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './tooltip.js';
 import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
@@ -29,6 +29,7 @@ $( document ).ready(function() {
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	requiredDataLoadedPromise.then(function() {
 		createGameToPatternRelations();
+		createPatternToGameRelation();
 		loadFiltersorDefaults();
 		//bindFilters();
 		//applyFilters();

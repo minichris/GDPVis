@@ -55,6 +55,18 @@ export function createGameToPatternRelations(){
 	});
 }
 
+export function createPatternToGameRelation(){	
+	Patterns.forEach(function(pattern){
+		pattern.LinkedGames = [];
+		pattern.PatternsLinks.forEach(function(pLink){
+			let GameObject = Games.find(game => game.name == pLink.To);
+			if(GameObject){
+				pattern.LinkedGames.push(GameObject);
+			}
+		});
+	});
+}
+
 //Loads and transforms the Games from the json format
 export function loadGames(){
 	var request = loadViaAjax("AllGames.json");

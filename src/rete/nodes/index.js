@@ -6,6 +6,9 @@ import FilterGamesByCategory from './filters/FilterGamesByCategory.js';
 import FilterPatternsByLinkedToGame from './filters/FilterPatternsByLinkedToGame.js';
 import FilterGamesByLinkedToPattern from './filters/FilterGamesByLinkedToPattern.js';
 
+import FilterPatternsByThoseFoundInGames from './filters/FilterPatternsByThoseFoundInGames.js';
+import FilterGamesByThoseWhichUsePatterns from './filters/FilterGamesByThoseWhichUsePatterns.js';
+
 import ArrayUnion from './combiners/ArrayUnion.js';
 import ArrayIntersection from './combiners/ArrayIntersection.js';
 import ArrayDifference from './combiners/ArrayDifference.js';
@@ -20,6 +23,8 @@ export default {
 		new FilterGamesByCategory,
 		new FilterPatternsByLinkedToGame,
 		new FilterGamesByLinkedToPattern,
+		new FilterPatternsByThoseFoundInGames,
+		new FilterGamesByThoseWhichUsePatterns,
 		new ArrayUnion,
 		new ArrayIntersection,
 		new ArrayDifference,
