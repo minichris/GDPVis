@@ -22,17 +22,27 @@ export default class CombinerBase extends Rete.Component {
 	};
 	
 	disconnected(connection) {
+		let self;
 		if(connection.input.node.name == this.name){
-			let self = connection.input.node;
-			console.log(self);
+			self = connection.input.node;
+		}
+		else if(connection.output.node.name == this.name){
+			self = connection.output.node;
+		}
+		else{
+			return;
+		}
+		console.log(self);
+		let connectionCount = Array.from(self.inputs).map(input => input[1].connections.length).reduce((a, b) => a + b, 0) + Array.from(self.outputs).map(output => output[1].connections.length).reduce((a, b) => a + b, 0);
+		if(connectionCount == 0){
 			self.inputs.forEach(function(input){
 				input.socket = sockets.wildcard;
 			});
 			self.outputs.forEach(function(output){
 				output.socket = sockets.wildcard;
 			});
-			self.update();
 		}
+		self.update();
 	}
 	
 	arrayUnique(array) {

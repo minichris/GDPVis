@@ -7,6 +7,8 @@ import FilterPatternsByLinkedToGame from './filters/FilterPatternsByLinkedToGame
 import FilterGamesByLinkedToPattern from './filters/FilterGamesByLinkedToPattern.js';
 
 import ArrayUnion from './combiners/ArrayUnion.js';
+import ArrayIntersection from './combiners/ArrayIntersection.js';
+import ArrayDifference from './combiners/ArrayDifference.js';
 
 import DataOutput from './output/DataOutput.js';
 
@@ -19,6 +21,8 @@ export default {
 		new FilterPatternsByLinkedToGame,
 		new FilterGamesByLinkedToPattern,
 		new ArrayUnion,
+		new ArrayIntersection,
+		new ArrayDifference,
         new DataOutput
     ],
     get(name) {
