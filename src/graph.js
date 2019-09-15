@@ -133,6 +133,7 @@ export class Graph extends React.Component{
 			linksData = [];
 		}
 		if(!dataType){
+			$("#GraphItemCount").text("Nothing matches this filter setup.");
 			return;
 		}
 
