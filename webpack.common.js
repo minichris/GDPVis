@@ -5,7 +5,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-	mode: 'development',
 	entry: ['babel-polyfill', './src/index.js'],
 
 	output: {
@@ -75,13 +74,5 @@ module.exports = {
 			minSize: 30000,
 			name: true
 		}
-	},
-
-	devServer: {
-		contentBase: __dirname + "/dist/",
-		open: true,
-		inline: true
-	},
-	
-	devtool: "eval-source-map"
+	}
 };
