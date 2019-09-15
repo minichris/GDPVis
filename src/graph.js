@@ -360,7 +360,7 @@ export class Graph extends React.Component{
 					<g id="stillHere"></g>
 				</svg>
 				<span id="GraphItemCount"></span>
-				<RelationshipSelector owner={this} ref="RelationshipSelector" />
+				{this.state.dataType == "Patterns" ? <RelationshipSelector owner={this} ref="RelationshipSelector" /> : null}
 			</div>
 		);
 	}
