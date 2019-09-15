@@ -175,13 +175,10 @@ svg{
 }*/
 
 #FilterPanel{
-    -webkit-transition: width 2s ease;
-    -moz-transition: width 2s ease;
-    -o-transition: width 2s ease;
-    transition: width 2s ease;
+    transition: width 2s ease, background 0.5s ease, border 2s ease;
     display: inline-block;
     overflow: hidden;
-    background: #676767d6;
+    background: #38383800;
     border-radius: 8px;
     position: fixed;
     top: 50px;
@@ -190,10 +187,13 @@ svg{
     right: 0px;
     width: 0%;
     z-index: 100;
+	border: #38383800 2px solid;
 }
 
 #FilterPanel.out {
     width: 65%;
+	border: black 2px solid;
+    background: #383838bd;
 }
 
 #FiltersList{
