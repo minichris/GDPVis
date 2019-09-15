@@ -31,8 +31,6 @@ $( document ).ready(function() {
 		fixCanInstantiatepLinks();
 		
 		//loadFiltersorDefaults();
-		//bindFilters();
-		//applyFilters();
 		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
@@ -41,13 +39,13 @@ $( document ).ready(function() {
 		DisplayDocumentViewer(true);
 		
 		//set up the filter graph stuff
-		global.reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
+		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
 	});
 });
 
 global.updateReteFilters = function(query){
 	let pageType = getPageType(query);
-	updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
+	updateReteComponentFromSearch(reteFilterComponent, pageType, query);
 }
 
 //Given a set of filtered patterns, refreshes the graph with these patterns

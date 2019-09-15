@@ -3,7 +3,7 @@ import searchGameTemplate from './searchtemplates/searchGameTemplate.js';
 import searchPatternCategoryTemplate from './searchtemplates/searchPatternCategoryTemplate.js';
 import searchGameCategoryTemplate from './searchtemplates/searchGameCategoryTemplate.js';
 
-export default function updateReteComponentFromSearch(reteFilterComponent, type, query){
+export default function updateReteComponentFromSearch(reteComponent, type, query){
 	var template;
 	switch(type){
 		case "Pattern":
@@ -23,8 +23,8 @@ export default function updateReteComponentFromSearch(reteFilterComponent, type,
 			break;
 	}
 	
-	reteFilterComponent.engine.process(template);
-	reteFilterComponent.editor.fromJSON(template).then(() => {
-		reteFilterComponent.editor.view.resize();
+	reteComponent.engine.process(template);
+	reteComponent.editor.fromJSON(template).then(() => {
+		reteComponent.editor.view.resize();
 	});
 }
