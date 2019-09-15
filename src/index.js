@@ -15,14 +15,14 @@ import {ReteFilterModule} from './rete/retefilters.js';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 
-var seachBoxComponent, graphComponent, reteFilterComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph, currentlyFilteredData;
+var seachBoxComponent, reteFilterComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph, currentlyFilteredData;
 
 global.Filters = [];
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
+	global.graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
 	//graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	requiredDataLoadedPromise.then(function() {
@@ -55,7 +55,7 @@ global.refreshGraph = function(filteredData){
 	currentlyFilteredData = filteredData;
 	console.log(filteredData);
 	if(filteredData[0] && !filteredData[0].name){ //protection against putting games in for now
-		graphComponent.setState({patterns: filteredData});
+		global.graphComponent.setState({patterns: filteredData});
 		setWindowHistory(global.docViewerComponent.state.title);
 	}
 }
