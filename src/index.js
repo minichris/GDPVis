@@ -10,21 +10,19 @@ import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './toolt
 import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
 import {Graph} from './graph.js';
 import {SearchBox} from './search.js';
-//import {FilterGraph, VisualFilterModule} from './visualfilter.js';
-import {performFiltering, generateReleventFilters} from './oldfilters.js';
 import {loadFiltersorDefaults, setWindowHistory} from './saving.js';
 import {ReteFilterModule} from './rete/retefilters.js';
-
+import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 
-var seachBoxComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph;
+var seachBoxComponent, graphComponent, reteFilterComponent, graphSelectBoxComponent, warningDialogComponent, visualFilterComponent, filterGraph, currentlyFilteredData;
 
 global.Filters = [];
 
 $( document ).ready(function() {
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]);
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	global.graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
+	graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
 	//graphSelectBoxComponent = ReactDOM.render(<GraphSelectBox />, document.getElementById("Search"));
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	requiredDataLoadedPromise.then(function() {
@@ -43,17 +41,27 @@ $( document ).ready(function() {
 		DisplayDocumentViewer(true);
 		
 		//set up the filter graph stuff
-		global.reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule")); 
-		//filterGraph = new FilterGraph();
-		//filterGraph.initialize();
-		//filterGraph.graphNodes[1].outputPort.connectPort(filterGraph.graphNodes[0].inputPorts[0]);
-		//visualFilterComponent = ReactDOM.render(<VisualFilterModule FilterGraphObject={filterGraph} />, document.getElementById("VisualFilterModule"));
+		global.reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
 	});
 });
 
+global.updateReteFilters = function(query){
+	let pageType = getPageType(query);
+	updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
+}
+
 //Given a set of filtered patterns, refreshes the graph with these patterns
-global.refreshGraph = function(filteredPatterns){
-	global.graphComponent.setState({patterns: filteredPatterns});
-	//graphSelectBoxComponent.setState({patterns: filteredPatterns});
-	setWindowHistory(global.docViewerComponent.state.title);
+global.refreshGraph = function(filteredData){
+	currentlyFilteredData = filteredData;
+	console.log(filteredData);
+	if(filteredData[0] && !filteredData[0].name){ //protection against putting games in for now
+		graphComponent.setState({patterns: filteredData});
+		setWindowHistory(global.docViewerComponent.state.title);
+	}
+}
+
+//Function to find if a pattern is in the list of currently filtered patterns
+global.checkPatternCurrentlyFiltered = function(patternName){
+	//check if the page we are looking for is in the current patterns
+	return (currentlyFilteredData.find(fPattern => fPattern.Title == patternName) != null);
 }

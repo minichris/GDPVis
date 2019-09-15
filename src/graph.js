@@ -41,6 +41,8 @@ export class Graph extends React.Component{
 		}
 
 		var nodesObject = [];  //array to store the output of the function
+		console.log("patterns");
+		console.log(patterns);
 		patterns.forEach(function(pattern){
 			nodesObject.push({
 				id: pattern.Title,
@@ -96,6 +98,7 @@ export class Graph extends React.Component{
 
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
+		console.log(this.state.patterns);
 		this.generateGraph(this.state.patterns);
 	}
 

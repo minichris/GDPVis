@@ -2,7 +2,7 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
-import {performFiltering, generateReleventFilters, pageFilter, checkPatternCurrentlyFiltered} from './oldfilters.js';
+import {pageFilter, patternCategoryFilter} from './oldfilters.js';
 import {setWindowHistory} from './saving.js';
 
 //-------------------------------------------------------------------------
@@ -25,11 +25,10 @@ export class DocumentViewer extends React.Component{
 			if(linkElement.attributes['title']){ //if the title isn't undefined
 				var linkClickedTitle = linkElement.attributes['title'].value;
 				//get some new Filters based on the selected link and update the filter list
-				Filters = generateReleventFilters(linkClickedTitle);
-				global.refreshGraph(performFiltering());
+				global.updateReteFilters(linkClickedTitle);
 
 				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-				if(checkPatternCurrentlyFiltered(linkClickedTitle)){
+				if(global.checkPatternCurrentlyFiltered(linkClickedTitle)){
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 				}
 				else{
@@ -41,7 +40,7 @@ export class DocumentViewer extends React.Component{
 			}
 		}
 		
-		let scrollableElement = document.querySelector(".insertedPage");
+		let scrollableElement = document.querySelector("#DocumentContainer");
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
@@ -57,9 +56,6 @@ export class DocumentViewer extends React.Component{
 				}				
 			}
 		}
-    	/*$(".insertedPage").find("a[href]").click(function(e){
-    		this.DocumentViewerEventHandler(e);
-    	});*/
         setWindowHistory(global.docViewerComponent.state.title);
     }
 
@@ -314,6 +310,11 @@ export function DisplayDocumentViewer(show){
 		document.getElementById("DocumentViewer").style.minWidth = null;
 		document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
 		document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
+		
+		let scrollableElement = document.querySelector("#DocumentContainer");
+        if(scrollableElement){
+			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
+		}
 	}
 	else{
 		document.getElementById("DocumentViewer").style.width = "0"
@@ -358,6 +359,10 @@ class GamePage extends React.Component {
     }
 
     getPatternsReasons(game){
+		function pageFilter(inputPatterns, inputPage){ 
+			return inputPatterns.filter(pattern => (pattern.PatternsLinks.some(pLink => pLink.To == inputPage)) || (pattern.Title == inputPage));
+		}
+		
         var gamePatterns = pageFilter(Patterns, game.name);
         var releventParagraphs = [];
         gamePatterns.forEach(function(pattern){

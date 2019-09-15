@@ -2,7 +2,6 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-import {performFiltering, generateReleventFilters} from './oldfilters.js';
 
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 
@@ -59,8 +58,7 @@ export class SearchBox extends React.Component {
 
     searchButtonClicked(event){
         let articleSelected = $("#SearchBox").val();
-        global.Filters = generateReleventFilters(articleSelected);
-    	global.refreshGraph(performFiltering(global.Filters));
+        global.updateReteFilters(articleSelected);
         global.docViewerComponent.setState({title: articleSelected});
         //updateFiltersGUI();
     }

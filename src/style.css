@@ -379,11 +379,11 @@ hr {
     border: black solid 2px;
     display: flex;
     flex: 1 0 90%;
+	overflow-y: scroll;
 }
 
 .insertedPage{
 	padding: 10px;
-	overflow-y: auto;
 }
 
 #InsertedPageOuter{
