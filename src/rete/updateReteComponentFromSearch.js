@@ -23,8 +23,8 @@ export default function updateReteComponentFromSearch(reteFilterComponent, type,
 			break;
 	}
 	
+	reteFilterComponent.engine.process(template);
 	reteFilterComponent.editor.fromJSON(template).then(() => {
 		reteFilterComponent.editor.view.resize();
 	});
-	reteFilterComponent.engine.process(template);
 }
