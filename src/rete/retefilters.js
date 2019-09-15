@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import $ from 'jquery';
 
 import Rete from "rete";
 import ConnectionPlugin from 'rete-connection-plugin';
@@ -24,6 +25,8 @@ export class ReteFilterModule extends React.Component {
 	}
 
 	filtersButtonClick(event){
+		var selector = $("#ShowFiltersButton").data("target");
+		$(selector).toggleClass('out');
 	}
 	
 	componentDidMount(){
@@ -66,8 +69,8 @@ export class ReteFilterModule extends React.Component {
 	render(){
 		return (
 		<>
-			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="collapse" data-target="#FilterPanel">Filters</button>
-			<div id="FilterPanel" className="collapse">
+			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
+			<div id="FilterPanel">
 				<div id="rete"></div>
 			</div>
 		</>

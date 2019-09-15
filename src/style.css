@@ -162,20 +162,38 @@ svg{
 	z-index: 10;
     pointer-events: all;
     position: absolute;
+	bottom: 20px;
+    right: 10px;
 }
 
-#FilterPanel.show, #FilterPanel.collapsing{
+/*#FilterPanel.show, #FilterPanel.collapsing{
     position: fixed;
-    top: 50px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
     display: flex;
     flex-direction: column;
-    background: #676767d6;
-    border-radius: 8px;
     padding: 2px;
     z-index: 100;
+}*/
+
+#FilterPanel{
+    -webkit-transition: width 2s ease;
+    -moz-transition: width 2s ease;
+    -o-transition: width 2s ease;
+    transition: width 2s ease;
+    display: inline-block;
+    overflow: hidden;
+    background: #676767d6;
+    border-radius: 8px;
+    position: fixed;
+    top: 50px;
+    bottom: 55px;
+    margin: 10px;
+    right: 0px;
+    width: 0%;
+    z-index: 100;
+}
+
+#FilterPanel.out {
+    width: 65%;
 }
 
 #FiltersList{
@@ -372,6 +390,7 @@ hr {
 	flex-direction: column;
 	max-width: 100%;
 	min-width: min-content;
+	z-index: 200;
 }
 
 #DocumentContainer{
@@ -445,6 +464,7 @@ hr {
 
 #ExternalLinkGroup {
     display: flex;
+	background: var(--bgColor);
 }
 
 #DocumentViewerToolbar > button{
