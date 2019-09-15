@@ -30,7 +30,7 @@ $( document ).ready(function() {
 		createPatternToGameRelation();
 		fixCanInstantiatepLinks();
 		
-		loadFiltersorDefaults();
+		//loadFiltersorDefaults();
 		//bindFilters();
 		//applyFilters();
 		$("#Search").show();
