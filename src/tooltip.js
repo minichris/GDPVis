@@ -7,7 +7,7 @@ import {getPatternOneWayRelationTexts, RelationshipColors} from './graph.js';
 //The following section contains the Tooltip react components
 //-------------------------------------------------------------------------
 
-export class Tooltip extends React.Component{
+export default class Tooltip extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -18,7 +18,7 @@ export class Tooltip extends React.Component{
 
 	render(){
 		let subcomponent;
-		if(this.state.d != null){
+		if(this.state.d){
 			switch(this.state.type){
 				case "Link":
 					subcomponent = (<LinkTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
@@ -26,10 +26,13 @@ export class Tooltip extends React.Component{
 				case "LinkExpanded":
 					subcomponent = (<LinkExpandedTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
 					break;
-				case "Pattern":
+				case "Games":
+					subcomponent = (<GameTooltip Game={this.state.d.id} />);
+					break;
+				case "Patterns":
 					subcomponent = (<PatternTooltip Pattern={this.state.d.id} />);
 					break;
-				case null:
+				default:
 					subcomponent = (<p>nothing to see here</p>);
 					break;
 			}
@@ -182,6 +185,22 @@ export class PatternTooltip extends React.Component{
 			<div id="TooltipInner">
 				<span className="TooltipTitle">{this.props.Pattern}</span><br />
 				<span className="TooltipBrief">{discriptionText}</span><br />
+				<div className="FindOutMoreText">Click to find out more...</div>
+			</div>
+		);
+	}
+}
+
+export class GameTooltip extends React.Component{
+	render(){
+		let gameObj = Games.find(game => game.name == this.props.Game);
+		let gameCategories = gameObj.categories.join(", ");
+		let gamePatterns = gameObj.LinkedPatterns.map(pattern => pattern.Title).join(", ");
+		return(
+			<div id="TooltipInner">
+				<span className="TooltipTitle">{gameObj.name}</span><br />
+				<span className="TooltipBrief"><b>A game in the following categories: </b> {gameCategories}</span><br />
+				<span className="TooltipBrief"><b>It is linked to these patterns: </b> {gamePatterns}</span><br />
 				<div className="FindOutMoreText">Click to find out more...</div>
 			</div>
 		);

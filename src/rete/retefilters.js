@@ -53,8 +53,7 @@ export class ReteFilterModule extends React.Component {
 		
 		this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
 			await this.engine.abort();
-			var json = this.editor.toJSON();
-			await this.engine.process(json);
+			await this.engine.process(this.editor.toJSON());
 		});
 
 		this.editor.fromJSON(getExampleData()).then(() => {

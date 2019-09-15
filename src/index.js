@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations, createPatternToGameRelation, fixCanInstantiatepLinks} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
-import {Tooltip, LinkTooltip, LinkExpandedTooltip, PatternTooltip} from './tooltip.js';
+import Tooltip from './tooltip.js';
 import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
 import {Graph} from './graph.js';
 import {SearchBox} from './search.js';
@@ -53,11 +53,18 @@ global.updateReteFilters = function(query){
 //Given a set of filtered patterns, refreshes the graph with these patterns
 global.refreshGraph = function(filteredData){
 	currentlyFilteredData = filteredData;
-	console.log(filteredData);
-	if(filteredData[0] && !filteredData[0].name){ //protection against putting games in for now
-		global.graphComponent.setState({patterns: filteredData});
-		setWindowHistory(global.docViewerComponent.state.title);
+	let dataType;
+	if(filteredData[0] && filteredData[0].name){
+		dataType = "Games"
 	}
+	else if(filteredData[0] && filteredData[0].Title){
+		dataType = "Patterns"
+	}
+	else{
+		dataType = null;
+	}
+	global.graphComponent.setState({displayData: filteredData, dataType: dataType});
+	setWindowHistory(global.docViewerComponent.state.title);
 }
 
 //Function to find if a pattern is in the list of currently filtered patterns

@@ -28,14 +28,15 @@ export class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			patterns: [],
+			displayData: [],
+			dataType: null,
 			tooltipEventsEnabled: true,
 			tooltipRequiresClickClose: false
 		}
 		this.svg = React.createRef();
 	}
 
-	createNodes(patterns){
+	createPatternNodes(patterns){
 		function getGroup(){
 			return Math.floor(Math.random() * 12) + 1;
 		}
@@ -46,6 +47,24 @@ export class Graph extends React.Component{
 		patterns.forEach(function(pattern){
 			nodesObject.push({
 				id: pattern.Title,
+				group: getGroup()
+			});
+		});
+
+		return nodesObject;
+	}
+	
+	createGameNodes(games){
+		function getGroup(){
+			return Math.floor(Math.random() * 12) + 1;
+		}
+
+		var nodesObject = [];  //array to store the output of the function
+		console.log("games");
+		console.log(games);
+		games.forEach(function(game){
+			nodesObject.push({
+				id: game.name,
 				group: getGroup()
 			});
 		});
@@ -98,14 +117,24 @@ export class Graph extends React.Component{
 
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
-		console.log(this.state.patterns);
-		this.generateGraph(this.state.patterns);
+		console.log(this.state.displayData);
+		this.generateGraph(this.state.displayData, this.state.dataType);
 	}
 
 
-	generateGraph(patterns) {
-		let nodesData = this.createNodes(patterns);
-		let linksData = this.createLinks(patterns);
+	generateGraph(displayData, dataType) {
+		let nodesData, linksData;
+		if(dataType == "Patterns"){
+			nodesData = this.createPatternNodes(displayData);
+			linksData = this.createLinks(displayData);
+		}
+		if(dataType == "Games"){
+			nodesData = this.createGameNodes(displayData);
+			linksData = [];
+		}
+		if(!dataType){
+			return;
+		}
 
 		var svg = d3.select(this.svg.current);
 		var width = 300;
@@ -198,7 +227,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: "Pattern"});
+				global.toolTipComponent.setState({d: d, type: dataType});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -337,7 +366,7 @@ export class Graph extends React.Component{
 	}
 }
 
-class GraphSelectBox extends React.Component{
+/*class GraphSelectBox extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -381,13 +410,13 @@ class GraphSelectBox extends React.Component{
 		return(
 			<select ref={this.select2} id="SearchSelect" placeholder="Select a pattern...">
 				<option></option>
-				{this.state.patterns.map((pat, i) =>
+				{this.state.displayData.map((pat, i) =>
 					<option key={i} value={pat.Title}>{pat.Title}</option>
 				)}
 			</select>
 		);
 	}
-}
+}*/
 
 class RelationshipSelector extends React.Component{
 	constructor(props) {
