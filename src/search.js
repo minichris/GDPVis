@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-
+import {DisplayDocumentViewer} from './browser.js';
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 
 export class SearchBox extends React.Component {
@@ -60,7 +60,7 @@ export class SearchBox extends React.Component {
         let articleSelected = $("#SearchBox").val();
         global.updateReteFilters(articleSelected);
         global.docViewerComponent.setState({title: articleSelected});
-        //updateFiltersGUI();
+        DisplayDocumentViewer(true);
     }
 
     render(){

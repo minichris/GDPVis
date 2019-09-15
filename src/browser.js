@@ -21,7 +21,7 @@ export class DocumentViewer extends React.Component{
     }
 	
     componentDidUpdate(){
-		function documentViewerLinkClickEventHandler(linkElement){
+		function eventLinkClicked(linkElement){
 			if(linkElement.attributes['title']){ //if the title isn't undefined
 				var linkClickedTitle = linkElement.attributes['title'].value;
 				//get some new Filters based on the selected link and update the filter list
@@ -52,7 +52,7 @@ export class DocumentViewer extends React.Component{
 				
 				
 				elements[i].onclick = function () {
-					documentViewerLinkClickEventHandler(this);
+					eventLinkClicked(this);
 				}				
 			}
 		}
