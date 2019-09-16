@@ -315,7 +315,9 @@ export function DisplayDocumentViewer(show){
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
-		$("#ShowFiltersButton").hide();
+		$( "#ShowFiltersButton" ).ready(function() {
+			$("#ShowFiltersButton").hide();
+		});
 	}
 	else{
 		document.getElementById("DocumentViewer").style.width = "0"
