@@ -15,7 +15,7 @@ export default class FilterGamesByCategoryComponent extends Rete.Component {
 		node.addOutput(new Rete.Output('games', 'Games (array)', sockets.games));
 		
 		const nodeDropDownList = GameCategories.map(function(cat){return ({value: cat, label: cat})});
-		node.addControl(new DropDownControl(this.editor, "GameCategory", nodeDropDownList, "Game Category"));
+		node.addControl(new DropDownControl(node, "GameCategory", nodeDropDownList, "Game Category"));
 		
 		node.info = "A filter node that filters games by a game category.";
 		

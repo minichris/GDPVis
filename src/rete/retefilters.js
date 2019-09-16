@@ -53,8 +53,9 @@ export class ReteFilterModule extends React.Component {
 		components.list.map(c => {
 			this.editor.register(c);
 		});
-		
-		this.editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
+
+		this.editor.on('process connectioncreated', async () => {
+			//ignoring noderemoved, nodecreate, connectionremoved
 			await this.engine.abort();
 			await this.engine.process(this.editor.toJSON());
 		});
@@ -64,6 +65,15 @@ export class ReteFilterModule extends React.Component {
 		});
 
 		this.editor.trigger('process');
+		
+		let ourEditor = this.editor;
+		//custom function for nodes to prevent them from wanting to process every control change even when not completely plugged in
+		Rete.Node.prototype.processControlChange = function(){
+			console.log(this);
+			if(this.inputs.size + this.outputs.size == this.getConnections().length){
+				ourEditor.trigger("process");
+			}
+		}
 	}
 	
 	render(){

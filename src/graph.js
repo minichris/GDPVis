@@ -34,6 +34,8 @@ export class Graph extends React.Component{
 			tooltipRequiresClickClose: false
 		}
 		this.svg = React.createRef();
+		this.prevNodesCount = null;
+		this.prevLinksCount = null;
 	}
 
 	createPatternNodes(patterns){
@@ -118,22 +120,38 @@ export class Graph extends React.Component{
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
 		console.log(this.state.displayData);
-		this.generateGraph(this.state.displayData, this.state.dataType);
+		this.generateGraph(false);
 	}
 
 
-	generateGraph(displayData, dataType) {
+	generateGraph(force) {
 		let nodesData, linksData;
-		if(dataType == "Patterns"){
-			nodesData = this.createPatternNodes(displayData);
-			linksData = this.createLinks(displayData);
+		if(this.state.dataType == "Patterns"){
+			nodesData = this.createPatternNodes(this.state.displayData);
+			linksData = this.createLinks(this.state.displayData);
 		}
-		if(dataType == "Games"){
-			nodesData = this.createGameNodes(displayData);
+		if(this.state.dataType == "Games"){
+			nodesData = this.createGameNodes(this.state.displayData);
 			linksData = [];
 		}
-		if(!dataType){
+		if(!this.state.dataType){
 			$("#GraphItemCount").text("Nothing matches this filter setup.");
+			return;
+		}
+		
+		if(nodesData.length == this.prevNodesCount && linksData.length == this.prevLinksCount){
+			return;
+		}
+		
+		this.prevNodesCount = nodesData;
+		this.prevLinksCount = linksData;
+		
+		if(nodesData.length > 750 || linksData.length > 750 && !force){
+			global.warningDialogComponent.setState({
+				NodeCount: nodesData.length,
+				LinkCount: linksData.length
+			});
+			$("#TooManyDialogModal").show();
 			return;
 		}
 
@@ -228,7 +246,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: dataType});
+				global.toolTipComponent.setState({d: d, type: this.state.dataType});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node

@@ -5,12 +5,14 @@ export class WarningDialog extends React.Component{
 	constructor(props) {
     	super(props);
     	this.state = {
-			Count: 0
+			NodeCount: 0,
+			LinkCount: 0
     	};
   	}
 	
 	handleShowAnywayButtonClick(event){
 		$("#TooManyDialogModal").hide();
+		global.graphComponent.generateGraph(true);
 	}
 	
 	handleAddLimiterButtonClick(event){
@@ -33,11 +35,11 @@ export class WarningDialog extends React.Component{
 							</button>
 						</div>
 						<div className="modal-body">
-							The graph you are trying to display will contain <span id="TooManyDialogPatternCount">{this.state.Count}</span> patterns! This high amount may cause your browser to become unresponsive. Add a limiter to prevent this?
+							The graph you are trying to display will contain <span id="TooManyDialogPatternCount">{this.state.NodeCount}</span> nodes and <span id="TooManyDialogPatternCount">{this.state.LinkCount} links</span>! This high amount may cause your browser to become unresponsive. Add a limiter to prevent this?
 						</div>
 						<div className="modal-footer">
 							<button onClick={this.handleShowAnywayButtonClick.bind(this)} type="button" id="TooManyIgnoreButton" className="btn btn-danger">Show anyway</button>
-							<button onClick={this.handleAddLimiterButtonClick.bind(this)}  type="button" id="TooManyOkButton" className="btn btn-primary">Add limiter</button>
+							<button onClick={this.handleAddLimiterButtonClick.bind(this)}  type="button" id="TooManyOkButton" className="btn btn-success">Cancel</button>
 						</div>
 					</div>
 				</div>

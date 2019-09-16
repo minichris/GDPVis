@@ -16,7 +16,7 @@ export default class FilterPatternsByThoseWithoutRelationToPatternComponent exte
 		node.addOutput(new Rete.Output('patterns', 'Patterns (array)', sockets.patterns));
 		
 		const nodeDropDownList1 = Patterns.map(function(pattern){return ({value: pattern.Title, label: pattern.Title})});
-		node.addControl(new DropDownControl(this.editor, "Pattern", nodeDropDownList1, "Pattern"));
+		node.addControl(new DropDownControl(node, "Pattern", nodeDropDownList1, "Pattern"));
 		
 		const nodeDropDownList2 = [
 			{value: "Can Modulate", label: "Can Modulate"},
@@ -27,7 +27,7 @@ export default class FilterPatternsByThoseWithoutRelationToPatternComponent exte
 			{value: "Possible Closure Effects", label: "Possible Closure Effects"},
 			
 		];
-		node.addControl(new DropDownControl(this.editor, "RelationType", nodeDropDownList2, "Relation Type(s) (only needs to match one)", true));
+		node.addControl(new DropDownControl(node, "RelationType", nodeDropDownList2, "Relation Type(s) (only needs to match one)", true));
 		
 		node.info = "A filter node which filters patterns to only those without relation(s) to a specific pattern.";
 		

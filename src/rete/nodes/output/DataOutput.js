@@ -9,16 +9,14 @@ export default class DataOutputComponent extends Rete.Component {
 	}
 
 	builder(node) {
-		node.addInput(new Rete.Input('patternsInput', 'Patterns to output', sockets.wildcard));
+		node.addInput(new Rete.Input('patternsInput', 'Data to output', sockets.wildcard));
 		node.info = "The final node in any filtering graph.";
-		node.finalOutputData = [];
 		return node;
 	}
 	
 	async worker(node, inputs, outputs) {
-		if(inputs['patternsInput'] && inputs['patternsInput'][0]){
+		if(inputs['patternsInput'] && inputs['patternsInput'][0]){ //we have an output
 			global.refreshGraph(inputs['patternsInput'][0]);
-			node.finalOutputData = inputs['patternsInput'][0];
 			return (inputs['patternsInput'][0]);
 		}
     }

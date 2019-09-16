@@ -16,7 +16,7 @@ export default class FilterGamesToThoseWhichSharePatternsWithAGameComponent exte
 		node.addOutput(new Rete.Output('games', 'Games (array)', sockets.games));
 		
 		const nodeDropDownList = Games.map(function(game){return ({value: game.name, label: game.name})});
-		node.addControl(new DropDownControl(this.editor, "Game", nodeDropDownList, "Game"));	
+		node.addControl(new DropDownControl(node, "Game", nodeDropDownList, "Game"));	
 		
 		node.addControl(new SpinnerControl(this.editor, "SharedAmount", 10, "Required Amount of Shared Patterns"));
 		
