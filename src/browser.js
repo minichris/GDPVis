@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 import {pageFilter, patternCategoryFilter} from './oldfilters.js';
 import {setWindowHistory} from './saving.js';
+import {ChangePatternSelection} from './graph.js';
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
@@ -24,19 +25,19 @@ export class DocumentViewer extends React.Component{
 		function eventLinkClicked(linkElement){
 			if(linkElement.attributes['title']){ //if the title isn't undefined
 				var linkClickedTitle = linkElement.attributes['title'].value;
-				//get some new Filters based on the selected link and update the filter list
-				global.updateReteFilters(linkClickedTitle);
 
 				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
 				if(global.checkPatternCurrentlyFiltered(linkClickedTitle)){
+					console.log("Found pattern, updating selection.");
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 				}
 				else{
-					//handle the document viewer
-					global.docViewerComponent.setState({title: linkClickedTitle});
-					//graphSelectBoxComponent.setState({filters: Filters, value: null});
+					console.log("Didn't find pattern, updating filters.")
+					global.updateReteFilters(linkClickedTitle);
 				}
-				//updateFiltersGUI();
+				
+				//get some new Filters based on the selected link and update the filter list
+				global.docViewerComponent.setState({title: linkClickedTitle});
 			}
 		}
 		

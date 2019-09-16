@@ -67,6 +67,11 @@ global.refreshGraph = function(filteredData){
 
 //Function to find if a pattern is in the list of currently filtered patterns
 global.checkPatternCurrentlyFiltered = function(patternName){
-	//check if the page we are looking for is in the current patterns
-	return (currentlyFilteredData.find(fPattern => fPattern.Title == patternName) != null);
+	if(currentlyFilteredData[0] && currentlyFilteredData[0].Title){
+		//check if the page we are looking for is in the current patterns
+		return (currentlyFilteredData.find(fPattern => fPattern.Title == patternName) != null);
+	}
+	else{
+		return false;
+	}
 }

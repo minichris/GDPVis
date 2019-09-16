@@ -512,7 +512,7 @@ class RelationshipSelector extends React.Component{
 }
 
 //function which handles changing the currently selected pattern
-function ChangePatternSelection(newSelectionID){
+export function ChangePatternSelection(newSelectionID){
 	if(newSelectionID != false){
 		//handle the document DocumentViewer
 		global.docViewerComponent.setState({title: newSelectionID});
