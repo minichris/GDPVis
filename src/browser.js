@@ -315,6 +315,7 @@ export function DisplayDocumentViewer(show){
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
+		$("#ShowFiltersButton").hide();
 	}
 	else{
 		document.getElementById("DocumentViewer").style.width = "0"
@@ -324,6 +325,7 @@ export function DisplayDocumentViewer(show){
 		setTimeout(function(){
 			document.getElementById("DocumentViewer").style.display = "none";			
 		}, 500);
+		$("#ShowFiltersButton").show();
 	}
 }
 
