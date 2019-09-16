@@ -3,8 +3,36 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>VGTropes</title>
+	<style>
+		body.loading{
+			background: #434343;
+			color: white;
+			font-family: monospace;
+			/* text-align: center; */
+			position: fixed;
+			text-align: center;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		
+		body.loading > header > h1{
+			width: 100%;
+			position: absolute;
+			top: 40%;
+			transform: translate(0, -50%);
+		}
+		
+		#LoadingAjax {
+			width: 100%;
+			position: absolute;
+			top: 55%;
+			transform: translate(0, -50%);
+		}
+	</style>
 </head>
-<body>
+<body class="loading">
 	<header>
 		<h1>VGTropes</h1>
 		<div id="SearchBoxOuter"></div>

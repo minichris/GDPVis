@@ -20,6 +20,7 @@ var seachBoxComponent, reteFilterComponent, currentlyFilteredData;
 global.Filters = [];
 
 $( document ).ready(function() {
+	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
 	global.graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
