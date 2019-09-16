@@ -5,8 +5,8 @@
 export function loadFiltersorDefaults(){
 	var urlParams = new URLSearchParams( new URL(window.location).search);
 	if(urlParams.has('data')) { //if the url has Filters in the GET request
-		global.Filters = JSON.parse(atob(urlParams.get('data')))["filters"]; //parse the Filters
-		let pageToDisplay = JSON.parse(atob(urlParams.get('data')))["currentPage"];
+		global.Filters = JSON.parse(decodeURIComponent(escape(atob(urlParams.get('data')))))["filters"]; //parse the Filters
+		let pageToDisplay = JSON.parse(decodeURIComponent(escape(atob(urlParams.get('data')))))["currentPage"];
 		docViewerComponent.setState({title: pageToDisplay});
 	}
 	else {
@@ -25,6 +25,6 @@ export function setWindowHistory(currentPage){
 		filters: global.Filters, //current Filters
 		currentPage: currentPage //current browser page
 	}
-	let encoded = btoa(JSON.stringify(saveData));
+	let encoded = btoa(unescape(encodeURIComponent(JSON.stringify(saveData))));
 	window.history.pushState('VGTropes', 'VGTropes', '?data=' + encoded);
 }
