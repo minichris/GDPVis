@@ -83,14 +83,7 @@ export class Graph extends React.Component{
 			if (currentAllowedRelationships.hasOwnProperty(relationship)) { //if the property is unique to currentAllowedRelationships
 				outputRelationships[relationship] = ( currentAllowedRelationships[relationship] && linkRelationships[relationship] );
 			}
-		}
-		
-		/*if(Object.values(outputRelationships).filter(b => b).length > 0){ //if it should be shown
-			console.log("------------");
-			console.log(sourcePatternName + " & " + targetPatternName);
-			console.log(linkRelationships);
-		}*/
-		
+		}		
 		return outputRelationships;
 	}
 
@@ -246,7 +239,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: this.state.dataType});
+				global.toolTipComponent.setState({d: d, type: selfGraph.state.dataType});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
