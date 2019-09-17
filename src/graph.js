@@ -36,6 +36,7 @@ export class Graph extends React.Component{
 		this.svg = React.createRef();
 		this.prevNodesCount = null;
 		this.prevLinksCount = null;
+		this.zoomLevel = 1;
 	}
 
 	createPatternNodes(patterns){
@@ -153,9 +154,10 @@ export class Graph extends React.Component{
 		var height = 300;
 
 		var root = svg.select("g");
+		let self = this;
 
-		function resizer(scale = 1){
-			let sizeMultiplyer = 0.5 / scale;
+		function resizer(){
+			let sizeMultiplyer = 0.5 / self.zoomLevel;
 			$("g > svg > text").css("font-size", sizeMultiplyer * 7);
 			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
 			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
@@ -163,10 +165,12 @@ export class Graph extends React.Component{
 			$("g > svg > text").attr("x", sizeMultiplyer * 6);
 			$("g > svg > text").attr("y", sizeMultiplyer * 3);
 		}
+		
 
 		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
-			resizer(d3.event.transform.k);
+			resizer();
 			root.attr("transform", d3.event.transform);
+			self.zoomLevel = d3.event.transform.k;
 		}));
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
@@ -227,8 +231,6 @@ export class Graph extends React.Component{
 				$("#FilterPanel").removeClass('out');
 			}
 		});
-		
-		resizer();
 		
 		
 		var tooltip = d3.select("#Tooltip");
@@ -322,7 +324,7 @@ export class Graph extends React.Component{
 		});
 
 		simulation.force("link").links(linksData); //Start the simulation of the links
-
+		resizer();
 
 		function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
 			if (x < a) x = a;
