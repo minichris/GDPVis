@@ -22,12 +22,11 @@ export class DocumentViewer extends React.Component{
     }
 	
     componentDidUpdate(){
-		function eventLinkClicked(linkElement){
-			if(linkElement.attributes['title']){ //if the title isn't undefined
-				var linkClickedTitle = linkElement.attributes['title'].value;
+		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
+			if(linkClickedTitle){ //if the title isn't undefined
 
 				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-				if(global.checkPatternCurrentlyFiltered(linkClickedTitle)){
+				if(global.checkPatternCurrentlyFiltered(linkClickedTitle) && !forceUpdateFilters){
 					console.log("Found pattern, updating selection.");
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 				}
@@ -41,10 +40,13 @@ export class DocumentViewer extends React.Component{
 			}
 		}
 		
+		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
+		
+		//setting up page links for in browser linking
 		var elements = document.getElementsByTagName('a');
 		for(var i = 0, len = elements.length; i < len; i++) {
 			if(elements[i].host == "virt10.itu.chalmers.se"){
@@ -53,10 +55,17 @@ export class DocumentViewer extends React.Component{
 				
 				
 				elements[i].onclick = function () {
-					eventLinkClicked(this);
+					eventLinkClicked(this.attributes['title'].value);
 				}				
 			}
 		}
+		
+		//setting up page links for in browser linking
+		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
+			eventLinkClicked(event.target.textContent, true);
+		});
+		
+		
         setWindowHistory(global.docViewerComponent.state.title);
     }
 
@@ -391,7 +400,7 @@ class GamePage extends React.Component {
 
         return(
             <div className="insertedPage GamePage">
-                <h1>{game.name}</h1>
+                <h1 className="firstHeading">{game.name}</h1>
                 <h2>About</h2>
                 <p>[insert info here]</p>
                 <h2>Gameplay Patterns Used</h2>
