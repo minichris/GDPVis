@@ -74,6 +74,22 @@ export class ReteFilterModule extends React.Component {
 				ourEditor.trigger("process");
 			}
 		}
+		
+		//adds delete button to delete node support
+		let selfEditor = this.editor;
+		$(document).keyup(function (e) {
+			if(e.keyCode == 46 && $("#FilterPanel").hasClass("out")) {
+				console.log(e);
+				console.log(selfEditor);
+				console.log(selfEditor.selected.list);
+				selfEditor.nodes.forEach(function(node){
+					if(selfEditor.selected.list.includes(node)){
+						selfEditor.removeNode(node);
+					}
+				});
+			}
+		});
+		
 	}
 	
 	render(){
