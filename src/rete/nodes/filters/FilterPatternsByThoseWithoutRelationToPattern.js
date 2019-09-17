@@ -22,7 +22,7 @@ export default class FilterPatternsByThoseWithoutRelationToPatternComponent exte
 			{value: "Can Modulate", label: "Can Modulate"},
 			{value: "Can Be Modulated By", label: "Can Be Modulated By"},
 			{value: "Can Instantiate", label: "Can Instantiate"},
-			{value: "CCan Be Instantiated By", label: "Can Be Instantiated By"},
+			{value: "Can Be Instantiated By", label: "Can Be Instantiated By"},
 			{value: "Potentially Conflicting With", label: "Potentially Conflicting With"},
 			{value: "Possible Closure Effects", label: "Possible Closure Effects"},
 			

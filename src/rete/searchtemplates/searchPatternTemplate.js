@@ -61,7 +61,7 @@ export default function searchPatternTemplate(patternName){
 				"label": "Can Instantiate"
 			  },
 			  {
-				"value": "CCan Be Instantiated By",
+				"value": "Can Be Instantiated By",
 				"label": "Can Be Instantiated By"
 			  },
 			  {
