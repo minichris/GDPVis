@@ -160,8 +160,8 @@ export class Graph extends React.Component{
 			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
 			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
 			$("g > svg > circle").css("stroke-width", sizeMultiplyer * 1.5);
-			$("g > svg > text").attr("x", sizeMultiplyer * 7);
-			$("g > svg > text").attr("y", sizeMultiplyer * 3.5);
+			$("g > svg > text").attr("x", sizeMultiplyer * 6);
+			$("g > svg > text").attr("y", sizeMultiplyer * 3);
 		}
 
 		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
@@ -226,6 +226,8 @@ export class Graph extends React.Component{
 				ChangePatternSelection(false); //clear pattern selection
 			}
 		});
+		
+		resizer();
 		
 		
 		var tooltip = d3.select("#Tooltip");
@@ -319,9 +321,6 @@ export class Graph extends React.Component{
 		});
 
 		simulation.force("link").links(linksData); //Start the simulation of the links
-
-				
-		resizer();
 
 
 		function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
