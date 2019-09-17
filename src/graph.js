@@ -224,6 +224,7 @@ export class Graph extends React.Component{
 		$(this.svg.current).click(function(e) { //clicking the background
 			if(e.target.parentNode.id == "GraphOuter"){
 				ChangePatternSelection(false); //clear pattern selection
+				$("#FilterPanel").removeClass('out');
 			}
 		});
 		
