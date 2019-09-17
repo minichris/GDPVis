@@ -154,10 +154,20 @@ export class Graph extends React.Component{
 
 		var root = svg.select("g");
 
-		svg.call(d3.zoom().scaleExtent([1/4, 2]).on("zoom", function(){ //Allows the graph to be zoomed and panned
+		function resizer(scale = 1){
+			let sizeMultiplyer = 0.5 / scale;
+			$("g > svg > text").css("font-size", sizeMultiplyer * 7);
+			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
+			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
+			$("g > svg > circle").css("stroke-width", sizeMultiplyer * 1.5);
+			$("g > svg > text").attr("x", sizeMultiplyer * 7);
+			$("g > svg > text").attr("y", sizeMultiplyer * 3.5);
+		}
+
+		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
+			resizer(d3.event.transform.k);
 			root.attr("transform", d3.event.transform);
 		}));
-
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
 
@@ -309,6 +319,10 @@ export class Graph extends React.Component{
 		});
 
 		simulation.force("link").links(linksData); //Start the simulation of the links
+
+				
+		resizer();
+
 
 		function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
 			if (x < a) x = a;
