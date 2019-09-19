@@ -5,7 +5,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import {DisplayDocumentViewer} from './browser.js';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 
 export var RelationshipColors = {
@@ -538,7 +537,7 @@ export function ChangePatternSelection(newSelectionID){
 	if(newSelectionID != false){
 		//handle the document DocumentViewer
 		global.docViewerComponent.setState({title: newSelectionID});
-		DisplayDocumentViewer(true);
+		global.docViewerComponent.displayDocumentViewer(true);
 		//handle the search box
 		//graphSelectBoxComponent.setState({value: newSelectionID});
 
@@ -548,7 +547,7 @@ export function ChangePatternSelection(newSelectionID){
 		$(nodeIDToHighlight).addClass('SelectedNode');
 	}
 	else{
-		DisplayDocumentViewer(false);
+		global.docViewerComponent.displayDocumentViewer(false);
 		//graphSelectBoxComponent.setState({value: false});
 		$(".SelectedNode").removeClass('SelectedNode');
 	}

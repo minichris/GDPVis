@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations, createPatternToGameRelation, fixCanInstantiatepLinks} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
 import Tooltip from './tooltip.js';
-import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
+import {DocumentViewer, getPageType} from './browser';
 import {Graph} from './graph.js';
 import {SearchBox} from './search.js';
 import {loadFiltersorDefaults, setWindowHistory} from './saving.js';
@@ -36,7 +36,7 @@ $( document ).ready(function() {
 		$("#LoadingAjax").hide();
 		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		global.toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
-		DisplayDocumentViewer(true);
+		global.docViewerComponent.displayDocumentViewer(true);
 		
 		//set up the filter graph stuff
 		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));

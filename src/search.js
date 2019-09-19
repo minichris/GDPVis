@@ -2,7 +2,6 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-import {DisplayDocumentViewer} from './browser.js';
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 
 export class SearchBox extends React.Component {
@@ -74,7 +73,7 @@ export class SearchBox extends React.Component {
         global.updateReteFilters(articleSelected);
 		if(!articleSelected.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
 			global.docViewerComponent.setState({title: articleSelected});
-			DisplayDocumentViewer(true);
+			global.docViewerComponent.displayDocumentViewer(true);
 		}
     }
 

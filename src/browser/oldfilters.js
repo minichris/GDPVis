@@ -1,5 +1,4 @@
-import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
-import {getPageType} from './browser.js';
+import {Patterns, Games, PatternCategories, GameCategories} from '../loaddata.js';
 //------------------------------------------
 //OLD FILTERS FUNCTIONS FOR THE OLD FILTERING SYSTEM
 //------------------------------------------

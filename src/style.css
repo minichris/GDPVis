@@ -417,9 +417,9 @@ hr {
     border-left-style: solid;
     border-left-width: 6px;
     cursor: ew-resize;
-    position: sticky;
-    bottom: 0px;
-    top: 0px;
+    bottom: 56px;
+    top: 12px;
+    position: absolute;
 }
 
 
