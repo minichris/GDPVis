@@ -15,7 +15,7 @@ import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 
-var seachBoxComponent, reteFilterComponent, currentlyFilteredData;
+var seachBoxComponent, warningDialogComponent, reteFilterComponent, currentlyFilteredData;
 
 global.Filters = [];
 
@@ -23,8 +23,8 @@ $( document ).ready(function() {
 	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	global.graphComponent = ReactDOM.render(<Graph />, document.getElementById("Graph"));
-	global.warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
+	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
+	global.graphComponent = ReactDOM.render(<Graph WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
 	requiredDataLoadedPromise.then(function() {
 		createGameToPatternRelations();
 		createPatternToGameRelation();

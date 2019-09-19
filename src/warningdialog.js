@@ -6,26 +6,36 @@ export class WarningDialog extends React.Component{
     	super(props);
     	this.state = {
 			NodeCount: 0,
-			LinkCount: 0
+			LinkCount: 0,
+			display: false
     	};
+		
+		this.selfRef = React.createRef();
   	}
 	
 	handleShowAnywayButtonClick(event){
-		$("#TooManyDialogModal").hide();
+		this.setState({
+			display: false
+		});
 		global.graphComponent.generateGraph(true);
 	}
 	
 	handleAddLimiterButtonClick(event){
-		$("#TooManyDialogModal").hide();
+		this.setState({
+			display: false
+		});
 	}
 	
 	handleCancelButtonClick(event){
-		$("#TooManyDialogModal").hide();
+		this.setState({
+			display: false
+		});
 	}
 	
 	render(){
+		let displayMode = this.state.display ? "block" : "none";
 		return(
-			<div className="modal" id="TooManyDialogModal" tabIndex="-1" role="dialog">
+			<div style={{display: displayMode}} className="modal" id="TooManyDialogModal" tabIndex="-1" role="dialog">
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-header">

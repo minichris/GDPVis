@@ -141,15 +141,18 @@ export class Graph extends React.Component{
 		this.prevLinksCount = linksData;
 		
 		if(nodesData.length > 750 || linksData.length > 750 && !force){
-			global.warningDialogComponent.setState({
+			this.props.WarningDialogComponent.setState({
 				NodeCount: nodesData.length,
-				LinkCount: linksData.length
+				LinkCount: linksData.length,
+				display: true
+				
 			});
-			$("#TooManyDialogModal").show();
 			return;
 		}
 		else{
-			$("#TooManyDialogModal").hide(); //make sure it is hidden if it is not needed
+			this.props.WarningDialogComponent.setState({
+				display: false
+			}); //make sure it is hidden if it is not needed
 		}
 
 		var svg = d3.select(this.svg.current);
