@@ -14,6 +14,19 @@ export default class SpecialPage extends React.Component {
 						There are three main ways to use VGTropes...
         			<h3>Filtering</h3>
 						Write about filtering
+					<h4>Example Filters</h4>
+						Why not check out some of these patterns for insperation?
+						<ul>
+						<li><a href="javascript:void(0)" title="Category:Games">
+						All Games
+						</a></li>
+						<li><a href="javascript:void(0)" title="Game World Exploration">
+						All patterns relating to Game World Exploration
+						</a></li>
+						<li><a href="javascript:void(0)" title="Category:FPS Games">
+						All games in the category "FPS Games"
+						</a></li>
+						</ul>
         			<h3>Browsing</h3>
 						Write about browsing
         			<h3>Searching</h3>

@@ -36,6 +36,12 @@ $( document ).ready(function() {
 		
 		//set up the filter graph stuff
 		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
+		$("body > header > h1").click(function(){
+			global.docViewerComponent.setState({
+				title: "Special:VGTropes"
+			});
+			global.docViewerComponent.displayDocumentViewer(true);
+		});
 	});
 });
 

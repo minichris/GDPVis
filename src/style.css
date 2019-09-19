@@ -238,6 +238,10 @@ svg{
 	min-width: 410px;
 	min-height: 690px;
 	text-align: center;
+	width: 100%;
+	position: absolute;
+	top: 55%;
+	transform: translate(0, -50%);
 }
 
 #LoadingAjax span{
@@ -288,6 +292,8 @@ header > h1 {
 	display: inline-block;
 	font-size: 1.75rem;
 	font-family: 'Oswald', sans-serif;
+	pointer-events: all;
+	cursor: pointer;
 }
 
 .select2-container {
@@ -329,6 +335,8 @@ header > h1 {
     overflow-y: auto;
 	max-height: 500px;
     pointer-events: all;
+	top: -10000px;
+	left: -10000px;
 }
 
 
