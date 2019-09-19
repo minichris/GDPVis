@@ -148,6 +148,9 @@ export class Graph extends React.Component{
 			$("#TooManyDialogModal").show();
 			return;
 		}
+		else{
+			$("#TooManyDialogModal").hide(); //make sure it is hidden if it is not needed
+		}
 
 		var svg = d3.select(this.svg.current);
 		var width = 300;

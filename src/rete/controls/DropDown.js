@@ -25,10 +25,10 @@ class DropDownReactComponent extends React.Component {
 		const { selectedOption } = this.state;
 
 		return (
-			<>
+			<div className="controlInner">
 				<label>{this.props.title}</label>
 				<Select isMulti={this.props.isMulti} classNamePrefix="react-select" value={selectedOption} onChange={this.handleChange.bind(this)} options={this.props.options} />
-			</>
+			</div>
 		);
 	}
 }

@@ -11,7 +11,7 @@ import {DocumentViewer, getPageType, DisplayDocumentViewer} from './browser.js';
 import {Graph} from './graph.js';
 import {SearchBox} from './search.js';
 import {loadFiltersorDefaults, setWindowHistory} from './saving.js';
-import {ReteFilterModule} from './rete/retefilters.js';
+import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 

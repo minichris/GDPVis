@@ -13,10 +13,14 @@
 .node .control{
 	border: 1px solid;
     margin: 10px;
-    padding: 10px;
+    padding: 0px;
     border-radius: 5px;
 }
 
 .node .control label {
 	font-size: 14px;
+}
+
+.controlInner{
+	margin: 10px;
 }

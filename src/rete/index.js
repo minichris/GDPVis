@@ -15,7 +15,7 @@ import getExampleData from './exampledata.js';
 import components from './nodes';
 import './style.css';
 
-export class ReteFilterModule extends React.Component {
+export default class ReteFilterModule extends React.Component {
 	constructor(props){
 		super(props);
 	}
@@ -59,6 +59,12 @@ export class ReteFilterModule extends React.Component {
 			await this.engine.abort();
 			await this.engine.process(this.editor.toJSON());
 		});
+		
+		this.editor.on('nodetranslate', function(node, x, y){
+			if(document.activeElement.parentElement.className == "controlInner"){
+				return false;
+			}
+		});
 
 		this.editor.fromJSON(getExampleData()).then(() => {
 			this.editor.view.resize();
@@ -69,7 +75,6 @@ export class ReteFilterModule extends React.Component {
 		let ourEditor = this.editor;
 		//custom function for nodes to prevent them from wanting to process every control change even when not completely plugged in
 		Rete.Node.prototype.processControlChange = function(){
-			console.log(this);
 			if(this.inputs.size + this.outputs.size == this.getConnections().length){
 				ourEditor.trigger("process");
 			}
@@ -79,9 +84,6 @@ export class ReteFilterModule extends React.Component {
 		let selfEditor = this.editor;
 		$(document).keyup(function (e) {
 			if(e.keyCode == 46 && $("#FilterPanel").hasClass("out")) {
-				console.log(e);
-				console.log(selfEditor);
-				console.log(selfEditor.selected.list);
 				selfEditor.nodes.forEach(function(node){
 					if(selfEditor.selected.list.includes(node)){
 						selfEditor.removeNode(node);
