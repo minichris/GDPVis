@@ -33,7 +33,17 @@ export class SearchBox extends React.Component {
             templateResult: this.formatOption,
             minimumInputLength: 3,
             allowClear: true,
-            placeholder: "Search..."
+            placeholder: "Search...",
+			tags: true,
+			createTag: function (params) {
+				return {
+					id: "GenericSearch:" + params.term,
+					text: 'Search in patterns for "' + params.term + '"'
+				}
+			},
+			insertTag: function (data, tag) {
+				data.push(tag);
+			}
         });
 		
 		let component = this;
@@ -53,24 +63,29 @@ export class SearchBox extends React.Component {
         if (!option.element) {
             return option.text;
         }
+		if(!option.element.dataset.type){
+			return null;	
+		}
         return $('<span>' + option.element.dataset.type + ': ' + option.text + '</span>');
     };
 
     searchButtonClicked(event){
         let articleSelected = $("#SearchBox").val();
         global.updateReteFilters(articleSelected);
-        global.docViewerComponent.setState({title: articleSelected});
-        DisplayDocumentViewer(true);
+		if(!articleSelected.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
+			global.docViewerComponent.setState({title: articleSelected});
+			DisplayDocumentViewer(true);
+		}
     }
 
     render(){
         return(
-            < >
+            <>
                 <select ref="SearchBox" id="SearchBox" value={this.props.value} className="SearchBox">
                     {this.getOptions()}
                 </select>
                 <button id="SearchButton" className="btn btn-light" onClick={this.searchButtonClicked.bind(this)}>Display</button>
-            < />
+            </>
         );
     }
 }

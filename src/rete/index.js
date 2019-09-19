@@ -57,6 +57,7 @@ export default class ReteFilterModule extends React.Component {
 		this.editor.on('process connectioncreated', async () => {
 			//ignoring noderemoved, nodecreate, connectionremoved
 			await this.engine.abort();
+			console.log(this.editor.toJSON());
 			await this.engine.process(this.editor.toJSON());
 		});
 		

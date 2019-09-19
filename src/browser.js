@@ -293,6 +293,9 @@ export class DocumentViewerToolbar extends React.Component{
 
 //Give a page title, find the type of the page
 export function getPageType(pageTitle){
+	if(pageTitle.includes("GenericSearch:")){
+		return "Pattern Content";
+	}
 	if(pageTitle.includes("Special:")){
 		return "Special";
 	}

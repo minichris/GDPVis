@@ -10,6 +10,7 @@ class TextBoxReactComponent extends React.Component {
 		this.state = {
 			currentValue: this.props.getData(this.props.id)
 		};
+		this.handleChange = this.handleChange.bind(this);
 	}
 	
 	componentDidUpdate(prevProps, prevState, snapshot){
@@ -17,8 +18,7 @@ class TextBoxReactComponent extends React.Component {
 	}
 	
 	handleChange(event) {
-		let currentValue = event.target.value;
-		this.setState({ currentValue });
+		this.setState({ currentValue: event.target.value });
 		this.props.emitter.processControlChange();
 	}
 	
@@ -29,13 +29,11 @@ class TextBoxReactComponent extends React.Component {
 	}
 	
 	render() {
-		const { currentValue } = this.state;
-
 		return (
 			<div className="controlInner">
 				<label>{this.props.title}</label>
 				<br />
-				<input onPointerCancel={this.preventRetePointerEvents.bind(this)} onPointerMove={this.preventRetePointerEvents.bind(this)} type="text" value={currentValue} onChange={this.handleChange.bind(this)} />
+				<input onPointerCancel={this.preventRetePointerEvents.bind(this)} onPointerMove={this.preventRetePointerEvents.bind(this)} type="text" value={this.state.currentValue} onChange={this.handleChange} />
 			</div>
 		);
 	}
