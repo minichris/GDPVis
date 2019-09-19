@@ -2,7 +2,6 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 import {Patterns, Games, PatternCategories, GameCategories} from '../loaddata.js';
-import {pageFilter, patternCategoryFilter} from './oldfilters.js';
 //import {setWindowHistory} from './saving.js';
 import {ChangePatternSelection} from '../graph.js';
 
@@ -185,13 +184,20 @@ export function getPageType(pageTitle){
 	if(Games.find(game => game.name == pageTitle) != null){
 		return "Game";
 	}
+	
 	//pattern category names may contain this string, remove it before next tests, but not before
 	pageTitle = pageTitle.replace('Category:', '');
-	if(PatternCategories.find(cat => cat == pageTitle) != null){
+	
+	let patternCatSize = Patterns.filter(pattern => pattern.Categories.some(category => category == pageTitle)).length;
+	let gameCatSize = Games.filter(game => game.categories.some(category => category == pageTitle)).length;
+	if(patternCatSize > gameCatSize){
 		return "Pattern Category";
 	}
-	if(GameCategories.find(cat => cat == pageTitle) != null){
+	if(patternCatSize < gameCatSize){
 		return "Game Category";
+	}
+	if(patternCatSize == gameCatSize && patternCatSize > 1){
+		return "Pattern Category";
 	}
 	return "Other";
 }
