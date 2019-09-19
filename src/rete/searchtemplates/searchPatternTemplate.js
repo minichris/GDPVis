@@ -71,6 +71,10 @@ export default function searchPatternTemplate(patternName){
 			  {
 				"value": "Possible Closure Effects",
 				"label": "Possible Closure Effects"
+			  },
+			  {
+				"value": "Self Reference", 
+				"label": "The pattern being related to"
 			  }
 			],
 			"Pattern": {

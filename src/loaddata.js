@@ -51,12 +51,17 @@ function createPatternCategories(){
 	PatternCategories = Array.from(PatternCategories);
 }
 
+function createPatternSelfReference(){
+	Patterns.forEach(pattern => pattern.PatternsLinks.push({Type: ["Self Reference"], To: pattern.Title}));
+}
+
 //Loads and transforms the patterns from the json format
 function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
 	request.done(function(data) {
 		Patterns = data;
 		createPatternCategories();
+		createPatternSelfReference();
 	});
 	return request;
 }

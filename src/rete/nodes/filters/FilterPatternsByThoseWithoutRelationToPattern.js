@@ -25,7 +25,7 @@ export default class FilterPatternsByThoseWithoutRelationToPatternComponent exte
 			{value: "Can Be Instantiated By", label: "Can Be Instantiated By"},
 			{value: "Potentially Conflicting With", label: "Potentially Conflicting With"},
 			{value: "Possible Closure Effects", label: "Possible Closure Effects"},
-			
+			{value: "Self Reference", label: "The pattern being related to"}
 		];
 		node.addControl(new DropDownControl(node, "RelationType", nodeDropDownList2, "Relation Type(s) (only needs to match one)", true));
 		
