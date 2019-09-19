@@ -33,16 +33,47 @@ function loadViaAjax(inputURL){
 	return request;
 }
 
+//Function for dynamically creating an array of Pattern categories
+function createPatternCategories(){
+	PatternCategories = new Set();
+	Patterns.map(pattern => pattern.Categories).flat().forEach(function(subcategory){
+		PatternCategories.add(subcategory);
+	});
+	PatternCategories = Array.from(PatternCategories);
+}
+
 //Loads and transforms the patterns from the json format
 export function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
 	request.done(function(data) {
 		Patterns = data;
-		PatternCategories = new Set();
-		Patterns.map(pattern => pattern.Categories).flat().forEach(function(subcategory){
-			PatternCategories.add(subcategory);
-		});
-		PatternCategories = Array.from(PatternCategories);
+		createPatternCategories();
+	});
+	return request;
+}
+
+//Function for dynamically creating an array of Game categories
+function createGameCategories(){
+	GameCategories = new Set();
+	Games.map(game => game.categories).flat().forEach(function(subcategory){
+		GameCategories.add(subcategory);
+	});
+	GameCategories = Array.from(GameCategories); //turn the set into an array
+}
+
+//Function for dynamically creating adding a category to all games called "Game"
+function createGameCategoryAll(){
+	Games.forEach(game => game.categories.push("Games"));
+	GameCategories.push("Games");
+}
+
+//Loads and transforms the Games from the json format
+export function loadGames(){
+	var request = loadViaAjax("AllGames.json");
+	request.done(function(data) {
+		Games = data;
+		createGameCategories();
+		createGameCategoryAll();
 	});
 	return request;
 }
@@ -76,18 +107,4 @@ export function fixCanInstantiatepLinks(){
 			}
 		});
 	});
-}
-
-//Loads and transforms the Games from the json format
-export function loadGames(){
-	var request = loadViaAjax("AllGames.json");
-	request.done(function(data) {
-		Games = data;
-		GameCategories = new Set();
-		Games.map(game => game.categories).flat().forEach(function(subcategory){
-			GameCategories.add(subcategory);
-		});
-		GameCategories = Array.from(GameCategories); //turn the set into an array
-	});
-	return request;
 }

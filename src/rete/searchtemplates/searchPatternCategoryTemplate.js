@@ -48,8 +48,8 @@ export default function searchPatternCategoryTemplate(patternCategoryName){
 		  "id": 9,
 		  "data": {
 			"PatternCategory": {
-			  "value": patternCategoryName,
-			  "label": patternCategoryName
+			  "value": patternCategoryName.replace('Category:',''),
+			  "label": patternCategoryName.replace('Category:','')
 			}
 		  },
 		  "inputs": {

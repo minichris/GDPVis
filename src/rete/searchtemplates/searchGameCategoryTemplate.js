@@ -48,8 +48,8 @@ export default function searchGameCategoryTemplate(gameCategoryName){
       "id": 10,
       "data": {
         "GameCategory": {
-          "value": gameCategoryName,
-          "label": gameCategoryName
+          "value": gameCategoryName.replace('Category:',''),
+          "label": gameCategoryName.replace('Category:','')
         }
       },
       "inputs": {

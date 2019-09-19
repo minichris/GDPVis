@@ -60,6 +60,9 @@ export class DocumentViewer extends React.Component{
     }
 	
 	
+	componentDidMount(){
+		this.componentDidUpdate();
+	}
 	
     componentDidUpdate(){
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
@@ -85,7 +88,7 @@ export class DocumentViewer extends React.Component{
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
-		
+		console.log(this);
 		//setting up page links for in browser linking
 		var elements = document.getElementsByTagName('a');
 		for(var i = 0, len = elements.length; i < len; i++) {
@@ -97,6 +100,12 @@ export class DocumentViewer extends React.Component{
 				elements[i].onclick = function () {
 					eventLinkClicked(this.attributes['title'].value);
 				}				
+			}
+			else{
+				elements[i].onclick = function (event) {
+					console.log(event.target.attributes['title'].value);
+					eventLinkClicked(event.target.attributes['title'].value);
+				}
 			}
 		}
 		

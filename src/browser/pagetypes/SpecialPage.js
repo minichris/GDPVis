@@ -10,7 +10,7 @@ export default class SpecialPage extends React.Component {
                     <p>
                     VGTropes is a visualization tool built on top of the GameDesignPatterns.org wiki.
                     It can help you browse the collection of patterns, analysis games, contribute to the wiki, and much more.
-                    To get started, why not try looking at the <a href="javascript:void(0)" title="Category:Patterns">Patterns category</a> for some inspiration,
+                    To get started, why not try looking at the <a href="javascript:void(0)" title="Category:Games">Games category</a> for some inspiration,
                     or try filtering the patterns shown by clicking the "Filters" button in the graph view, or just clicking a node in the graph.
                     </p>
                     <h2>Features</h2>
