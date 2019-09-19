@@ -4,7 +4,7 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames, createGameToPatternRelations, createPatternToGameRelation, fixCanInstantiatepLinks} from './loaddata.js';
+import {Patterns, Games, PatternCategories, GameCategories, getAllData} from './loaddata.js';
 import {WarningDialog} from './warningdialog.js';
 import Tooltip from './tooltip.js';
 import {DocumentViewer, getPageType} from './browser';
@@ -21,15 +21,11 @@ global.Filters = [];
 
 $( document ).ready(function() {
 	$("body").removeClass("loading");
-	var requiredDataLoadedPromise = Promise.all([loadPatterns(), loadGames()]); 
+	var requiredDataLoadedPromise = getAllData(); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	global.graphComponent = ReactDOM.render(<Graph WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
 	requiredDataLoadedPromise.then(function() {
-		createGameToPatternRelations();
-		createPatternToGameRelation();
-		fixCanInstantiatepLinks();
-		
 		//loadFiltersorDefaults();
 		$("#Search").show();
 		$("#Graph").show();

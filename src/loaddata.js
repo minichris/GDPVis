@@ -1,13 +1,11 @@
 import $ from 'jquery';
 
-export var Patterns;
-export var Games;
-export var PatternCategories;
-export var GameCategories;
+var Patterns, Games, PatternCategories, GameCategories;
 
+export {Patterns, Games, PatternCategories, GameCategories, getAllData};
 
-var CurrentFileLoadPercentage;
 var CurrentLoadingFile = 0;
+var CurrentFileLoadPercentage;
 
 //The common setup for loading JSON, including progress text system
 function loadViaAjax(inputURL){
@@ -33,6 +31,17 @@ function loadViaAjax(inputURL){
 	return request;
 }
 
+function getAllData(){
+	return new Promise((resolve, reject) => {
+		Promise.all([loadPatterns(), loadGames()]).then(function() {
+			createGameToPatternRelations();
+			createPatternToGameRelation();
+			fixCanInstantiatepLinks();
+			resolve("done");
+		});
+	});
+}
+
 //Function for dynamically creating an array of Pattern categories
 function createPatternCategories(){
 	PatternCategories = new Set();
@@ -43,7 +52,7 @@ function createPatternCategories(){
 }
 
 //Loads and transforms the patterns from the json format
-export function loadPatterns(){
+function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
 	request.done(function(data) {
 		Patterns = data;
@@ -68,7 +77,7 @@ function createGameCategoryAll(){
 }
 
 //Loads and transforms the Games from the json format
-export function loadGames(){
+function loadGames(){
 	var request = loadViaAjax("AllGames.json");
 	request.done(function(data) {
 		Games = data;
@@ -80,13 +89,13 @@ export function loadGames(){
 
 
 //Adds members to the game array of associated patterns
-export function createGameToPatternRelations(){
+function createGameToPatternRelations(){
 	Games.forEach(function(game){
 		game.LinkedPatterns = Patterns.filter(pattern => pattern.PatternsLinks.some(pLink => pLink.To == game.name))
 	});
 }
 
-export function createPatternToGameRelation(){	
+function createPatternToGameRelation(){	
 	Patterns.forEach(function(pattern){
 		pattern.LinkedGames = [];
 		pattern.PatternsLinks.forEach(function(pLink){
@@ -99,7 +108,7 @@ export function createPatternToGameRelation(){
 }
 
 //fixes "Can Instantiate With ..." relations to also have "Can Instantiate"
-export function fixCanInstantiatepLinks(){
+function fixCanInstantiatepLinks(){
 	Patterns.forEach(function(pattern){
 		pattern.PatternsLinks.forEach(function(pLink){
 			if(pLink.Type && pLink.Type.find(type => type.startsWith("Can Instantiate with"))){ 
