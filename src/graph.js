@@ -260,7 +260,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: selfGraph.state.dataType});
+				selfGraph.props.ToolTipComponent.setState({d: d, type: selfGraph.state.dataType});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -277,7 +277,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: "Link"});
+				selfGraph.props.ToolTipComponent.setState({d: d, type: "Link"});
 			}
 		})
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -292,7 +292,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				global.toolTipComponent.setState({d: d, type: "LinkExpanded"});
+				selfGraph.props.ToolTipComponent.setState({d: d, type: "LinkExpanded"});
 			}
 		});
 		

@@ -15,19 +15,18 @@ import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.
 import './style.css';
 import getExampleData from './rete/exampledata.js';
 
-var seachBoxComponent, warningDialogComponent, reteFilterComponent, currentlyFilteredData = [];
+var reteFilterComponent, currentlyFilteredData = [], prevFilteredData;
 
 $( document ).ready(function() {
 	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = getAllData(); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
-	global.graphComponent = ReactDOM.render(<Graph WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
+	var warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
+	var toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
+	global.graphComponent = ReactDOM.render(<Graph ToolTipComponent={toolTipComponent} WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
 	requiredDataLoadedPromise.then(function() {
-		$("#Graph").show();
 		$("#LoadingAjax").hide();
-		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
-		global.toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
+		var seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		global.docViewerComponent.displayDocumentViewer(true);
 		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
 		
