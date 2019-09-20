@@ -69,11 +69,9 @@ export class DocumentViewer extends React.Component{
 
 				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
 				if(global.checkPatternCurrentlyFiltered(linkClickedTitle) && !forceUpdateFilters){
-					console.log("Found pattern, updating selection.");
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 				}
 				else{
-					console.log("Didn't find pattern, updating filters.")
 					global.updateReteFilters(linkClickedTitle);
 				}
 				
@@ -87,7 +85,6 @@ export class DocumentViewer extends React.Component{
         if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
-		console.log(this);
 		//setting up page links for in browser linking
 		var elements = document.getElementsByTagName('a');
 		for(var i = 0, len = elements.length; i < len; i++) {
@@ -102,8 +99,9 @@ export class DocumentViewer extends React.Component{
 			}
 			else{
 				elements[i].onclick = function (event) {
-					console.log(event.target.attributes['title'].value);
-					eventLinkClicked(event.target.attributes['title'].value);
+					if(event.target.attributes['title']){
+						eventLinkClicked(event.target.attributes['title'].value);
+					}
 				}
 			}
 		}
