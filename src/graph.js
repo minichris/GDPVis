@@ -164,7 +164,7 @@ export class Graph extends React.Component{
 
 		function resizer(){
 			let sizeMultiplyer = 0.75 / self.zoomLevel;
-			$("g > svg > text").css("font-size", sizeMultiplyer * 7);
+			$("g > svg > text").css("font-size", sizeMultiplyer * 0.2 + "cm");
 			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
 			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
 			$("g > svg > circle").css("stroke-width", sizeMultiplyer * 1.5);
@@ -174,9 +174,9 @@ export class Graph extends React.Component{
 		
 
 		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
-			resizer();
 			root.attr("transform", d3.event.transform);
 			self.zoomLevel = d3.event.transform.k;
+			resizer();
 		}));
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme

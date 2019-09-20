@@ -165,14 +165,6 @@ svg{
     right: 10px;
 }
 
-/*#FilterPanel.show, #FilterPanel.collapsing{
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    padding: 2px;
-    z-index: 100;
-}*/
-
 #FilterPanel{
     transition: width 2s ease, background 0.5s ease, border 2s ease;
     display: inline-block;
@@ -207,19 +199,7 @@ svg{
     height: 32px;
     vertical-align: middle;
 }
-/*
-.FilterTypeSelect{
-	width: 30%;
-	display: inline-block;
-	padding: 5px;
-}
 
-.FilterValue{
-	width: 40%;
-	display: inline-block;
-	padding: 5px;
-}
-*/
 .select2-results__option{
 	color: black;
 	font-size: 12px;
@@ -376,23 +356,16 @@ hr {
 /* Document Viewer Stuff */
 
 #Content > #DocumentViewer{
-	/*flex: 2 1 50%;
-	padding: 0px;
-	height: 468px;
-	display: grid;*/
 	position: absolute;
 	width: 0%;
 	transition: width 0.5s, border-width 0.5s, padding 0.5s;
 	transition-timing-function: ease;
     right: 0;
-	/*background: var(--bgColor2);
-	border: black solid;*/
 	bottom: 10px;
     top: 0px;
 	user-select: text;
 	overflow-x: auto;
 	overflow-y: hidden;
-	/*transition: none;*/
 	display: flex;
 	flex-direction: column;
 	max-width: 100%;
@@ -532,43 +505,6 @@ Items removed from the new design version
 #ShowFiltersButton{
 	display: none;
 }
-
-/*----------------------------------------------
-New Visual filtering system styling
-----------------------------------------------*/
-/*#VisualFilterViewer{
-	top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: absolute;
-}
-
-#VisualFilterViewer > svg{
-	position: absolute;
-}
-
-#VisualFilterViewer > svg > path{
-	stroke-width: 8;
-    stroke: #000;
-    stroke-linecap: round;
-    fill: none;
-}
-
-.node{
-	display: inline-block;
-    min-width: 200px;
-    padding: 0px;
-    background: darkgray;
-    border: 2px solid black;
-	position: absolute;
-	z-index: 1;
-}
-
-.nodeTitle{
-	border-bottom: 2px solid black;
-	padding-left: 5px;
-}*/
 
 #rete{
 	overflow: hidden; 
