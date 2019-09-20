@@ -2,8 +2,8 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 import {Patterns, Games, PatternCategories, GameCategories} from '../loaddata.js';
-//import {setWindowHistory} from './saving.js';
 import {ChangePatternSelection} from '../graph.js';
+import {setWindowHistory} from '../index.js';
 
 import DocumentViewerToolbar from './components/DocumentViewerToolbar.js';
 import DocumentViewerTableOfContents from './components/DocumentViewerTableOfContents.js';
@@ -24,8 +24,8 @@ export class DocumentViewer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            title: "Special:VGTropes",
-            prevtitle: "Special:VGTropes"
+            title: null,
+            prevtitle: null
         };
 		this.internalPageRef = React.createRef();
 		
@@ -58,17 +58,12 @@ export class DocumentViewer extends React.Component{
 		}
     }
 	
-	
-	componentDidMount(){
-		this.componentDidUpdate();
-	}
-	
     componentDidUpdate(){
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
 			if(linkClickedTitle){ //if the title isn't undefined
 
 				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-				if(global.checkPatternCurrentlyFiltered(linkClickedTitle) && !forceUpdateFilters){
+				if(global.isPatternCurrentlyFiltered(linkClickedTitle) && !forceUpdateFilters){
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 				}
 				else{
@@ -77,6 +72,7 @@ export class DocumentViewer extends React.Component{
 				
 				//get some new Filters based on the selected link and update the filter list
 				global.docViewerComponent.setState({title: linkClickedTitle});
+				setWindowHistory();
 			}
 		}
 		
@@ -110,9 +106,6 @@ export class DocumentViewer extends React.Component{
 		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
 			eventLinkClicked(event.target.textContent, true);
 		});
-		
-		
-        //setWindowHistory(global.docViewerComponent.state.title);
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {

@@ -10,8 +10,6 @@ import AreaPlugin from 'rete-area-plugin';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import LifecyclePlugin from 'rete-lifecycle-plugin';
 
-import getExampleData from './exampledata.js';
-
 import components from './nodes';
 import './style.css';
 
@@ -35,8 +33,6 @@ export default class ReteFilterModule extends React.Component {
 		components.list.map(c => {
 			this.engine.register(c);
 		});
-		
-		this.engine.process(getExampleData());
 		
 		this.editor = new Rete.NodeEditor('tasksample@0.1.0', document.querySelector('#rete'));
 		this.editor.use(AlightRenderPlugin);
@@ -66,12 +62,6 @@ export default class ReteFilterModule extends React.Component {
 				return false;
 			}
 		});
-
-		this.editor.fromJSON(getExampleData()).then(() => {
-			this.editor.view.resize();
-		});
-
-		this.editor.trigger('process');
 		
 		let ourEditor = this.editor;
 		//custom function for nodes to prevent them from wanting to process every control change even when not completely plugged in

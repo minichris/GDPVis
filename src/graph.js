@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import {setWindowHistory} from './index.js';
 
 export var RelationshipColors = {
 	//goes R, G, B
@@ -162,7 +163,7 @@ export class Graph extends React.Component{
 		let self = this;
 
 		function resizer(){
-			let sizeMultiplyer = 0.5 / self.zoomLevel;
+			let sizeMultiplyer = 0.75 / self.zoomLevel;
 			$("g > svg > text").css("font-size", sizeMultiplyer * 7);
 			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
 			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
@@ -534,10 +535,11 @@ class RelationshipSelector extends React.Component{
 
 //function which handles changing the currently selected pattern
 export function ChangePatternSelection(newSelectionID){
-	if(newSelectionID != false){
+	if(newSelectionID){
 		//handle the document DocumentViewer
 		global.docViewerComponent.setState({title: newSelectionID});
 		global.docViewerComponent.displayDocumentViewer(true);
+		setWindowHistory();
 		//handle the search box
 		//graphSelectBoxComponent.setState({value: newSelectionID});
 
@@ -548,7 +550,6 @@ export function ChangePatternSelection(newSelectionID){
 	}
 	else{
 		global.docViewerComponent.displayDocumentViewer(false);
-		//graphSelectBoxComponent.setState({value: false});
 		$(".SelectedNode").removeClass('SelectedNode');
 	}
 }
