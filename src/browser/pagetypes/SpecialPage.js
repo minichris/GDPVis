@@ -40,11 +40,11 @@ export default class SpecialPage extends React.Component {
 						</a></li>
 						</ul>
         			<h3>Browsing</h3>
-						Write about browsing
+						Just want to browse like on a regular wiki? This panel will display page content. Hovering or clicking on nodes on the graph will will give information about that pattern / game, and the same with the links between them.
         			<h3>Searching</h3>
 						Know what you are looking for already? The search bar in the top left will allow you to quickly jump to any Pattern, Game, Pattern category or Game category on the wiki. When you press enter, not only will it bring up this page, but it will also set up the filters to display a graph of related patterns. For example, selecting a pattern page from your search will create a graph of all the patterns relating to the selected pattern. Selecting a game page will show all the patterns which are linked to that game. Selecting category pages will fill the graph will patterns or games from that category. It can also search within the content of a pattern page, and from that will create a graph of patterns that contain those words.
         			<h3>Other Features</h3>
-						Write about the ToC, links, etc
+					<p style={{color: "red"}}>Write about the ToC, links, etc</p>
         			<h2>Q&A</h2>
         			<i>Some pages look different to the original wiki, why is that?</i>
 					<br />
