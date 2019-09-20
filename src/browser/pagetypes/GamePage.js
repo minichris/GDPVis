@@ -37,8 +37,6 @@ export default class GamePage extends React.Component {
         return(
             <div className="insertedPage GamePage">
                 <h1 className="firstHeading">{game.name}</h1>
-                <h2>About</h2>
-                <p>[insert info here]</p>
                 <h2>Gameplay Patterns Used</h2>
                 <i>Note: this section is automatically generated from parts of pattern pages on the wiki. It can contain examples which aren't relevent to this game. Read with caution.</i>
                 {gamePatternsWithReasons.map((patternreason, i) =>
