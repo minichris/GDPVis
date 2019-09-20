@@ -4,7 +4,7 @@ import 'select2/dist/css/select2.css';
 import React from "react";
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 
-export class SearchBox extends React.Component {
+export default class SearchBox extends React.Component {
     constructor(props){
         super(props);
     }

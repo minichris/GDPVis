@@ -5,11 +5,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import {Patterns, Games, PatternCategories, GameCategories, getAllData} from './loaddata.js';
-import {WarningDialog} from './warningdialog.js';
+import WarningDialog from './warningdialog.js';
 import Tooltip from './tooltip.js';
 import {DocumentViewer, getPageType} from './browser';
 import {Graph, ChangePatternSelection} from './graph.js';
-import {SearchBox} from './search.js';
+import SearchBox from './search.js';
 import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
