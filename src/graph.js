@@ -400,58 +400,6 @@ export class Graph extends React.Component{
 	}
 }
 
-/*class GraphSelectBox extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			patterns: [],
-			value: null
-		}
-		this.select2 = React.createRef();
-	}
-
-	shouldComponentUpdate(nextProps, nextState){
-		//since this component makes use of select2, and therefore react...
-		//doesn't know that it needs updating. This prevents us needing to put...
-		//forceUpdate() after everything.
-		return true;
-	}
-
-	handleChange(event) {
-		if(event.target.value != this.state.value && this.state.value != null){
-			this.setState({value: event.target.value});
-			ChangePatternSelection( this.state.value );
-		}
-   	}
-
-	componentDidUpdate(){
-		$("#SearchSelect").select2({
-			width: '100%',
-			placeholder: "No pattern selected...",
-			allowClear: true
-		})
-		.on("change", this.handleChange.bind(this));
-
-		if(this.state.value != null){
-			$("#SearchSelect").val(this.state.value).trigger('change');
-		}
-		else{
-			$("#SearchSelect").val('').trigger('change');
-		}
-	}
-
-	render(){
-		return(
-			<select ref={this.select2} id="SearchSelect" placeholder="Select a pattern...">
-				<option></option>
-				{this.state.displayData.map((pat, i) =>
-					<option key={i} value={pat.Title}>{pat.Title}</option>
-				)}
-			</select>
-		);
-	}
-}*/
-
 class RelationshipSelector extends React.Component{
 	constructor(props) {
 		super(props);

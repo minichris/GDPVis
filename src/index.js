@@ -24,7 +24,6 @@ $( document ).ready(function() {
 	warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	global.graphComponent = ReactDOM.render(<Graph WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
 	requiredDataLoadedPromise.then(function() {
-		$("#Search").show();
 		$("#Graph").show();
 		$("#LoadingAjax").hide();
 		seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
