@@ -8,7 +8,7 @@ export default class OtherPage extends React.Component{
 
     handleGoToPrevPage(e){
         e.preventDefault();
-        global.docViewerComponent.setState({title: this.props.prevtitle});
+        window.history.back();
     }
 
     render(){

@@ -25,7 +25,7 @@ export class DocumentViewer extends React.Component{
         super(props);
         this.state = {
             title: null,
-            prevtitle: null
+            prevtitle: "Special:UnreachablePage"
         };
 		this.internalPageRef = React.createRef();
 		
@@ -58,24 +58,7 @@ export class DocumentViewer extends React.Component{
 		}
     }
 	
-    componentDidUpdate(){
-		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
-			if(linkClickedTitle){ //if the title isn't undefined
-
-				//check if the link click was a pattern that would result in a pattern in the node-link diagram being selected
-				if(global.isPatternCurrentlyFiltered(linkClickedTitle) && !forceUpdateFilters){
-					ChangePatternSelection(linkClickedTitle); //select the pattern
-				}
-				else{
-					global.updateReteFilters(linkClickedTitle);
-				}
-				
-				//get some new Filters based on the selected link and update the filter list
-				global.docViewerComponent.setState({title: linkClickedTitle});
-				setWindowHistory();
-			}
-		}
-		
+    componentDidUpdate(){		
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
         if(scrollableElement){
@@ -106,7 +89,26 @@ export class DocumentViewer extends React.Component{
 		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
 			eventLinkClicked(event.target.textContent, true);
 		});
+		
+		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
+			if(linkClickedTitle){ //if the title isn't undefined
+
+				//if the pattern isn't in the graph, or we are force updating the graph
+				if(!global.isPatternCurrentlyFiltered(linkClickedTitle) || forceUpdateFilters){
+					global.updateReteFiltersFromQuery(linkClickedTitle);
+				}
+				else{ //if it was in the graph and we aren't force updating the graph
+					ChangePatternSelection(linkClickedTitle); //select the pattern
+					global.docViewerComponent.setState({title: linkClickedTitle});
+					setWindowHistory(false);
+				}
+			}
+		}
     }
+	
+	shouldComponentUpdate(nextProps, nextState){
+		return nextState.title != this.state.title;
+	}
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
         if(prevState.title != this.state.prevtitle){

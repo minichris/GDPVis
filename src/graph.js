@@ -481,20 +481,24 @@ class RelationshipSelector extends React.Component{
 	}
 }
 
-//function which handles changing the currently selected pattern
-export function ChangePatternSelection(newSelectionID){
-	if(newSelectionID){
-		//handle the document DocumentViewer
-		global.docViewerComponent.setState({title: newSelectionID});
-		global.docViewerComponent.displayDocumentViewer(true);
-		setWindowHistory();
-		//handle the search box
-		//graphSelectBoxComponent.setState({value: newSelectionID});
+var currentSelectionID, prevSelectionID;
 
+//function which handles changing the currently selected pattern
+export function ChangePatternSelection(currentSelectionID){
+	if(currentSelectionID){
+		global.docViewerComponent.displayDocumentViewer(true);
+		
 		//handle the highlighted node
-		var nodeIDToHighlight = "#Node_" + newSelectionID.replace(/[\W_]/g,'_');
+		var nodeIDToHighlight = "#Node_" + currentSelectionID.replace(/[\W_]/g,'_');
 		$(".SelectedNode").removeClass('SelectedNode');
 		$(nodeIDToHighlight).addClass('SelectedNode');
+		
+		if(currentSelectionID != prevSelectionID){
+			prevSelectionID = currentSelectionID;
+			//handle the document DocumentViewer
+			global.docViewerComponent.setState({title: currentSelectionID});
+			setWindowHistory(true);
+		}
 	}
 	else{
 		global.docViewerComponent.displayDocumentViewer(false);

@@ -70,11 +70,7 @@ export default class SearchBox extends React.Component {
 
     searchButtonClicked(event){
         let articleSelected = $("#SearchBox").val();
-        global.updateReteFilters(articleSelected);
-		if(!articleSelected.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
-			global.docViewerComponent.setState({title: articleSelected});
-			global.docViewerComponent.displayDocumentViewer(true);
-		}
+        global.updateReteFiltersFromQuery(articleSelected);
     }
 
     render(){

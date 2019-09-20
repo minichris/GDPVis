@@ -10,6 +10,8 @@ import AreaPlugin from 'rete-area-plugin';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import LifecyclePlugin from 'rete-lifecycle-plugin';
 
+import {setWindowHistory} from '../index.js';
+
 import components from './nodes';
 import './style.css';
 
@@ -25,6 +27,7 @@ export default class ReteFilterModule extends React.Component {
 	filtersButtonClick(event){
 		var selector = $("#ShowFiltersButton").data("target");
 		$(selector).toggleClass('out');
+		setWindowHistory(true);
 	}
 	
 	componentDidMount(){
@@ -53,8 +56,10 @@ export default class ReteFilterModule extends React.Component {
 		this.editor.on('process connectioncreated', async () => {
 			//ignoring noderemoved, nodecreate, connectionremoved
 			await this.engine.abort();
-			console.log(this.editor.toJSON());
-			await this.engine.process(this.editor.toJSON());
+			this.currentEditorJSON = this.editor.toJSON();
+			if(this.currentEditorJSON != this.prevEditorJSON){
+				await this.engine.process(this.editor.toJSON());
+			}
 		});
 		
 		this.editor.on('nodetranslate', function(node, x, y){
