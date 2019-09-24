@@ -14,8 +14,10 @@ import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 import getExampleData from './rete/exampledata.js';
+import {getURLasJSON, InternalHistory} from './history.js';
 
 var reteFilterComponent, currentlyFilteredData = [], prevFilteredData;
+var historyObj = new InternalHistory;
 
 $( document ).ready(function() {
 	$("body").removeClass("loading");
@@ -39,19 +41,22 @@ $( document ).ready(function() {
 		});
 		
 		$(window).on('popstate',function(event) {
-			handlePopState(event);
+			historyObj.goBack();
 		});
 	});
 });
 
 global.updateReteFiltersFromQuery = function(query){
 	let pageType = getPageType(query);
-	updateReteComponentFromSearch(reteFilterComponent, pageType, query);
+	let template = updateReteComponentFromSearch(reteFilterComponent, pageType, query);
 	if(!query.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
 		global.docViewerComponent.setState({title: query});
 		global.docViewerComponent.displayDocumentViewer(true);
+		setWindowHistory(false, {currentPage: query, filters: template});
 	}
-	setWindowHistory(false);
+	else{
+		setWindowHistory(false, {currentPage: global.docViewerComponent.state.title, filters: template});
+	}
 }
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
@@ -69,6 +74,7 @@ global.refreshGraph = function(filteredData){
 			dataType = null;
 		}
 		global.graphComponent.setState({displayData: filteredData, dataType: dataType});
+		setWindowHistory(false);
 	}
 }
 
@@ -84,85 +90,48 @@ global.isPatternCurrentlyFiltered = function(patternName){
 }
 
 
-
-//-------------------------------------------------------------------------
-//The following section controls the saving and loading Filters from the URL
-//-------------------------------------------------------------------------
-function getURLasJSON(forceURL){
-	var urlParams;
-	if(forceURL){
-		urlParams = new URLSearchParams( new URL(forceURL).search);
-	}
-	else{
-		urlParams = new URLSearchParams( new URL(window.location).search);
-	}
-	if(urlParams.has('data')) { //if the url has Filters in the GET request
-		return JSON.parse(decodeURIComponent(escape(atob(urlParams.get('data')))));
-	}
-	else{
-		return null;
-	}
-}
-
-function loadFiltersorDefaults(forceURL){
-	function initializeRete(data){
-		reteFilterComponent.editor.fromJSON(data).then(() => {
-			reteFilterComponent.editor.view.resize();
-			reteFilterComponent.editor.trigger('process');
-		});
-	}
-	
-	if(getURLasJSON(forceURL)){
-		console.log("Retriving window history");
-		let filters = getURLasJSON()["filters"]; //parse the Filters
-		
-		initializeRete(filters);
-
-		let pageToDisplay = getURLasJSON()["currentPage"];
-		docViewerComponent.setState({title: pageToDisplay});
-		console.log("Retrived window history:", pageToDisplay, filters);
-	}
-	else {
-		console.log("Couldn't Retrive window history, using example data");
-		initializeRete(getExampleData());
-		docViewerComponent.setState({title: "Special:VGTropes"});
-	}
-	global.docViewerComponent.displayDocumentViewer(true);
-}
-
-export function setWindowHistory(replace = false){
-	if(reteFilterComponent && global.docViewerComponent){
-		if(global.docViewerComponent.state.prevtitle != "Special:UnreachablePage" && currentlyFilteredData != prevFilteredData){	
-			console.log("Setting window history");
-			let saveData = {
+export function setWindowHistory(replace, forceSaveData){
+	try {
+		let saveData;
+		if(forceSaveData){
+			saveData = forceSaveData;
+		}
+		else{
+			saveData = {
 				currentPage: global.docViewerComponent.state.title, //current browser page
 				filters: reteFilterComponent.editor.toJSON() //current Filters
 			}
-			if(saveData.filters.nodes != {}){
-				let encoded = btoa(unescape(encodeURIComponent(JSON.stringify(saveData))));
-				if(replace){
-					window.history.replaceState(global.docViewerComponent.state.title, 'VGTropes', '?data=' + encoded);
-					console.log("Replaced window history: ", saveData, JSON.stringify(saveData).length);
-				}
-				else{
-					window.history.pushState(global.docViewerComponent.state.title, 'VGTropes', '?data=' + encoded);
-					console.log("Set window history: ", saveData, JSON.stringify(saveData).length);
-				}
-				console.log("current history: ", getURLasJSON(), JSON.stringify(getURLasJSON()).length);
-				console.log("match: ", JSON.stringify(getURLasJSON()) == JSON.stringify(saveData));
-				console.log("History length:",window.history.length);
+		}
+		console.log("trying to setWindowHistory() with", saveData);
+		
+		if(Object.keys(saveData.filters.nodes).length > 0){
+			if(replace){
+				historyObj.replaceState(saveData);
 			}
+			else{
+				historyObj.pushState(saveData);
+			}
+			console.log("Success in setWindowHistory()");
 		}
 		else{
-			console.log("Couldn't set window history, not enough data");
+			throw(new Error("Nodes length is not greater than 0"));
 		}
 	}
-	else{
-		console.log("Couldn't set window history, rete / docviewer invalid");
+	catch(exception){
+		console.warn("Failed at saving in setWindowHistory", exception);
+		console.log(reteFilterComponent);
 	}
 }
 
-function handlePopState(event){
-	console.log("History length:",window.history.length);
-	loadFiltersorDefaults();
+function loadFiltersorDefaults(){	
+	let pageJson = getURLasJSON();
+	if(!pageJson){ //if can't get URL as JSON, use default filters
+		pageJson = [];
+		pageJson["filters"] = getExampleData();
+		pageJson["currentPage"] = "Special:VGTropes";
+	}
+	console.log("Loading state from url or defaults", pageJson);
+	reteFilterComponent.initialize(pageJson["filters"]);
+	docViewerComponent.setState({title: pageJson["currentPage"]});
+	global.docViewerComponent.displayDocumentViewer(true);
 }

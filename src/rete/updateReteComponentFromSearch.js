@@ -31,4 +31,6 @@ export default function updateReteComponentFromSearch(reteComponent, type, query
 		reteComponent.editor.view.resize();
 	});
 	reteComponent.editor.trigger('process');
+	
+	return template;
 }

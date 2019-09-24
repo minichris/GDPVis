@@ -5,28 +5,21 @@
   "main": "script-compiled.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
-    "start": "webpack-dev-server --open --config webpack.dev.js"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-react",
-      "minify"
-    ],
-    "plugins": [
-      "@babel/plugin-transform-runtime",
-      "@babel/plugin-transform-react-jsx"
-    ]
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.1.5",
-    "@babel/core": "^7.1.6",
-    "@babel/plugin-transform-react-jsx": "^7.1.6",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.6.0",
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
     "@babel/preset-react": "^7.0.0",
-    "@babel/runtime": "^7.6.0",
+    "@babel/register": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
     "babel-loader": "^8.0.6",
     "babel-minify": "^0.4.3",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
@@ -36,10 +29,11 @@
     "css-loader": "^3.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.9.0",
     "style-loader": "^1.0.0",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8",
-    "webpack-dev-server": "^3.8.0",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.1",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
@@ -52,17 +46,17 @@
     "popper.js": "^1.15.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-select": "^3.0.4",
+    "react-select": "^3.0.5",
     "rete": "^1.4.1",
     "rete-alight-render-plugin": "^0.1.5",
     "rete-area-plugin": "^0.2.1",
     "rete-connection-plugin": "^0.8.3",
-    "rete-context-menu-plugin": "^0.5.0",
+    "rete-context-menu-plugin": "^0.5.2",
     "rete-lifecycle-plugin": "^0.2.1",
     "rete-react-render-plugin": "^0.2.0",
     "rete-task-plugin": "^0.2.0-rc.2",
     "rete-vue-render-plugin": "^0.4.0",
     "select2": "^4.0.10",
-    "vue-select": "^3.1.0"
+    "vue-select": "^3.2.0"
   }
 }

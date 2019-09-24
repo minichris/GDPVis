@@ -20,6 +20,14 @@ export default class ReteFilterModule extends React.Component {
 		super(props);
 	}
 	
+	initialize(data){
+		this.engine.process(data);
+		this.editor.fromJSON(data).then(() => {
+			this.editor.view.resize();
+			this.editor.trigger('process');
+		});
+	}
+	
 	getEditorAsJSON(){
 		return this.editor.toJSON();
 	}
