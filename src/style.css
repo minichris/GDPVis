@@ -385,6 +385,14 @@ hr {
 	padding: 10px;
 }
 
+.broken-link{
+	color: inherit !important;
+}
+
+.broken-link:hover{
+	text-decoration: none !important;
+}
+
 #InsertedPageOuter{
 	display: flex;
     height: 100%;

@@ -66,15 +66,24 @@ export class DocumentViewer extends React.Component{
 		}
 		//setting up page links for in browser linking
 		var elements = document.getElementsByTagName('a');
+		var brokenLinks = [];
 		for(var i = 0, len = elements.length; i < len; i++) {
 			if(elements[i].host == "virt10.itu.chalmers.se"){
 				elements[i].setAttribute("data-originallink", elements[i].attributes["href"]);
 				elements[i].setAttribute("href", "javascript:;");
 				
-				
-				elements[i].onclick = function () {
-					eventLinkClicked(this.attributes['title'].value);
-				}				
+				if(elements[i].attributes['title'] != null && 
+				getPageType(elements[i].attributes['title'].value) != "Other"){
+					elements[i].onclick = function () {
+						eventLinkClicked(this.attributes['title'].value);
+					}									
+				}
+				else{
+					elements[i].className += " broken-link";
+					if(elements[i].attributes['title'] != null){
+						brokenLinks.push(elements[i].attributes['title'].value);
+					}
+				}
 			}
 			else{
 				elements[i].onclick = function (event) {
@@ -84,6 +93,7 @@ export class DocumentViewer extends React.Component{
 				}
 			}
 		}
+		console.log("Detected broken links: ",brokenLinks);
 		
 		//setting up page links for in browser linking
 		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
