@@ -534,6 +534,43 @@ input[type=checkbox]{
     vertical-align: middle;
 }
 
+#Content > #DocumentViewerOpenButtonOuter{
+	right: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    padding: 0;
+}
+
+#DocumentViewerOpenButton{
+	transition: background-color 0.5s ease, color 0.5s ease;
+    background-color: #757575;
+    color: #757575;
+    top: 40vh;
+    height: 20vh;
+    line-height: 19vh;
+    margin-right: 10px;
+    padding: 5px;
+    width: 39px;
+    text-align: center;
+    font-size: 2em;
+    --aug-border: 2px;
+    --aug-inset: 2px;
+    --aug-border-bg: #666666;
+    --aug-inset-bg: #666666;
+    --aug-tl: 15px;
+    --aug-bl: 15px;
+    --aug-r: 5px;
+    font-weight: bold;
+	pointer-events: all;
+}
+
+#DocumentViewerOpenButton:hover{
+	background-color: var(--linkBlueSelf);
+	color: var(--linkBlueSelf);
+}
+
 /*
 Items removed from the new design version
 */

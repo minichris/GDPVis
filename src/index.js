@@ -1,3 +1,4 @@
+import 'augmented-ui/augmented.css'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
@@ -8,6 +9,7 @@ import {Patterns, Games, PatternCategories, GameCategories, getAllData} from './
 import WarningDialog from './warningdialog.js';
 import Tooltip from './tooltip.js';
 import {DocumentViewer, getPageType} from './browser';
+import DocumentViewerOpenButton from './browser/components/DocumentViewerOpenButton.js';
 import {Graph, ChangePatternSelection} from './graph.js';
 import SearchBox from './search.js';
 import ReteFilterModule from './rete';
@@ -23,6 +25,7 @@ $( document ).ready(function() {
 	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = getAllData(); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
+	ReactDOM.render(<DocumentViewerOpenButton />, document.getElementById("DocumentViewerOpenButtonOuter"));
 	var warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	var toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 	global.graphComponent = ReactDOM.render(<Graph ToolTipComponent={toolTipComponent} WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
