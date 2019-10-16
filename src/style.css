@@ -297,7 +297,12 @@ header > h1 {
 	cursor: pointer;
 }
 
-h2, h3, h4, h5, h6 {
+#HeadingFilterText {
+	font-size: 0.9rem;
+	margin-bottom: 2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
 	font-family: 'Oswald', sans-serif;
 }
 
@@ -408,6 +413,10 @@ hr {
 
 .insertedPage{
 	padding: 10px;
+}
+
+.firstHeading{
+	display: inline-block;
 }
 
 #InsertedPageOuter{

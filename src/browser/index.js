@@ -102,10 +102,15 @@ export class DocumentViewer extends React.Component{
 			}
 		}
 		
-		//setting up page links for in browser linking
-		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
-			eventLinkClicked(event.target.textContent, true);
-		});
+		if( $("#HeadingFilterText").length == 0 ){	
+			let headingText = $(".firstHeading").text();
+			$(".firstHeading").after( '<p id="HeadingFilterText">Filter to only patterns relating to ' + headingText + '...</p>' );
+			
+			//setting up page links for in browser linking
+			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
+				eventLinkClicked(headingText, true);
+			});
+		}	
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
