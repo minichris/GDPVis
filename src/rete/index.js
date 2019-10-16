@@ -13,6 +13,27 @@ import LifecyclePlugin from 'rete-lifecycle-plugin';
 import components from './nodes';
 import './style.css';
 
+export function toggleFiltersPanel(){
+	$("#FilterPanel").toggleClass('out');
+	if($("#FilterPanel").hasClass('out')){
+		$("#ShowFiltersButton").addClass("btn-danger");
+		$("#ShowFiltersButton").removeClass("btn-light");
+		$("#ShowFiltersButton").text("X");
+	}
+	else{
+		$("#ShowFiltersButton").addClass("btn-light");
+		$("#ShowFiltersButton").removeClass("btn-danger");
+		$("#ShowFiltersButton").text("Change Filters");
+	}
+}
+
+export function closeFiltersPanel(){
+	$("#FilterPanel").removeClass('out');
+	$("#ShowFiltersButton").addClass("btn-light");
+	$("#ShowFiltersButton").removeClass("btn-danger");
+	$("#ShowFiltersButton").text("Change Filters");
+}
+
 export default class ReteFilterModule extends React.Component {
 	constructor(props){
 		super(props);
@@ -23,8 +44,7 @@ export default class ReteFilterModule extends React.Component {
 	}
 
 	filtersButtonClick(event){
-		var selector = $("#ShowFiltersButton").data("target");
-		$(selector).toggleClass('out');
+		toggleFiltersPanel();
 	}
 	
 	componentDidMount(){
@@ -88,7 +108,7 @@ export default class ReteFilterModule extends React.Component {
 	render(){
 		return (
 		<>
-			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
+			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
 				<span id="FilterPanelHeader">Filters Panel</span>
 				<div id="rete"></div>

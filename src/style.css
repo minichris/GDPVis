@@ -26,6 +26,11 @@
 	pointer-events: none;
 }
 
+.node > .title {
+	height: 65px;
+    overflow: hidden;
+}
+
 /*
 	#160F19 = Licorice (Dark Background)
 	#221A26 = Raisin Black (Lightest Background)
@@ -167,6 +172,7 @@ svg{
     position: absolute;
 	bottom: 20px;
     right: 10px;
+	display: inline-block;
 }
 
 #FilterPanel{

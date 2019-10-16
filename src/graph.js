@@ -7,6 +7,7 @@ import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 import {setWindowHistory} from './index.js';
+import {closeFiltersPanel} from './rete/index.js';
 
 export var RelationshipColors = {
 	//goes R, G, B
@@ -234,7 +235,7 @@ export class Graph extends React.Component{
 		$(this.svg.current).click(function(e) { //clicking the background
 			if(e.target.parentNode.id == "GraphOuter"){
 				ChangePatternSelection(false); //clear pattern selection
-				$("#FilterPanel").removeClass('out');
+				closeFiltersPanel();
 			}
 		});
 		
