@@ -110,7 +110,7 @@ export default class ReteFilterModule extends React.Component {
 		<>
 			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
-				<span id="FilterPanelHeader">Filters Panel</span>
+				<div id="FilterPanelHeader">Filters Panel</div>
 				<div id="rete"></div>
 			</div>
 		</>

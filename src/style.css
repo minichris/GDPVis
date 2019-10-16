@@ -205,6 +205,7 @@ svg{
     margin-left: 15px;
     margin-top: 5px;
     position: absolute;
+	width: 7em;
 }
 
 #FiltersList{
@@ -399,6 +400,7 @@ hr {
     display: flex;
     flex: 1 0 90%;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .insertedPage{
@@ -460,6 +462,7 @@ hr {
 	pointer-events: none;
 	flex: 0 1 38px;
 	z-index: 10;
+	overflow-x: hidden;
 }
 
 #ExternalLinkGroup {
