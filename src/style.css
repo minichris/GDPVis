@@ -297,6 +297,10 @@ header > h1 {
 	cursor: pointer;
 }
 
+h2, h3, h4, h5, h6 {
+	font-family: 'Oswald', sans-serif;
+}
+
 .select2-container {
 	width: 200px !important;
 }
@@ -385,8 +389,7 @@ hr {
 	bottom: 10px;
     top: 0px;
 	user-select: text;
-	overflow-x: auto;
-	overflow-y: hidden;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	max-width: 100%;
