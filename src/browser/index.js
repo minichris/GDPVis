@@ -168,6 +168,11 @@ export class DocumentViewer extends React.Component{
 
 //Give a page title, find the type of the page
 export function getPageType(pageTitle){
+	if(typeof pageTitle != "string"){
+		console.error("getPageType() pageTitle should be a string. It was: ", typeof pageTitle, pageTitle);
+		throw "getPageType() pageTitle should be a string.";
+	}
+	
 	if(pageTitle.includes("GenericSearch:")){
 		return "Pattern Content";
 	}
