@@ -90,6 +90,7 @@ export default class ReteFilterModule extends React.Component {
 		<>
 			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
+				<span id="FilterPanelHeader">Filters Panel</span>
 				<div id="rete"></div>
 			</div>
 		</>
