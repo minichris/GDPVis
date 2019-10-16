@@ -50,22 +50,6 @@ export default class SearchBox extends React.Component {
 		let component = this;
 		let searchBoxRef = this.refs["SearchBox"];
 		
-		$(this.refs["SearchBox"]).on('select2:selecting', function (e) {
-			console.log(e);
-		});
-		
-		$(this.refs["SearchBox"]).on('select2:clearing', function (e) {
-			console.log(e);
-		});
-		
-		$(this.refs["SearchBox"]).on('select2:opening', function (e) {
-			console.log(e);
-		});
-		
-		$(this.refs["SearchBox"]).on('select2:closing', function (e) {
-			console.log(e);
-		});
-		
 		$(this.refs["SearchBox"]).on('select2:select', function (e) {
 			component.searchButtonClicked(null);
 			$(searchBoxRef).val([]).trigger('change');
