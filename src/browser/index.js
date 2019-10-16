@@ -95,11 +95,6 @@ export class DocumentViewer extends React.Component{
 		}
 		console.log("Detected broken links: ",brokenLinks);
 		
-		//setting up page links for in browser linking
-		$(".firstHeading, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
-			eventLinkClicked(event.target.textContent, true);
-		});
-		
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
 			if(linkClickedTitle){ //if the title isn't undefined
 
@@ -114,6 +109,16 @@ export class DocumentViewer extends React.Component{
 				}
 			}
 		}
+		
+		if( $("#HeadingFilterText").length == 0 ){	
+			let headingText = $(".firstHeading").text();
+			$(".firstHeading").after( '<p id="HeadingFilterText">Filter to only patterns relating to ' + headingText + '...</p>' );
+			
+			//setting up page links for in browser linking
+			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
+				eventLinkClicked(headingText, true);
+			});
+		}	
     }
 	
 	shouldComponentUpdate(nextProps, nextState){
@@ -175,6 +180,11 @@ export class DocumentViewer extends React.Component{
 
 //Give a page title, find the type of the page
 export function getPageType(pageTitle){
+	if(typeof pageTitle != "string"){
+		console.error("getPageType() pageTitle should be a string. It was: ", typeof pageTitle, pageTitle);
+		throw "getPageType() pageTitle should be a string.";
+	}
+	
 	if(pageTitle.includes("GenericSearch:")){
 		return "Pattern Content";
 	}

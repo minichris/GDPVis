@@ -6,8 +6,7 @@ import {Patterns} from '../../loaddata.js';
 export default class PatternPage extends React.Component {
     render(){
         let pattern = Patterns.find(pat => pat.Title == this.props.title);
-        console.log("Generating page for the following pattern object:");
-        console.log(pattern);
+        console.log("Generating page for the following pattern object:", pattern);
         if(pattern != null){ //if the pattern is valid
             return(
                 <div className="insertedPage PatternPage" dangerouslySetInnerHTML={{__html: pattern.Content}}></div>

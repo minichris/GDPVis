@@ -26,6 +26,11 @@
 	pointer-events: none;
 }
 
+.node > .title {
+	height: 65px;
+    overflow: hidden;
+}
+
 /*
 	#160F19 = Licorice (Dark Background)
 	#221A26 = Raisin Black (Lightest Background)
@@ -34,6 +39,10 @@
 	#FFF8F0 = Floral White (Text)
 
 */
+
+form {
+	margin-block-end: 0em;
+}
 
 :root {
 	--bgColor: #434343;
@@ -163,6 +172,7 @@ svg{
     position: absolute;
 	bottom: 20px;
     right: 10px;
+	display: inline-block;
 }
 
 #FilterPanel{
@@ -185,6 +195,17 @@ svg{
     width: 65%;
 	border: black 2px solid;
     background: #383838bd;
+}
+
+#FilterPanelHeader {
+	text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2em;
+    color: #cecece45;
+    margin-left: 15px;
+    margin-top: 5px;
+    position: absolute;
+	width: 7em;
 }
 
 #FiltersList{
@@ -276,6 +297,15 @@ header > h1 {
 	cursor: pointer;
 }
 
+#HeadingFilterText {
+	font-size: 0.9rem;
+	margin-bottom: 2px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Oswald', sans-serif;
+}
+
 .select2-container {
 	width: 200px !important;
 }
@@ -364,8 +394,7 @@ hr {
 	bottom: 10px;
     top: 0px;
 	user-select: text;
-	overflow-x: auto;
-	overflow-y: hidden;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	max-width: 100%;
@@ -379,6 +408,7 @@ hr {
     display: flex;
     flex: 1 0 90%;
 	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 .insertedPage{
@@ -391,6 +421,10 @@ hr {
 
 .broken-link:hover{
 	text-decoration: none !important;
+}
+
+.firstHeading{
+	display: inline-block;
 }
 
 #InsertedPageOuter{
@@ -448,6 +482,7 @@ hr {
 	pointer-events: none;
 	flex: 0 1 38px;
 	z-index: 10;
+	overflow-x: hidden;
 }
 
 #ExternalLinkGroup {
@@ -478,10 +513,10 @@ button > img{
 #RelationshipSelector{
     position: fixed;
     bottom: 10px;
-    border: black solid 2px;
     padding: 10px;
-    background: #bebebe9e;
+    background: #bebebe52;
 	color: black;
+	border-radius: 8px;
 }
 
 #RelationshipSelector > span{
@@ -489,6 +524,7 @@ button > img{
     display: block;
     font-weight: 500;
     font-size: 1.2rem;
+	color: white;
 }
 
 input[type=checkbox]{

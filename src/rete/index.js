@@ -15,6 +15,29 @@ import {setWindowHistory} from '../index.js';
 import components from './nodes';
 import './style.css';
 
+export function toggleFiltersPanel(){
+	$("#FilterPanel").toggleClass('out');
+	if($("#FilterPanel").hasClass('out')){
+		$("#ShowFiltersButton").addClass("btn-danger");
+		$("#ShowFiltersButton").removeClass("btn-light");
+		$("#ShowFiltersButton").attr("title", "Close the filters panel");
+		$("#ShowFiltersButton").text("X");
+	}
+	else{
+		$("#ShowFiltersButton").addClass("btn-light");
+		$("#ShowFiltersButton").removeClass("btn-danger");
+		$("#ShowFiltersButton").attr("title", "Open the filters panel");
+		$("#ShowFiltersButton").text("Change Filters");
+	}
+}
+
+export function closeFiltersPanel(){
+	$("#FilterPanel").removeClass('out');
+	$("#ShowFiltersButton").addClass("btn-light");
+	$("#ShowFiltersButton").removeClass("btn-danger");
+	$("#ShowFiltersButton").text("Change Filters");
+}
+
 export default class ReteFilterModule extends React.Component {
 	constructor(props){
 		super(props);
@@ -33,8 +56,7 @@ export default class ReteFilterModule extends React.Component {
 	}
 
 	filtersButtonClick(event){
-		var selector = $("#ShowFiltersButton").data("target");
-		$(selector).toggleClass('out');
+		toggleFiltersPanel();
 		setWindowHistory(true);
 	}
 	
@@ -101,8 +123,9 @@ export default class ReteFilterModule extends React.Component {
 	render(){
 		return (
 		<>
-			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" style={{display: "inline-block"}} className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
+			<button onClick={this.filtersButtonClick.bind(this)} title="Open the filters panel" id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
+				<div id="FilterPanelHeader">Filters Panel</div>
 				<div id="rete"></div>
 			</div>
 		</>

@@ -11,6 +11,7 @@ export default class SearchBox extends React.Component {
 
     getOptions(){ //get all the options for the option text
         let options = [];
+		options.push(<option key="BLANKER" value=""></option>)
         Patterns.forEach((pattern, i) =>
             options.push(<option key={i + "_Pattern"} data-type={"Pattern"} value={pattern.Title}>{pattern.Title}</option>)
         );
@@ -34,6 +35,7 @@ export default class SearchBox extends React.Component {
             allowClear: true,
             placeholder: "Search...",
 			tags: true,
+			SelectOnClose: false,
 			createTag: function (params) {
 				return {
 					id: "GenericSearch:" + params.term,
@@ -46,9 +48,11 @@ export default class SearchBox extends React.Component {
         });
 		
 		let component = this;
+		let searchBoxRef = this.refs["SearchBox"];
 		
 		$(this.refs["SearchBox"]).on('select2:select', function (e) {
 			component.searchButtonClicked(null);
+			$(searchBoxRef).val([]).trigger('change');
 		});
 		
 		$(this.refs["SearchBox"]).val(null).trigger('change');
@@ -76,7 +80,7 @@ export default class SearchBox extends React.Component {
     render(){
         return(
             <>
-                <select ref="SearchBox" id="SearchBox" value={this.props.value} className="SearchBox">
+                <select ref="SearchBox" id="SearchBox" className="SearchBox">
                     {this.getOptions()}
                 </select>
                 <button id="SearchButton" className="btn btn-light" onClick={this.searchButtonClicked.bind(this)}>Display</button>
