@@ -18,11 +18,13 @@ export function toggleFiltersPanel(){
 	if($("#FilterPanel").hasClass('out')){
 		$("#ShowFiltersButton").addClass("btn-danger");
 		$("#ShowFiltersButton").removeClass("btn-light");
+		$("#ShowFiltersButton").attr("title", "Close the filters panel");
 		$("#ShowFiltersButton").text("X");
 	}
 	else{
 		$("#ShowFiltersButton").addClass("btn-light");
 		$("#ShowFiltersButton").removeClass("btn-danger");
+		$("#ShowFiltersButton").attr("title", "Open the filters panel");
 		$("#ShowFiltersButton").text("Change Filters");
 	}
 }
@@ -108,7 +110,7 @@ export default class ReteFilterModule extends React.Component {
 	render(){
 		return (
 		<>
-			<button onClick={this.filtersButtonClick.bind(this)} id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
+			<button onClick={this.filtersButtonClick.bind(this)} title="Open the filters panel" id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
 				<div id="FilterPanelHeader">Filters Panel</div>
 				<div id="rete"></div>

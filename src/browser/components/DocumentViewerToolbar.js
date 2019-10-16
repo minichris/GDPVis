@@ -92,7 +92,7 @@ export default class DocumentViewerToolbar extends React.Component{
 					<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(this.props.pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
 					<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(this.props.pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
 				</div>
-				<button onClick={this.closeButtonClick.bind(this)} title="Close" id="TocToggleButton" className="btn btn-danger">X</button>
+				<button onClick={this.closeButtonClick.bind(this)} title="Close the document viewer" id="TocToggleButton" className="btn btn-danger">X</button>
 			</div>
 		);
 	}
