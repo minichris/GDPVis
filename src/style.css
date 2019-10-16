@@ -35,6 +35,10 @@
 
 */
 
+form {
+	margin-block-end: 0em;
+}
+
 :root {
 	--bgColor: #434343;
 	--bgColor2: #666666;
@@ -480,10 +484,10 @@ button > img{
 #RelationshipSelector{
     position: fixed;
     bottom: 10px;
-    border: black solid 2px;
     padding: 10px;
-    background: #bebebe9e;
+    background: #bebebe52;
 	color: black;
+	border-radius: 8px;
 }
 
 #RelationshipSelector > span{
@@ -491,6 +495,7 @@ button > img{
     display: block;
     font-weight: 500;
     font-size: 1.2rem;
+	color: white;
 }
 
 input[type=checkbox]{
