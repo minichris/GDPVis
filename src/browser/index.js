@@ -34,7 +34,6 @@ export class DocumentViewer extends React.Component{
 				document.getElementById("DocumentViewer").style.display = "flex";
 				document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
 				document.getElementById("DocumentViewer").style.minWidth = null;
-				document.getElementById("DocumentViewer").style.padding = "10px 10px 10px 0px"
 				document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
 				
 				let scrollableElement = document.querySelector("#DocumentContainer");
@@ -48,7 +47,6 @@ export class DocumentViewer extends React.Component{
 			else{
 				document.getElementById("DocumentViewer").style.width = "0"
 				document.getElementById("DocumentViewer").style.minWidth = "0"
-				document.getElementById("DocumentViewer").style.padding = "0px"
 				document.getElementById("DocumentViewer").style.borderWidth = "0px"
 				setTimeout(function(){
 					document.getElementById("DocumentViewer").style.display = "none";			

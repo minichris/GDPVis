@@ -388,7 +388,7 @@ hr {
 #Content > #DocumentViewer{
 	position: absolute;
 	width: 0%;
-	transition: width 0.5s, border-width 0.5s, padding 0.5s;
+	transition: width 0.5s, border-width 0.5s, margin 0.5s;
 	transition-timing-function: ease;
     right: 0;
 	bottom: 10px;
@@ -400,15 +400,19 @@ hr {
 	max-width: 100%;
 	min-width: min-content;
 	z-index: 200;
+	padding: 0;
+	margin: 70px 10px 10px 0px;
+	box-shadow: #00000024 2px 2px 5px 7px;
 }
 
 #DocumentContainer{
 	background: #666666;
-    border: black solid 2px;
+    border: #757575 solid 2px;
     display: flex;
     flex: 1 0 90%;
 	overflow-y: scroll;
 	overflow-x: hidden;
+	box-shadow: #00000026 5px 5px 4px 0px;
 }
 
 .insertedPage{
@@ -440,8 +444,8 @@ hr {
     border-left-style: solid;
     border-left-width: 6px;
     cursor: ew-resize;
-    bottom: 56px;
-    top: 12px;
+    bottom: 45px;
+    top: 0px;
     position: absolute;
 }
 
@@ -476,12 +480,13 @@ hr {
 /* Document Viewer Toolbar Stuff */
 
 #DocumentViewerToolbar{
-	margin-top: 5px;
+	padding: 5px;
 	display: flex;
     justify-content: space-between;
 	pointer-events: none;
-	flex: 0 1 38px;
-	z-index: 10;
+	flex: 0 1 45px;
+	z-index: 10;    
+	background: #666666;
 	overflow-x: hidden;
 }
 
@@ -569,6 +574,11 @@ input[type=checkbox]{
 #DocumentViewerOpenButton:hover{
 	background-color: var(--linkBlueSelf);
 	color: var(--linkBlueSelf);
+}
+
+#DocumentViewerOpenButton:active{
+	background-color: #ffd92c;
+	color: #ffd92c;
 }
 
 /*
