@@ -82,15 +82,60 @@ export default class DocumentViewerToolbar extends React.Component{
 		global.docViewerComponent.displayDocumentViewer(false);
 	}
 	
+	getTableOfContentTitle(){
+		if(!this.props.pageTitle.includes("Special:")){
+			return "Toggle Table of Contents panel";
+		}
+		else{
+			return "This document doesn't have a Table of Contents";
+		}
+	}
+	
+	getOrginalPageButtonTitle(){
+		if(getOrginalPageLocation(this.props.pageTitle)){
+			return "Visit original article";
+		}
+		else{
+			return "This page is unique to VGTropes";		
+		}
+	}
+	
+	getEditPageButtonTitle(){
+		if(getEditPageLocation(this.props.pageTitle)){
+			return "Edit original article";
+		}
+		else{
+			return "This page can not be edited";		
+		}
+	}
+	
+	getDiscussionButtonTitle(){
+		if(getDiscussionPageLocation(this.props.pageTitle)){
+			return "Visit discussion page";
+		}
+		else{
+			return "This page doesn't have a discussion page";		
+		}
+	}
+	
+	getHistoryPageButtonTitle(){
+		if(getHistoryPageLocation(this.props.pageTitle)){
+			return "Visit history page";
+		}
+		else{
+			return "This page doesn't have a history page";		
+		}
+	}
+	
 	render(){
 		return (
 			<div id="DocumentViewerToolbar">
-				<button onClick={this.tocToggleButtonClick.bind(this)} disabled={this.props.pageTitle.includes("Special:")} title="Toggle Table of Contents Pane" id="TocToggleButton" className="btn btn-light">ToC</button>
+				<button onClick={this.tocToggleButtonClick.bind(this)} disabled={/*this.props.pageTitle.includes("Special:")*/false} title={this.getTableOfContentTitle()} id="TocToggleButton" className="btn btn-light">ToC</button>
 				<div id="ExternalLinkGroup">
-					<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(this.props.pageTitle)} title="Visit original article" id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
-					<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(this.props.pageTitle)} title="Edit original article" id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
-					<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(this.props.pageTitle)} title="Visit discussion page" id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
-					<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(this.props.pageTitle)} title="Visit history page" id="HistoryPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
+					<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(this.props.pageTitle)} title={this.getOrginalPageButtonTitle()} id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
+					<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(this.props.pageTitle)} title={this.getEditPageButtonTitle()} id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
+					<button onClick={this.discussionPageButtonClick.bind(this)} disabled={!getDiscussionPageLocation(this.props.pageTitle)} title={this.getDiscussionButtonTitle()} id="DiscussionPageButton" className="btn btn-light"><img src="icons/Discussion.png" /></button>
+					<button onClick={this.historyPageButtonClick.bind(this)} disabled={!getHistoryPageLocation(this.props.pageTitle)} title={this.getHistoryPageButtonTitle()} id="HistoryPageButton" className="btn btn-light"><img src="icons/History.png" /></button>
 				</div>
 				<button onClick={this.closeButtonClick.bind(this)} title="Close the document viewer" id="TocToggleButton" className="btn btn-danger">X</button>
 			</div>

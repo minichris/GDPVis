@@ -48,7 +48,7 @@ export default class SpecialPage extends React.Component {
         			<h2>Q&A</h2>
         			<i>Some pages look different to the original wiki, why is that?</i>
 					<br />
-						The game pages and category pages you find on this system are generated from the patterns in this system, rather then using the wiki’s own pages. Also, the pattern information in this system is only updated every so often, which means any recent changes on the wiki will take some time to propagate to this visualization. Don’t worry, edits to the wiki will get here eventually!
+						The game pages and category pages you find on this system are generated from the patterns in this system, rather then using the wiki’s own pages. Games which don't appear on any pattern page are not found in this system. Also, the pattern information in this system is only updated every so often, which means any recent changes on the wiki will take some time to propagate to this visualization. Don’t worry, edits to the wiki will get here eventually!
 					<br /><br />
 					<i>Where did you get the icons?</i>
 					<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>

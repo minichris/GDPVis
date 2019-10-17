@@ -321,13 +321,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #GraphItemCount {
-	bottom: 10px;
-    left: 0px;
-    right: 0px;
-    text-align: center;
+	top: 45px;
+    left: 10px;
+    font-size: 0.9em;
     position: fixed;
-    display: block;
     pointer-events: none;
+}
+
+.btn:disabled{
+	background-image: url("/icons/diagonal.png");
+	background-size: cover;
+	cursor: not-allowed;
 }
 
 /* Tooltip Stuff */
