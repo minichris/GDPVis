@@ -31,6 +31,7 @@ $( document ).ready(function() {
 	global.graphComponent = ReactDOM.render(<Graph ToolTipComponent={toolTipComponent} WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
 	requiredDataLoadedPromise.then(function() {
 		$("#LoadingAjax").hide();
+		$("body").addClass("fullyloaded");
 		var seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
 		

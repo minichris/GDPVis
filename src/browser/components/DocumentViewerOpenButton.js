@@ -11,7 +11,7 @@ export default class DocumentViewerOpenButton extends React.Component{
 	
 	render(){
 		return(
-			<div onClick={this.documentOpenButtonClick.bind(this)} id="DocumentViewerOpenButton" title="Open the document viewer" augmented-ui="tl-clip tr-clip b-clip exe"><span>Open Document Viewer</span></div>
+			<div onClick={this.documentOpenButtonClick.bind(this)} id="DocumentViewerOpenButton" title="Open the document viewer" augmented-ui="tl-clip tr-clip b-clip exe">Open Document Viewer</div>
 		);
 	}
 }
