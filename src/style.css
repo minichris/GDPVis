@@ -590,12 +590,18 @@ body.fullyloaded #Content > #DocumentViewerOpenButtonOuter{
 	cursor: pointer;
 }
 
-#DocumentViewerOpenButton:hover, #BackButton:hover{
+#BackButton.disabled{
+	background-image: url(/icons/diagonal.png);
+    background-size: cover;
+    cursor: not-allowed;
+}
+
+#DocumentViewerOpenButton:hover, #BackButton.enabled:hover{
 	background-color: var(--linkBlueSelf);
 	color: var(--linkBlueSelf);
 }
 
-#DocumentViewerOpenButton:active, #BackButton:active{
+#DocumentViewerOpenButton:active, #BackButton.enabled:active{
 	background-color: #ffd92c;
 	color: #ffd92c;
 }
