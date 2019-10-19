@@ -557,12 +557,11 @@ input[type=checkbox]{
 	transition: background-color 0.5s ease, color 0.5s ease;
     background-color: #757575;
     color: #757575;
-    top: 40vh;
-    height: 20vh;
-    line-height: 19vh;
-    margin-right: 10px;
+    top: 35vh;
+    width: 20vh;
+    line-height: 28px;
     padding: 5px;
-    width: 39px;
+    height: 39px;
     text-align: center;
     font-size: 2em;
     --aug-border: 2px;
@@ -570,10 +569,17 @@ input[type=checkbox]{
     --aug-border-bg: #666666;
     --aug-inset-bg: #666666;
     --aug-tl: 15px;
-    --aug-bl: 15px;
-    --aug-r: 5px;
+    --aug-tr: 15px;
+    --aug-b: 5px;
     font-weight: bold;
 	pointer-events: all;
+	transform: rotate(-90.0deg);
+	transform-origin: right bottom 0;
+    margin-right: 10px;
+}
+
+#DocumentViewerOpenButton > span {
+    font-size: 11px;
 }
 
 #DocumentViewerOpenButton:hover{
