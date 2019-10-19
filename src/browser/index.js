@@ -101,9 +101,9 @@ export class DocumentViewer extends React.Component{
 					global.updateReteFiltersFromQuery(linkClickedTitle);
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
+					setWindowHistory(false); //add the previous state to the history
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 					global.docViewerComponent.setState({title: linkClickedTitle});
-					setWindowHistory(false);
 				}
 			}
 		}

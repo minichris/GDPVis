@@ -2,38 +2,115 @@
 //The following section controls the saving and loading Filters from the URL
 //-------------------------------------------------------------------------
 
-export class InternalHistory {
-	constructor(){
-		this.InternalHistory = [];
+import React from "react";
+import {initializeFromStateObject} from './index.js';
+
+export class BackButtonComponent extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			InternalHistory: []
+		}
 	}
 	
 	getState(){
-		return(this.InternalHistory[this.InternalHistory.length - 1])
+		return(this.state.InternalHistory[this.state.InternalHistory.length - 1])
 	}
 	
 	pushState(stateObject){
-		this.InternalHistory.push(stateObject);
+		if(this.currentLastState == stateObject){
+			console.warn("Tried to push state which is same as current state, ignored.");
+			return;
+		}
+		
+		if(global.ignoreSettingHistoryOnce){
+			console.warn("Tried to set history while we are ignoring one set of the history, ignored.");
+			global.ignoreSettingHistoryOnce = false;
+			return;
+		}
+		
+		this.setState({
+			InternalHistory: this.state.InternalHistory.concat(stateObject)
+		});
+			
 		const dataUrl = encodeJSONtoString(stateObject)
 		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
-		console.log("Pushed state to history", stateObject, this.InternalHistory);
+		console.log("Pushed state to history", stateObject, this.state.InternalHistory);
 	}
 	
-	replaceState(stateObject){
-		this.InternalHistory[this.InternalHistory.length - 1] = stateObject;
+	replaceState(stateObject){		
+		var historyArr = [...this.state.InternalHistory];
+		historyArr[historyArr.length - 1] = stateObject;
+		this.setState({
+			InternalHistory: historyArr
+		});
+		
 		const dataUrl = encodeJSONtoString(stateObject)
 		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
-		console.log("Replaced state in history", stateObject, this.InternalHistory);
+		console.log("Replaced state in history", stateObject, this.state.InternalHistory);
+	}
+	
+	currentLastState(){
+		if(this.state.InternalHistory.length){
+			return this.state.InternalHistory.slice(-1)[0];
+		}
+		else{
+			return null;
+		}
 	}
 	
 	goBack(){
-		this.InternalHistory.pop();
-		const stateObject = this.InternalHistory[this.InternalHistory.length - 1];
+		global.ignoreSettingHistoryOnce = true;
+		var historyArr = this.state.InternalHistory.slice(0); //Copy the array
+		historyArr.pop(); //remove the last element of the array (the current state)
+		this.setState({
+			InternalHistory: historyArr
+		});
+		console.log("Current state is: ", this.currentLastState());
+		
+		const stateObject = this.currentLastState();
 		const dataUrl = encodeJSONtoString(stateObject);
 		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
-		console.log("Popped state in history", this.InternalHistory);
+		console.log("Popped state in history, going back to", stateObject);
+		
+		initializeFromStateObject(stateObject);
+		
 		return stateObject;
 	}
 	
+	backButtonClick(event){
+		if(this.currentLastState()){
+			this.goBack();
+		}
+	}
+	
+	backButtonTitle(){
+		var previousStateTexts = [];
+		for(var i = 0; i < (Math.min(5, this.state.InternalHistory.length)); i++){
+			var pageTitle = this.state.InternalHistory[i].currentPage;
+			var pageFiltersCount = Object.values(this.state.InternalHistory[i].filters.nodes).length;
+			previousStateTexts.push("\n(" + (i+1) + ") " + pageTitle + " with " + pageFiltersCount + " filter nodes");
+		}
+		if(this.state.InternalHistory.length > 5){
+			previousStateTexts.push("\n...");
+		}
+		if(this.state.InternalHistory.length > 0){
+			return "Click to go back. There is " + this.state.InternalHistory.length + " states in history. The last 5 are: " + previousStateTexts;
+		}
+		else{
+			return "Click to go back. There is nothing in the history."
+		}
+	}
+	
+	render(){
+		var disabledClass = "disabled";
+		if(this.state.InternalHistory.length > 0){
+			disabledClass = "enabled";
+		}
+		return(
+			<div onClick={this.backButtonClick.bind(this)} className={disabledClass} id="BackButton" title={this.backButtonTitle()} augmented-ui="tl-clip tr-clip b-clip exe">🢃</div>
+		);
+	}
 }
 
 export function getURLasJSON(){

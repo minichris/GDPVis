@@ -137,7 +137,7 @@ export class Graph extends React.Component{
 		if(nodesData.length == this.prevNodesCount && linksData.length == this.prevLinksCount){
 			return;
 		}
-		
+		setWindowHistory(false); //add the previous state to the history
 		this.prevNodesCount = nodesData;
 		this.prevLinksCount = linksData;
 		
@@ -487,6 +487,7 @@ var currentSelectionID, prevSelectionID;
 //function which handles changing the currently selected pattern
 export function ChangePatternSelection(currentSelectionID){
 	if(currentSelectionID){
+		setWindowHistory(false); //add the previous state to the history
 		global.docViewerComponent.displayDocumentViewer(true);
 		
 		//handle the highlighted node
@@ -498,7 +499,6 @@ export function ChangePatternSelection(currentSelectionID){
 			prevSelectionID = currentSelectionID;
 			//handle the document DocumentViewer
 			global.docViewerComponent.setState({title: currentSelectionID});
-			setWindowHistory(true);
 		}
 	}
 	else{

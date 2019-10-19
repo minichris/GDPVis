@@ -16,16 +16,18 @@ import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 import getExampleData from './rete/exampledata.js';
-import {getURLasJSON, InternalHistory} from './history.js';
+import {BackButtonComponent, getURLasJSON, InternalHistory} from './history.js';
 
 var reteFilterComponent, currentlyFilteredData = [], prevFilteredData;
-var historyObj = new InternalHistory;
+var historyObj;
+global.ignoreSettingHistoryOnce = true;
 
 $( document ).ready(function() {
 	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = getAllData(); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
 	ReactDOM.render(<DocumentViewerOpenButton />, document.getElementById("DocumentViewerOpenButtonOuter"));
+	historyObj = ReactDOM.render(<BackButtonComponent />, document.getElementById("BackButtonOuter"));
 	var warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
 	var toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
 	global.graphComponent = ReactDOM.render(<Graph ToolTipComponent={toolTipComponent} WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
@@ -38,10 +40,11 @@ $( document ).ready(function() {
 		loadFiltersorDefaults();
 		
 		$("body > header > h1").click(function(){
-			global.docViewerComponent.setState({
-				title: "Special:VGTropes"
-			});
-			global.docViewerComponent.displayDocumentViewer(true);
+			var pageJson = [];
+			pageJson["filters"] = getExampleData();
+			pageJson["currentPage"] = "Special:VGTropes";
+			initializeFromStateObject(pageJson);
+			
 		});
 		
 		$(window).on('popstate',function(event) {
@@ -54,12 +57,12 @@ global.updateReteFiltersFromQuery = function(query){
 	let pageType = getPageType(query);
 	let template = updateReteComponentFromSearch(reteFilterComponent, pageType, query);
 	if(!query.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
+		setWindowHistory(false); //add the previous state to the history
 		global.docViewerComponent.setState({title: query});
 		global.docViewerComponent.displayDocumentViewer(true);
-		setWindowHistory(false, {currentPage: query, filters: template});
 	}
 	else{
-		setWindowHistory(false, {currentPage: global.docViewerComponent.state.title, filters: template});
+		setWindowHistory(false); //add the previous state to the history
 	}
 }
 
@@ -78,7 +81,6 @@ global.refreshGraph = function(filteredData){
 			dataType = null;
 		}
 		global.graphComponent.setState({displayData: filteredData, dataType: dataType});
-		setWindowHistory(false);
 	}
 }
 
@@ -115,7 +117,7 @@ export function setWindowHistory(replace, forceSaveData){
 			else{
 				historyObj.pushState(saveData);
 			}
-			console.log("Success in setWindowHistory()");
+			console.log("Success in setWindowHistory()", historyObj.state.InternalHistory);
 		}
 		else{
 			throw(new Error("Nodes length is not greater than 0"));
@@ -127,6 +129,12 @@ export function setWindowHistory(replace, forceSaveData){
 	}
 }
 
+export function initializeFromStateObject(stateObject){
+	reteFilterComponent.initialize(stateObject["filters"]);
+	docViewerComponent.setState({title: stateObject["currentPage"]});
+	global.docViewerComponent.displayDocumentViewer(true);
+}
+
 function loadFiltersorDefaults(){	
 	let pageJson = getURLasJSON();
 	if(!pageJson){ //if can't get URL as JSON, use default filters
@@ -135,7 +143,5 @@ function loadFiltersorDefaults(){
 		pageJson["currentPage"] = "Special:VGTropes";
 	}
 	console.log("Loading state from url or defaults", pageJson);
-	reteFilterComponent.initialize(pageJson["filters"]);
-	docViewerComponent.setState({title: pageJson["currentPage"]});
-	global.docViewerComponent.displayDocumentViewer(true);
+	initializeFromStateObject(pageJson);
 }

@@ -57,7 +57,6 @@ export default class ReteFilterModule extends React.Component {
 
 	filtersButtonClick(event){
 		toggleFiltersPanel();
-		setWindowHistory(true);
 	}
 	
 	componentDidMount(){
