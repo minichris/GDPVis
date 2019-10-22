@@ -27,7 +27,7 @@ export default class VgtropesNode extends Node {
 	getButtonTitle(type, type2){
 		const { node, bindSocket, bindControl } = this.props;
 		if(!node.userimmutable){
-			return type + "this node";
+			return type + " this node";
 		}
 		else{
 			return "This node cannot be " + type2;
