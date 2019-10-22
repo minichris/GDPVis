@@ -1,0 +1,20 @@
+.node .toolbar{
+    margin: 5px;
+    float: right;
+}
+
+
+.node .toolbar > .clone, .node .toolbar > .delete{
+	width: 1.75em;
+    height: 1.75em;
+    padding: 2px;
+	display: inline-block;
+}
+
+.node .toolbar > .clone{
+	margin-right: 5px;
+}
+
+.node .toolbar > .delete{
+	
+}

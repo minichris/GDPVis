@@ -10,6 +10,8 @@ import AreaPlugin from 'rete-area-plugin';
 import ReactRenderPlugin from 'rete-react-render-plugin';
 import LifecyclePlugin from 'rete-lifecycle-plugin';
 
+import VgtropesNode from './nodetemplate.js';
+
 import {setWindowHistory} from '../index.js';
 
 import components from './nodes';
@@ -76,7 +78,9 @@ export default class ReteFilterModule extends React.Component {
 			scaleExtent: { min: 0.25, max: 1 },
 			translateExtent: { width: 6000, height: 3500 }
 		});
-		this.editor.use(ReactRenderPlugin);
+		this.editor.use(ReactRenderPlugin, {
+			component: VgtropesNode
+		});
 		
 		components.list.map(c => {
 			this.editor.register(c);
