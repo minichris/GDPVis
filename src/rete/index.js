@@ -71,7 +71,20 @@ export default class ReteFilterModule extends React.Component {
 		this.editor = new Rete.NodeEditor('tasksample@0.1.0', document.querySelector('#rete'));
 		this.editor.use(AlightRenderPlugin);
 		this.editor.use(ConnectionPlugin);
-		this.editor.use(ContextMenuPlugin);
+		this.editor.use(ContextMenuPlugin, {
+			nodeItems: node => {
+				if (node.userimmutable) {
+					return {
+						'Delete': false,
+						'Clone': false,
+						'Cannot be deleted or cloned'(){}
+					};
+				}
+				else{
+					return {};
+				}
+			}
+		});
 		this.editor.use(LifecyclePlugin);
 		this.editor.use(AreaPlugin, {
 			snap: false,
@@ -114,7 +127,7 @@ export default class ReteFilterModule extends React.Component {
 		$(document).keyup(function (e) {
 			if(e.keyCode == 46 && $("#FilterPanel").hasClass("out")) {
 				selfEditor.nodes.forEach(function(node){
-					if(selfEditor.selected.list.includes(node)){
+					if(selfEditor.selected.list.includes(node) && !node.userimmutable){
 						selfEditor.removeNode(node);
 					}
 				});

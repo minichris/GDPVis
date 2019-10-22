@@ -8,17 +8,30 @@ import './nodetemplate.css';
 export default class VgtropesNode extends Node {
 	deleteNodeButtonClicked(){
 		const { node, bindSocket, bindControl, editor } = this.props;
-		editor.removeNode(node);
+		if(!node.userimmutable){
+			editor.removeNode(node);
+		}
 	}
 	
 	cloneNodeButtonClicked(){
-		console.log(this.props);
 		const { node, bindSocket, bindControl, editor } = this.props;
 		const { name, position: [x, y], ...params } = node;
-        const component = editor.components.get(name);
-		createNode(component, { ...params, x: x + 10, y: y + 10 }).then(function(newnode){
-			editor.addNode(newnode);
-		});
+		const component = editor.components.get(name);
+		if(!node.userimmutable){
+			createNode(component, { ...params, x: x + 10, y: y + 10 }).then(function(newnode){
+				editor.addNode(newnode);
+			});
+		}
+	}
+	
+	getButtonTitle(type, type2){
+		const { node, bindSocket, bindControl } = this.props;
+		if(!node.userimmutable){
+			return type + "this node";
+		}
+		else{
+			return "This node cannot be " + type2;
+		}
 	}
 	
 	render() {
@@ -28,8 +41,8 @@ export default class VgtropesNode extends Node {
 		  <div className={`node ${selected}`}>
 			<div className="top">
 				<div className="toolbar">
-					<div onClick={this.cloneNodeButtonClicked.bind(this)} title="Clone this node" className="clone btn btn-light">C</div>
-					<div onClick={this.deleteNodeButtonClicked.bind(this)} title="Delete this node" className="delete btn btn-danger">X</div>
+					<button disabled={node.userimmutable} onClick={this.cloneNodeButtonClicked.bind(this)} title={this.getButtonTitle("Clone", "cloned")} className="clone btn btn-light">C</button>
+					<button disabled={node.userimmutable} onClick={this.deleteNodeButtonClicked.bind(this)} title={this.getButtonTitle("Delete", "deleted")} className="delete btn btn-danger">X</button>
 				</div>
 				<div title={node.info} className="title">{node.name}</div>
 			</div>

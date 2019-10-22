@@ -11,6 +11,7 @@ export default class DataOutputComponent extends Rete.Component {
 	builder(node) {
 		node.addInput(new Rete.Input('patternsInput', 'Data to output', sockets.wildcard));
 		node.info = "The final node in any filtering graph.";
+		node.userimmutable = true;
 		return node;
 	}
 	
