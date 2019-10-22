@@ -178,7 +178,7 @@ export class Graph extends React.Component{
 			root.attr("transform", d3.event.transform);
 			self.zoomLevel = d3.event.transform.k;
 			resizer();
-		}));
+		})).on("dblclick.zoom", null);
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
 
@@ -233,7 +233,7 @@ export class Graph extends React.Component{
 		});
 		
 		$(this.svg.current).click(function(e) { //clicking the background
-			if(e.target.parentNode.id == "GraphOuter"){
+			if(e.target.id == "MainNodeGraph" || (e.target.tagName == "text" && e.target.className.baseVal == "node")){
 				ChangePatternSelection(false); //clear pattern selection
 				closeFiltersPanel();
 			}
