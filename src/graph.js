@@ -164,7 +164,7 @@ export class Graph extends React.Component{
 		let self = this;
 
 		function resizer(){
-			let sizeMultiplyer = 0.75 / self.zoomLevel;
+			let sizeMultiplyer = 0.4 / self.zoomLevel;
 			$("g > svg > text").css("font-size", sizeMultiplyer * 0.2 + "cm");
 			$("g > svg > circle").attr("r", sizeMultiplyer * 3.5);
 			$("g > g > line").attr("stroke-width", sizeMultiplyer * 1.5);
