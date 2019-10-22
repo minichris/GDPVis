@@ -247,7 +247,6 @@ svg{
 }
 
 .CategoryPage > #CatListBox > a{
-	display: inline-block;
 	width: 100px;
 	height: 100px;
 	background: var(--bgColor2);
@@ -257,11 +256,13 @@ svg{
     padding: 4px;
 	font-size: small;
 	word-break: break-word;
+	user-select: all;
 }
 
 .CategoryPage > #CatListBox{
 	flex-wrap: wrap;
 	display: flex;
+	user-select: none;
 }
 
 #SearchButton{
