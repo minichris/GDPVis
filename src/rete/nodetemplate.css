@@ -18,3 +18,17 @@
 .node .toolbar > .delete{
 	
 }
+
+.node{
+	max-width: 350px;
+}
+
+.node.selected, .node.selected .title, 
+.node.selected .input-title,
+.node.selected .output-title {
+	color: black;
+}
+
+.node.selected > * {
+	border-color: black;
+}

@@ -2,20 +2,6 @@
 	width: 250px !important;
 }
 
-.node{
-	max-width: 350px;
-}
-
-.node.selected, .node.selected > .title, 
-.node.selected > .input > .input-title,
-.node.selected > .output > .output-title {
-	color: black;
-}
-
-.node.selected > * {
-	border-color: black;
-}
-
 #FilterPanelHeader {
 	text-transform: uppercase;
     font-family: 'Oswald', sans-serif;
