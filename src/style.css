@@ -166,12 +166,20 @@ svg{
 }
 
 #ShowFiltersButton{
-	z-index: 10;
+	z-index: 200;
     pointer-events: all;
     position: absolute;
+	display: inline-block;
+}
+
+#ShowFiltersButton.btn-light{
 	bottom: 20px;
     right: 10px;
-	display: inline-block;
+}
+
+#ShowFiltersButton.btn-danger{
+	top: 15px;
+    right: 15px;
 }
 
 #FilterPanel{
@@ -181,8 +189,8 @@ svg{
     background: #38383800;
     border-radius: 8px;
     position: fixed;
-    top: 50px;
-    bottom: 55px;
+    top: 60px;
+    bottom: 0px;
     margin: 10px;
     right: 0px;
     width: 0%;
@@ -437,7 +445,7 @@ hr {
     border-left-style: solid;
     border-left-width: 6px;
     cursor: ew-resize;
-    bottom: 45px;
+    bottom: 0px;
     top: 0px;
     position: absolute;
 }

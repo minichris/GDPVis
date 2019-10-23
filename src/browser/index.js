@@ -162,6 +162,7 @@ export class DocumentViewer extends React.Component{
 
         return(
 			<>
+				<DocumentViewerToolbar pageTitle={this.state.title} />
 				<div id="DocumentContainer">
 					<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
 					<div id ="InsertedPageOuter">
@@ -169,7 +170,6 @@ export class DocumentViewer extends React.Component{
 						{pageToRender}
 					</div>
 				</div>
-				<DocumentViewerToolbar pageTitle={this.state.title} />
 			</>
 		);
     }
