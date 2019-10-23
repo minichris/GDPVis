@@ -390,7 +390,7 @@ hr {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	max-width: 100%;
+	max-width: 99%;
 	min-width: min-content;
 	z-index: 200;
 	padding: 0;
