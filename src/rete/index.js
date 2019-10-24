@@ -58,6 +58,12 @@ export default class ReteFilterModule extends React.Component {
 	}
 
 	filtersButtonClick(event){
+		if($("#FilterPanel").hasClass('out')){
+			logger.info("User closed filter panel @ " + Math.round((new Date()).getTime() / 1000));
+		}
+		else{
+			logger.info("User opened filter panel @ " + Math.round((new Date()).getTime() / 1000));
+		}
 		toggleFiltersPanel();
 	}
 	

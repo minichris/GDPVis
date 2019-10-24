@@ -43,6 +43,7 @@ export class DocumentViewer extends React.Component{
 				$( "#ShowFiltersButton" ).ready(function() {
 					$("#ShowFiltersButton").hide();
 				});
+				logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 			}
 			else{
 				document.getElementById("DocumentViewer").style.width = "0"
@@ -52,6 +53,7 @@ export class DocumentViewer extends React.Component{
 					document.getElementById("DocumentViewer").style.display = "none";			
 				}, 500);
 				$("#ShowFiltersButton").show();
+				logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 			}
 		}
     }
@@ -105,6 +107,7 @@ export class DocumentViewer extends React.Component{
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 					global.docViewerComponent.setState({title: linkClickedTitle});
 				}
+				logger.info("User clicked a link to " + linkClickedTitle + " @ " + Math.round((new Date()).getTime() / 1000));
 			}
 		}
 		
