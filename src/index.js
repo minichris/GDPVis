@@ -1,4 +1,4 @@
-import {participantIDAlert} from './logger.js';
+import {startLogger} from './logger.js';
 import 'augmented-ui/augmented.css'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +24,7 @@ var historyObj;
 global.ignoreSettingHistoryOnce = true;
 
 $( document ).ready(function() {
-	participantIDAlert();
+	startLogger();
 	$("body").removeClass("loading");
 	var requiredDataLoadedPromise = getAllData(); 
 	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
