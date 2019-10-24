@@ -11,7 +11,8 @@ export function startLogger(){
 		success: function(){
 			let participantID = window.prompt("Please enter your participant ID");
 			Logger.setHandler(function (messages, context) {
-				$.post(logURL, { participant: participantID, message: messages[0], level: context.level });
+				let time = Math.round((new Date()).getTime() / 1000);
+				$.post(logURL, { timestamp: time, participant: participantID, message: messages[0], level: context.level });
 			});
 		}
 	});
