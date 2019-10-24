@@ -24,12 +24,14 @@ export function toggleFiltersPanel(){
 		$("#ShowFiltersButton").removeClass("btn-light");
 		$("#ShowFiltersButton").attr("title", "Close the filters panel");
 		$("#ShowFiltersButton").text("X");
+		logger.info("Filter panel opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 	}
 	else{
 		$("#ShowFiltersButton").addClass("btn-light");
 		$("#ShowFiltersButton").removeClass("btn-danger");
 		$("#ShowFiltersButton").attr("title", "Open the filters panel");
 		$("#ShowFiltersButton").text("Change Filters");
+		logger.info("Filter panel closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 	}
 }
 
@@ -58,6 +60,12 @@ export default class ReteFilterModule extends React.Component {
 	}
 
 	filtersButtonClick(event){
+		if($("#FilterPanel").hasClass('out')){
+			logger.info("User manually closed filter panel @ " + Math.round((new Date()).getTime() / 1000));
+		}
+		else{
+			logger.info("User manually opened filter panel @ " + Math.round((new Date()).getTime() / 1000));
+		}
 		toggleFiltersPanel();
 	}
 	

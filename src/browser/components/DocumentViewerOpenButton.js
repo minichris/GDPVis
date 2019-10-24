@@ -7,6 +7,7 @@ export default class DocumentViewerOpenButton extends React.Component{
 	
 	documentOpenButtonClick(event){
 		global.docViewerComponent.displayDocumentViewer(true);
+		logger.info("User manually opened document viewer panel @ " + Math.round((new Date()).getTime() / 1000));
 	}
 	
 	render(){

@@ -75,6 +75,7 @@ export default class SearchBox extends React.Component {
     searchButtonClicked(event){
         let articleSelected = $("#SearchBox").val();
         global.updateReteFiltersFromQuery(articleSelected);
+		logger.info("User used search bar to search for " + articleSelected + " @ " + Math.round((new Date()).getTime() / 1000));
     }
 
     render(){
