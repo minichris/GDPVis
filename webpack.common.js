@@ -3,6 +3,8 @@ const webpack = require('webpack');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
 	entry: ['babel-polyfill', './src/index.js'],
@@ -22,7 +24,13 @@ module.exports = {
 				from: './assets',
 				to: '.'
 			}
-		])
+		]),
+		gitRevisionPlugin,
+		new webpack.DefinePlugin({
+			'VERSION': JSON.stringify(gitRevisionPlugin.version()),
+			'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
+			'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
+		})
 	],
 
 	module: {

@@ -77,6 +77,15 @@ header{
     height: 60px;
 }
 
+#VersionString{
+	top: 62px;
+    left: 10px;
+    font-size: 0.9em;
+    position: fixed;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
 #Content{
 	display: flex;
 	flex-wrap: wrap;

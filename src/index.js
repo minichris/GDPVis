@@ -52,6 +52,9 @@ $( document ).ready(function() {
 		$(window).on('popstate',function(event) {
 			historyObj.goBack();
 		});
+		
+		let versionString = "version: " + VERSION.slice(0,8) + " " + BRANCH + " " + COMMITHASH.slice(0,7);
+		$("#VersionString").text(versionString);
 	});
 });
 
