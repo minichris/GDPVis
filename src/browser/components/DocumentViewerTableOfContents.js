@@ -15,6 +15,9 @@ export default class DocumentViewerTableOfContents extends React.Component{
 		$("#TableOfContents > div").click(function(event){
 			$("#DocumentContainer").find(":header").each(function(i, heading){
 				if(heading.innerText == event.target.innerHTML){
+					if(heading.parentElement.tagName.toLowerCase() == "summary"){
+						heading.parentElement.parentElement.setAttribute("open", true);
+					}
 					heading.scrollIntoView();
 				}
 			});

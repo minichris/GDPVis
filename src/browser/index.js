@@ -28,6 +28,7 @@ export class DocumentViewer extends React.Component{
             prevtitle: "Special:UnreachablePage"
         };
 		this.internalPageRef = React.createRef();
+		this.tableOfContentsRef = React.createRef();
 		
 		this.displayDocumentViewer = function(show){
 			if(show){
@@ -123,7 +124,9 @@ export class DocumentViewer extends React.Component{
 			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
 				eventLinkClicked(headingText, true);
 			});
-		}	
+		}
+		
+		this.tableOfContentsRef.current.forceUpdate();
     }
 	
 	shouldComponentUpdate(nextProps, nextState){
@@ -171,7 +174,7 @@ export class DocumentViewer extends React.Component{
 			<>
 				<DocumentViewerToolbar pageTitle={this.state.title} />
 				<div id="DocumentContainer">
-					<DocumentViewerTableOfContents internalPage={this.internalPageRef} />
+					<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
 					<div id ="InsertedPageOuter">
 						<DocumentResizer Parent={this} />
 						{pageToRender}
