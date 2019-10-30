@@ -18,7 +18,7 @@ import SpecialPage from './pagetypes/SpecialPage.js';
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
 
-global.documentViewerOpenSize = "65%";
+global.documentViewerOpenSize = "50%";
 
 export class DocumentViewer extends React.Component{
     constructor(props) {
@@ -43,6 +43,9 @@ export class DocumentViewer extends React.Component{
 				$( "#ShowFiltersButton" ).ready(function() {
 					$("#ShowFiltersButton").hide();
 				});
+				$("#DocumentViewerOpenButton").ready(function (){
+					$("#DocumentViewerOpenButton").hide();
+				});
 				logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 			}
 			else{
@@ -53,6 +56,7 @@ export class DocumentViewer extends React.Component{
 					document.getElementById("DocumentViewer").style.display = "none";			
 				}, 500);
 				$("#ShowFiltersButton").show();
+				$("#DocumentViewerOpenButton").show();
 				logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 			}
 		}

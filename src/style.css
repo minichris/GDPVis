@@ -251,7 +251,7 @@ svg{
 }
 
 #LoadingAjax span{
-	margin-top: 30px;
+	margin-top: 10%;
     display: inline-block;
 }
 
@@ -416,7 +416,7 @@ hr {
 }
 
 #DocumentContainer{
-	background: #666666;
+	background: #666666ab;
     border: #757575 solid 2px;
     display: flex;
     flex: 1 0 90%;
@@ -455,7 +455,7 @@ hr {
     border-left-width: 6px;
     cursor: ew-resize;
     bottom: 0px;
-    top: 0px;
+    top: 45px;
     position: absolute;
 }
 
@@ -496,8 +496,8 @@ hr {
 	pointer-events: none;
 	flex: 0 1 45px;
 	z-index: 10;    
-	background: #666666;
-	overflow-x: hidden;
+	background: #666666ab;
+	height: 45px;
 }
 
 #ExternalLinkGroup {
