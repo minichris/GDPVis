@@ -44,7 +44,7 @@ $( document ).ready(function() {
 		$("body > header > h1").click(function(){
 			var pageJson = [];
 			pageJson["filters"] = getExampleData();
-			pageJson["currentPage"] = "Special:VGTropes";
+			pageJson["currentPage"] = "Special:GDPVis";
 			initializeFromStateObject(pageJson);
 			
 		});
@@ -145,7 +145,7 @@ function loadFiltersorDefaults(){
 	if(!pageJson){ //if can't get URL as JSON, use default filters
 		pageJson = [];
 		pageJson["filters"] = getExampleData();
-		pageJson["currentPage"] = "Special:VGTropes";
+		pageJson["currentPage"] = "Special:GDPVis";
 	}
 	console.log("Loading state from url or defaults", pageJson);
 	initializeFromStateObject(pageJson);

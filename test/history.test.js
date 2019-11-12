@@ -11,7 +11,7 @@ test('Encoding and Decoding a URL should return the same data', function () {
 test('Pushing a state and then using getState should return the state', function () {
 	let historyObj = new InternalHistory;
 	let saveData = {
-		currentPage: "Special:VGTropes", //current browser page
+		currentPage: "Special:GDPVis", //current browser page
 		filters: getExampleData() //current Filters
 	}
 	historyObj.pushState(saveData);
@@ -22,7 +22,7 @@ test('Pushing a state and then using getState should return the state', function
 test('Pushing a two states then using goBack() should return the first', function () {
 	let historyObj = new InternalHistory;
 	let saveData = {
-		currentPage: "Special:VGTropes", //current browser page
+		currentPage: "Special:GDPVis", //current browser page
 		filters: getExampleData() //current Filters
 	}
 	let saveData2 = {

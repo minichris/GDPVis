@@ -3,18 +3,18 @@ import OtherPage from "./OtherPage.js";
 
 export default class SpecialPage extends React.Component {
     render(){
-        if(this.props.title == "Special:VGTropes"){ //if this is the starting page
+        if(this.props.title == "Special:GDPVis"){ //if this is the starting page
             return(
                 <div className="insertedPage SpecialPage">
-                    <h1>Welcome to VGTropes</h1>
+                    <h1>Welcome to GDPVis</h1>
                     <p>
-						Hello and welcome to VGTropes. This is a visualization tool built to help you view the information found on the GameplayDesignPatterns.org wiki, with a major focus on allowing better understanding of the links found between patterns.
+						Hello and welcome to GDPVis. This is a visualization tool built to help you view the information found on the GameplayDesignPatterns.org wiki, with a major focus on allowing better understanding of the links found between patterns.
                     </p>
                     <h2>How do I use it?</h2>
-						There are three main ways to use VGTropes...
+						There are three main ways to use GDPVis...
         			<details title="Click to expand">
 						<summary><h3>Filtering</h3></summary>
-							VGTropes has an experimental filtering system inspired by Unreal Engine 4's blueprint programming system. It uses the <a target="_blank" href="http://rete.js.org">rete.js</a> library to create the filtering graphs. <br />
+							GDPVis has an experimental filtering system inspired by Unreal Engine 4's blueprint programming system. It uses the <a target="_blank" href="http://rete.js.org">rete.js</a> library to create the filtering graphs. <br />
 							The reasoning for a somewhat more complex than usual filtering system is it is it allows the end-user (a.k.a you) a modular system of filtering for both the games and patterns found on the wiki, which allows a finer control of the output than a more standard filter setup. <br />
 							<ul>
 								<li>You can open the filtering system by clicking the "Change Filters" button in the bottom left, which only appears when the document viewer (this panel) is closed. </li>

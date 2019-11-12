@@ -1,4 +1,4 @@
-# VGTropes
+# GDPVis
 A webapp that allows you do visualize, filter and display articles from the GameplayDesignPatterns.org wiki.
 
 ## Inputting the data

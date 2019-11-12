@@ -96,7 +96,7 @@ export default class DocumentViewerToolbar extends React.Component{
 			return "Visit original article";
 		}
 		else{
-			return "This page is unique to VGTropes";		
+			return "This page is unique to GDPVis";		
 		}
 	}
 	

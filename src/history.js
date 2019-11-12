@@ -34,7 +34,7 @@ export class BackButtonComponent extends React.Component{
 		});
 			
 		const dataUrl = encodeJSONtoString(stateObject)
-		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
+		window.history.replaceState('GDPVis', 'GDPVis', '?data=' + dataUrl);
 		console.log("Pushed state to history", stateObject, this.state.InternalHistory);
 	}
 	
@@ -46,7 +46,7 @@ export class BackButtonComponent extends React.Component{
 		});
 		
 		const dataUrl = encodeJSONtoString(stateObject)
-		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
+		window.history.replaceState('GDPVis', 'GDPVis', '?data=' + dataUrl);
 		console.log("Replaced state in history", stateObject, this.state.InternalHistory);
 	}
 	
@@ -70,7 +70,7 @@ export class BackButtonComponent extends React.Component{
 		
 		const stateObject = this.currentLastState();
 		const dataUrl = encodeJSONtoString(stateObject);
-		window.history.replaceState('VGTropes', 'VGTropes', '?data=' + dataUrl);
+		window.history.replaceState('GDPVis', 'GDPVis', '?data=' + dataUrl);
 		console.log("Popped state in history, going back to", stateObject);
 		
 		initializeFromStateObject(stateObject);
