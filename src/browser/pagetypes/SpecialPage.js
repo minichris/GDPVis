@@ -62,7 +62,7 @@ export default class SpecialPage extends React.Component {
 						You can find links to the original wiki in the top bar. 
 					</details>
         			<details title="Click to expand">
-						<summary><h3>Q&A</h3></summary>
+						<summary><h3>FAQ</h3></summary>
 						<i>Some pages look different to the original wiki, why is that?</i>
 						<br />
 							The game pages and category pages you find on this system are generated from the patterns in this system, rather then using the wiki’s own pages. Games which don't appear on any pattern page are not found in this system. Also, the pattern information in this system is only updated every so often, which means any recent changes on the wiki will take some time to propagate to this visualization. Don’t worry, edits to the wiki will get here eventually!
