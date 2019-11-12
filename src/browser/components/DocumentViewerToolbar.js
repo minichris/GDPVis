@@ -130,7 +130,7 @@ export default class DocumentViewerToolbar extends React.Component{
 	render(){
 		return (
 			<div id="DocumentViewerToolbar">
-				<button onClick={this.tocToggleButtonClick.bind(this)} disabled={/*this.props.pageTitle.includes("Special:")*/false} title={this.getTableOfContentTitle()} id="TocToggleButton" className="btn btn-light">ToC</button>
+				<button onClick={this.tocToggleButtonClick.bind(this)} disabled={/*this.props.pageTitle.includes("Special:")*/false} title={/*this.getTableOfContentTitle()*/"Toggle Table of Contents panel"} id="TocToggleButton" className="btn btn-light">ToC</button>
 				<div id="ExternalLinkGroup">
 					<button onClick={this.originalPageButtonClick.bind(this)} disabled={!getOrginalPageLocation(this.props.pageTitle)} title={this.getOrginalPageButtonTitle()} id="OriginalPageButton" className="btn btn-light"><img src="icons/Original.png" /></button>
 					<button onClick={this.editPageButtonClick.bind(this)} disabled={!getEditPageLocation(this.props.pageTitle)} title={this.getEditPageButtonTitle()} id="EditPageButton" className="btn btn-light"><img src="icons/Edit.png" /></button>
