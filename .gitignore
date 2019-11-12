@@ -3,3 +3,4 @@ build/
 AllPatterns.json
 AllGames.json
 dist/
+distNoLogin/

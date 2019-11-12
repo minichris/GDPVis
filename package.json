@@ -5,6 +5,7 @@
   "main": "script-compiled.js",
   "scripts": {
     "build": "webpack --config webpack.prod.js",
+    "build_static": "webpack --config webpack.prodNoLogin.js",
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "test": "jest"
   },

@@ -27,6 +27,7 @@ module.exports = {
 		]),
 		gitRevisionPlugin,
 		new webpack.DefinePlugin({
+			'LOGIN': JSON.stringify(true),
 			'VERSION': JSON.stringify(gitRevisionPlugin.version()),
 			'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
 			'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
