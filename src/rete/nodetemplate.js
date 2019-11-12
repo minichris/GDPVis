@@ -5,7 +5,7 @@ import {createNode} from 'rete-context-menu-plugin/src/utils';
 
 import './nodetemplate.css';
 
-export default class VgtropesNode extends Node {
+export default class CustomNode extends Node {
 	deleteNodeButtonClicked(){
 		const { node, bindSocket, bindControl, editor } = this.props;
 		if(!node.userimmutable){
