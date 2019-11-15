@@ -15,6 +15,8 @@ import FilterGamesToThoseWhichSharePatternsWithAGame from './filters/FilterGames
 import FilterPatternsByThoseWithRelationToPattern from './filters/FilterPatternsByThoseWithRelationToPattern.js';
 import FilterPatternsByThoseWithoutRelationToPattern from './filters/FilterPatternsByThoseWithoutRelationToPattern.js';
 
+import FilterPatternsByThoseWithRelationToPatterns from './filters/FilterPatternsByThoseWithRelationToPatterns.js';
+
 import FilterPatternsByContent from './filters/FilterPatternsByContent.js';
 
 import ArrayUnion from './combiners/ArrayUnion.js';
@@ -36,6 +38,7 @@ export default {
 		new FilterGamesToThoseWhichSharePatternsWithAGame,
 		new FilterPatternsByThoseWithRelationToPattern,
 		new FilterPatternsByThoseWithoutRelationToPattern,
+		new FilterPatternsByThoseWithRelationToPatterns,
 		new FilterPatternsByContent,
 		new ArrayUnion,
 		new ArrayIntersection,
