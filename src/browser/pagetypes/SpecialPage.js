@@ -1,7 +1,176 @@
 import React from "react";
 import OtherPage from "./OtherPage.js";
+import $ from 'jquery';
+import {initializeFromStateObject} from '../../index.js';
+
+function complexExample(){
+	return({
+	  "id": "tasksample@0.1.0",
+	  "nodes": {
+		"1": {
+		  "id": 1,
+		  "data": {},
+		  "inputs": {},
+		  "outputs": {
+			"patterns": {
+			  "connections": [
+				{
+				  "node": 6,
+				  "input": "patternsInput",
+				  "data": {}
+				},
+				{
+				  "node": 7,
+				  "input": "patternsInput",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "position": [
+			-255.95824067908444,
+			830.1666702989344
+		  ],
+		  "name": "All Patterns"
+		},
+		"3": {
+		  "id": 3,
+		  "data": {},
+		  "inputs": {
+			"patternsInput": {
+			  "connections": [
+				{
+				  "node": 7,
+				  "output": "patterns",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "outputs": {},
+		  "position": [
+			993.4869907541898,
+			399.0971663772516
+		  ],
+		  "name": "Output Data"
+		},
+		"6": {
+		  "id": 6,
+		  "data": {
+			"Pattern": {
+			  "value": "Thematic Consistency",
+			  "label": "Thematic Consistency"
+			},
+			"RelationType": [
+			  {
+				"value": "Can Instantiate",
+				"label": "Can Instantiate"
+			  },
+			  {
+				"value": "Self Reference",
+				"label": "The pattern being related to"
+			  }
+			]
+		  },
+		  "inputs": {
+			"patternsInput": {
+			  "connections": [
+				{
+				  "node": 1,
+				  "output": "patterns",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "outputs": {
+			"patterns": {
+			  "connections": [
+				{
+				  "node": 7,
+				  "input": "patternsRelateTo",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "position": [
+			2.112715719463786,
+			389.0642452448718
+		  ],
+		  "name": "Filter Patterns By Those With Relation To Pattern"
+		},
+		"7": {
+		  "id": 7,
+		  "data": {
+			"RelationType": [
+			  {
+				"value": "Can Instantiate",
+				"label": "Can Instantiate"
+			  },
+			  {
+				"value": "Self Reference",
+				"label": "The pattern being related to"
+			  }
+			]
+		  },
+		  "inputs": {
+			"patternsInput": {
+			  "connections": [
+				{
+				  "node": 1,
+				  "output": "patterns",
+				  "data": {}
+				}
+			  ]
+			},
+			"patternsRelateTo": {
+			  "connections": [
+				{
+				  "node": 6,
+				  "output": "patterns",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "outputs": {
+			"patterns": {
+			  "connections": [
+				{
+				  "node": 3,
+				  "input": "patternsInput",
+				  "data": {}
+				}
+			  ]
+			}
+		  },
+		  "position": [
+			604.1355050151965,
+			365.6875186302759
+		  ],
+		  "name": "Filter Patterns By Those With Relation To Patterns"
+		}
+	  }
+	});
+}
 
 export default class SpecialPage extends React.Component {
+	goToComplexExample(){
+		let pageJson = [];
+		pageJson["filters"] = complexExample();
+		pageJson["currentPage"] = "Thematic Consistency";
+		initializeFromStateObject(pageJson);
+	}
+	
+	componentDidMount(){
+		let self = this;
+		document.getElementById("ComplexExampleLink").onclick = function(event) {
+			event.stopPropagation();
+			self.goToComplexExample();
+		}
+	}
+	
     render(){
         if(this.props.title == "Special:GDPVis"){ //if this is the starting page
             return(
@@ -30,7 +199,7 @@ export default class SpecialPage extends React.Component {
 					</details>	
 					<details title="Click to expand" open>
 						<summary><h3>Example Filters</h3></summary>
-						Why not check out some of these patterns for insperation?
+						Why not check out some of these filters for insperation?
 						<ul>
 						<li><a href="javascript:void(0)" title="Category:Games">
 						All Games
@@ -40,6 +209,9 @@ export default class SpecialPage extends React.Component {
 						</a></li>
 						<li><a href="javascript:void(0)" title="Category:FPS Games">
 						All games in the category "FPS Games"
+						</a></li>
+						<li><a id="ComplexExampleLink" className="ignore" href="javascript:void(0)" title="All patterns which instantiate from patterns that instantiate Thematic Consistency.">
+						Thematic Consistency, all patterns which instantiate from it, and the patterns that instantiate from those. (Warning: lots of patterns)
 						</a></li>
 						</ul>
 					</details>

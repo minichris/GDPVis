@@ -91,9 +91,11 @@ export class DocumentViewer extends React.Component{
 				}
 			}
 			else{
-				elements[i].onclick = function (event) {
-					if(event.target.attributes['title']){
-						eventLinkClicked(event.target.attributes['title'].value);
+				if(elements[i].className != "ignore"){
+					elements[i].onclick = function (event) {
+						if(event.target.attributes['title']){
+							eventLinkClicked(event.target.attributes['title'].value);
+						}
 					}
 				}
 			}
