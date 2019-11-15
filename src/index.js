@@ -38,7 +38,7 @@ $( document ).ready(function() {
 		$("body").addClass("fullyloaded");
 		var seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
 		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
-		
+		global.rete = reteFilterComponent; //for debugging
 		loadFiltersorDefaults();
 		
 		$("body > header > h1").click(function(){
