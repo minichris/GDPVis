@@ -30,7 +30,7 @@ export default class SpecialPage extends React.Component {
 					</details>	
 					<details title="Click to expand" open>
 						<summary><h3>Example Filters</h3></summary>
-						Why not check out some of these patterns for insperation?
+						Why not check out some of these filters for insperation?
 						<ul>
 						<li><a href="javascript:void(0)" title="Category:Games">
 						All Games
