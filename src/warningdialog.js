@@ -45,7 +45,7 @@ export default class WarningDialog extends React.Component{
 							</button>
 						</div>
 						<div className="modal-body">
-							The graph you are trying to display will contain <span id="TooManyDialogPatternCount">{this.state.NodeCount}</span> nodes and <span id="TooManyDialogPatternCount">{this.state.LinkCount} links</span>! This high amount may cause your browser to become unresponsive. Add a limiter to prevent this?
+							The graph you are trying to display will contain <span id="TooManyDialogPatternCount">{this.state.NodeCount}</span> nodes and <span id="TooManyDialogPatternCount">{this.state.LinkCount} links</span>! This high amount may cause your browser to become unresponsive.
 						</div>
 						<div className="modal-footer">
 							<button onClick={this.handleShowAnywayButtonClick.bind(this)} type="button" id="TooManyIgnoreButton" className="btn btn-danger">Show anyway</button>
