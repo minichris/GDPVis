@@ -166,6 +166,13 @@ svg{
 	overflow: visible;
 }
 
+#EmergencyStopButton{
+	z-index: 100;
+	display: none;
+	position: relative;
+    top: 55px;
+}
+
 #MainNodeGraph{
 	position: fixed;
     top: 0;
