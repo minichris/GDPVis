@@ -399,6 +399,7 @@ export class Graph extends React.Component{
 	
 	stopSim(){
 		this.simulation.stop();
+		$("#EmergencyStopButton").hide();
 	}
 
 	render(){		
@@ -407,7 +408,9 @@ export class Graph extends React.Component{
 				<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
 				</svg>
-				<button onClick={this.stopSim.bind(this)} title="Stops all graph physics" id="EmergencyStopButton" className="btn btn-danger">Stop graph physics</button>
+				<div id="EmergencyStopButtonContainer">
+					<button onClick={this.stopSim.bind(this)} title="Stops all graph physics" id="EmergencyStopButton" className="btn btn-danger">Stop graph physics</button>
+				</div>
 				<span id="GraphItemCount"></span>
 				{this.state.dataType == "Patterns" ? <RelationshipSelector owner={this} ref="RelationshipSelector" /> : null}
 			</div>
