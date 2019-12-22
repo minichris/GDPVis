@@ -38,6 +38,8 @@ export class Graph extends React.Component{
 		this.prevNodesCount = null;
 		this.prevLinksCount = null;
 		this.zoomLevel = 1;
+		this.showWarningLevel = 750;
+		this.simulation = null;
 	}
 
 	createPatternNodes(patterns){
@@ -141,7 +143,7 @@ export class Graph extends React.Component{
 		this.prevNodesCount = nodesData;
 		this.prevLinksCount = linksData;
 		
-		if(nodesData.length > 750 || linksData.length > 750 && !force){
+		if(nodesData.length > this.showWarningLevel || linksData.length > this.showWarningLevel && !force){
 			this.props.WarningDialogComponent.setState({
 				NodeCount: nodesData.length,
 				LinkCount: linksData.length,
@@ -154,6 +156,13 @@ export class Graph extends React.Component{
 			this.props.WarningDialogComponent.setState({
 				display: false
 			}); //make sure it is hidden if it is not needed
+		}
+		
+		if(nodesData.length > this.showWarningLevel || linksData.length > this.showWarningLevel){
+			$("#EmergencyStopButton").show();
+		}
+		else{
+			$("#EmergencyStopButton").hide();
 		}
 
 		var svg = d3.select(this.svg.current);
@@ -176,13 +185,15 @@ export class Graph extends React.Component{
 
 		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
-			self.zoomLevel = d3.event.transform.k;
-			resizer();
+			if(self.zoomLevel != d3.event.transform.k){
+				self.zoomLevel = d3.event.transform.k;
+				resizer();
+			}
 		})).on("dblclick.zoom", null);
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
 
-		var simulation = d3.forceSimulation()
+		this.simulation = d3.forceSimulation()
 			.force("link", d3.forceLink().id(function(d) { return d.id; }).strength(0.05)) //sets up the links to use the nodes ID, rather then its index in the list
 			.force("gravity", d3.forceManyBody().strength(10).distanceMin(1000)) //stops nodes from being pushed all the way to the edge
 			.force("charge", d3.forceManyBody().strength(-50).distanceMax(1500)) //stops nodes being stuck too close together
@@ -306,7 +317,7 @@ export class Graph extends React.Component{
 		
 		$("#GraphItemCount").text("Displaying " + nodesData.length + " nodes and " + linksData.length + " links.");
 
-		simulation.nodes(nodesData).on("tick", function ticked() { //Set the nodes tick function
+		this.simulation.nodes(nodesData).on("tick", function ticked() { //Set the nodes tick function
 			link
 				.attr("x1", function(d) {
 					return d.source.x;
@@ -330,7 +341,7 @@ export class Graph extends React.Component{
 				});
 		});
 
-		simulation.force("link").links(linksData); //Start the simulation of the links
+		this.simulation.force("link").links(linksData); //Start the simulation of the links
 		resizer();
 
 		function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
@@ -340,7 +351,7 @@ export class Graph extends React.Component{
 		}
 
 		function dragstarted(d) { //when the user start to drag the node with the mouse
-			if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			if (!d3.event.active) this.simulation.alphaTarget(0.3).restart();
 			d.fx = d.x;
 			d.fy = d.y;
 		}
@@ -351,7 +362,7 @@ export class Graph extends React.Component{
 		}
 
 		function dragended(d) { //when the user stops dragging the node with the mouse
-			if (!d3.event.active) simulation.alphaTarget(0);
+			if (!d3.event.active) this.simulation.alphaTarget(0);
 			d.fx = null;
 			d.fy = null;
 		}
@@ -387,13 +398,21 @@ export class Graph extends React.Component{
 			return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 		}
 	}
+	
+	stopSim(){
+		this.simulation.stop();
+		$("#EmergencyStopButton").hide();
+	}
 
-	render(){
+	render(){		
 		return(
 			<div id="GraphOuter">
 				<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
 					<g id="stillHere"></g>
 				</svg>
+				<div id="EmergencyStopButtonContainer">
+					<button onClick={this.stopSim.bind(this)} title="Stops all graph physics" id="EmergencyStopButton" className="btn btn-danger">Stop graph physics</button>
+				</div>
 				<span id="GraphItemCount"></span>
 				{this.state.dataType == "Patterns" ? <RelationshipSelector owner={this} ref="RelationshipSelector" /> : null}
 			</div>
