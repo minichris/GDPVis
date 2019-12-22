@@ -185,8 +185,10 @@ export class Graph extends React.Component{
 
 		svg.call(d3.zoom().scaleExtent([1/8, 4]).on("zoom", function(){ //Allows the graph to be zoomed and panned
 			root.attr("transform", d3.event.transform);
-			self.zoomLevel = d3.event.transform.k;
-			resizer();
+			if(self.zoomLevel != d3.event.transform.k){
+				self.zoomLevel = d3.event.transform.k;
+				resizer();
+			}
 		})).on("dblclick.zoom", null);
 
 		var color = d3.scaleOrdinal(schemeCategory10); //set the color scheme
