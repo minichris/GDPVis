@@ -22,6 +22,12 @@ module.exports = {
         "react"
     ],
     "rules": {
-		"indent": ["error", "tab"]
+		"indent": ["error", "tab"],
+		"no-mixed-spaces-and-tabs": "off",
+		"react/prop-types": "off",
+		"react/no-unescaped-entities": "off"
+    },
+	"globals": {
+        "global": false
     }
 };
