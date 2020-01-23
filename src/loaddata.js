@@ -17,7 +17,7 @@ function loadViaAjax(inputURL){
 	var request = $.ajax({
 		url: inputURL,
 		dataType: "json",
-        xhr: function () {
+		xhr: function () {
 			var xhr = new window.XMLHttpRequest();
 			xhr.addEventListener("progress", function (evt) { //progress event
 				if (evt.lengthComputable) {

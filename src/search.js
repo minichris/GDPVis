@@ -5,35 +5,35 @@ import React from "react";
 import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
 
 export default class SearchBox extends React.Component {
-    constructor(props){
-        super(props);
-    }
+	constructor(props){
+		super(props);
+	}
 
-    getOptions(){ //get all the options for the option text
-        let options = [];
+	getOptions(){ //get all the options for the option text
+		let options = [];
 		options.push(<option key="BLANKER" value=""></option>)
-        Patterns.forEach((pattern, i) =>
-            options.push(<option key={i + "_Pattern"} data-type={"Pattern"} value={pattern.Title}>{pattern.Title}</option>)
-        );
-        Games.forEach((game, i) =>
-            options.push(<option key={i + "_Game"} data-type={"Game"} value={game.name}>{game.name}</option>)
-        );
-        PatternCategories.forEach((cat, i) =>
-            options.push(<option key={i + "_PCat"} data-type={"Pattern Category"} value={cat}>{cat}</option>)
-        );
-        GameCategories.forEach((cat, i) =>
-            options.push(<option key={i + "_GCat"} data-type={"Game Category"} value={cat}>{cat}</option>)
-        );
-        return options;
-    }
+		Patterns.forEach((pattern, i) =>
+			options.push(<option key={i + "_Pattern"} data-type={"Pattern"} value={pattern.Title}>{pattern.Title}</option>)
+		);
+		Games.forEach((game, i) =>
+			options.push(<option key={i + "_Game"} data-type={"Game"} value={game.name}>{game.name}</option>)
+		);
+		PatternCategories.forEach((cat, i) =>
+			options.push(<option key={i + "_PCat"} data-type={"Pattern Category"} value={cat}>{cat}</option>)
+		);
+		GameCategories.forEach((cat, i) =>
+			options.push(<option key={i + "_GCat"} data-type={"Game Category"} value={cat}>{cat}</option>)
+		);
+		return options;
+	}
 
-    componentDidMount() {
+	componentDidMount() {
   		$(this.refs["SearchBox"]).select2({
-            width: '20%',
-            templateResult: this.formatOption,
-            minimumInputLength: 3,
-            allowClear: true,
-            placeholder: "Search...",
+			width: '20%',
+			templateResult: this.formatOption,
+			minimumInputLength: 3,
+			allowClear: true,
+			placeholder: "Search...",
 			tags: true,
 			SelectOnClose: false,
 			createTag: function (params) {
@@ -45,7 +45,7 @@ export default class SearchBox extends React.Component {
 			insertTag: function (data, tag) {
 				data.push(tag);
 			}
-        });
+		});
 		
 		let component = this;
 		let searchBoxRef = this.refs["SearchBox"];
@@ -62,30 +62,30 @@ export default class SearchBox extends React.Component {
 		$(this.refs["SearchBox"]).off('select2:select');
 	}
 
-    formatOption(option) {
-        if (!option.element) {
-            return option.text;
-        }
+	formatOption(option) {
+		if (!option.element) {
+			return option.text;
+		}
 		if(!option.element.dataset.type){
 			return null;	
 		}
-        return $('<span>' + option.element.dataset.type + ': ' + option.text + '</span>');
-    };
+		return $('<span>' + option.element.dataset.type + ': ' + option.text + '</span>');
+	}
 
-    searchButtonClicked(event){
-        let articleSelected = $("#SearchBox").val();
-        global.updateReteFiltersFromQuery(articleSelected);
+	searchButtonClicked(event){
+		let articleSelected = $("#SearchBox").val();
+		global.updateReteFiltersFromQuery(articleSelected);
 		logger.info("User used search bar to search for " + articleSelected + " @ " + Math.round((new Date()).getTime() / 1000));
-    }
+	}
 
-    render(){
-        return(
-            <div id="SearchBoxOuter">
-                <select ref="SearchBox" id="SearchBox" className="SearchBox">
-                    {this.getOptions()}
-                </select>
-                <button id="SearchButton" className="btn btn-light" onClick={this.searchButtonClicked.bind(this)}>Display</button>
-            </div>
-        );
-    }
+	render(){
+		return(
+			<div id="SearchBoxOuter">
+				<select ref="SearchBox" id="SearchBox" className="SearchBox">
+					{this.getOptions()}
+				</select>
+				<button id="SearchButton" className="btn btn-light" onClick={this.searchButtonClicked.bind(this)}>Display</button>
+			</div>
+		);
+	}
 }

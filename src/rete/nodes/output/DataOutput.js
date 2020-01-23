@@ -20,5 +20,5 @@ export default class DataOutputComponent extends Rete.Component {
 			global.refreshGraph(inputs['patternsInput'][0]);
 			return (inputs['patternsInput'][0]);
 		}
-    }
+	}
 }

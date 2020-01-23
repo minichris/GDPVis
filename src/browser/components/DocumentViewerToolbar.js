@@ -47,8 +47,8 @@ function getHistoryPageLocation(pageTitle){
 
 export default class DocumentViewerToolbar extends React.Component{
 	constructor(props) {
-        super(props);
-    }
+		super(props);
+	}
 	
 	tocToggleButtonClick(event){
 		if(document.getElementById("TableOfContents").style.display == "block"){ //if it was in the visable state, now going hidden

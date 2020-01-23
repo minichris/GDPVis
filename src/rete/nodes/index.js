@@ -26,10 +26,10 @@ import ArrayDifference from './combiners/ArrayDifference.js';
 import DataOutput from './output/DataOutput.js';
 
 export default {
-    list : [
-        new AllPatterns,
-        new AllGames,
-        new FilterPatternsByCategory,
+	list : [
+		new AllPatterns,
+		new AllGames,
+		new FilterPatternsByCategory,
 		new FilterGamesByCategory,
 		new FilterPatternsByLinkedToGame,
 		new FilterGamesByLinkedToPattern,
@@ -43,15 +43,15 @@ export default {
 		new ArrayUnion,
 		new ArrayIntersection,
 		new ArrayDifference,
-        new DataOutput
-    ],
-    get(name) {
-        const comp = this
-            .list
-            .find(item => item.name.toUpperCase() === name.toUpperCase());
+		new DataOutput
+	],
+	get(name) {
+		const comp = this
+			.list
+			.find(item => item.name.toUpperCase() === name.toUpperCase());
 
-        if (!comp) 
-            throw new Error(`Component '${name}' not found`);
-        return comp;
-    }
+		if (!comp) 
+			throw new Error(`Component '${name}' not found`);
+		return comp;
+	}
 };

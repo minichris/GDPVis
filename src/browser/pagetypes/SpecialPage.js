@@ -7,150 +7,150 @@ function complexExample(){
 	return({
 	  "id": "tasksample@0.1.0",
 	  "nodes": {
-		"1": {
+			"1": {
 		  "id": 1,
 		  "data": {},
 		  "inputs": {},
 		  "outputs": {
-			"patterns": {
+					"patterns": {
 			  "connections": [
-				{
+							{
 				  "node": 6,
 				  "input": "patternsInput",
 				  "data": {}
-				},
-				{
+							},
+							{
 				  "node": 7,
 				  "input": "patternsInput",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "position": [
-			-255.95824067908444,
-			830.1666702989344
+					-255.95824067908444,
+					830.1666702989344
 		  ],
 		  "name": "All Patterns"
-		},
-		"3": {
+			},
+			"3": {
 		  "id": 3,
 		  "data": {},
 		  "inputs": {
-			"patternsInput": {
+					"patternsInput": {
 			  "connections": [
-				{
+							{
 				  "node": 7,
 				  "output": "patterns",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "outputs": {},
 		  "position": [
-			993.4869907541898,
-			399.0971663772516
+					993.4869907541898,
+					399.0971663772516
 		  ],
 		  "name": "Output Data"
-		},
-		"6": {
+			},
+			"6": {
 		  "id": 6,
 		  "data": {
-			"Pattern": {
+					"Pattern": {
 			  "value": "Thematic Consistency",
 			  "label": "Thematic Consistency"
-			},
-			"RelationType": [
+					},
+					"RelationType": [
 			  {
-				"value": "Can Instantiate",
-				"label": "Can Instantiate"
+							"value": "Can Instantiate",
+							"label": "Can Instantiate"
 			  },
 			  {
-				"value": "Self Reference",
-				"label": "The pattern being related to"
+							"value": "Self Reference",
+							"label": "The pattern being related to"
 			  }
-			]
+					]
 		  },
 		  "inputs": {
-			"patternsInput": {
+					"patternsInput": {
 			  "connections": [
-				{
+							{
 				  "node": 1,
 				  "output": "patterns",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "outputs": {
-			"patterns": {
+					"patterns": {
 			  "connections": [
-				{
+							{
 				  "node": 7,
 				  "input": "patternsRelateTo",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "position": [
-			2.112715719463786,
-			389.0642452448718
+					2.112715719463786,
+					389.0642452448718
 		  ],
 		  "name": "Filter Patterns By Those With Relation To Pattern"
-		},
-		"7": {
+			},
+			"7": {
 		  "id": 7,
 		  "data": {
-			"RelationType": [
+					"RelationType": [
 			  {
-				"value": "Can Instantiate",
-				"label": "Can Instantiate"
+							"value": "Can Instantiate",
+							"label": "Can Instantiate"
 			  },
 			  {
-				"value": "Self Reference",
-				"label": "The pattern being related to"
+							"value": "Self Reference",
+							"label": "The pattern being related to"
 			  }
-			]
+					]
 		  },
 		  "inputs": {
-			"patternsInput": {
+					"patternsInput": {
 			  "connections": [
-				{
+							{
 				  "node": 1,
 				  "output": "patterns",
 				  "data": {}
-				}
+							}
 			  ]
-			},
-			"patternsRelateTo": {
+					},
+					"patternsRelateTo": {
 			  "connections": [
-				{
+							{
 				  "node": 6,
 				  "output": "patterns",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "outputs": {
-			"patterns": {
+					"patterns": {
 			  "connections": [
-				{
+							{
 				  "node": 3,
 				  "input": "patternsInput",
 				  "data": {}
-				}
+							}
 			  ]
-			}
+					}
 		  },
 		  "position": [
-			604.1355050151965,
-			365.6875186302759
+					604.1355050151965,
+					365.6875186302759
 		  ],
 		  "name": "Filter Patterns By Those With Relation To Patterns"
-		}
+			}
 	  }
 	});
 }
@@ -171,15 +171,15 @@ export default class SpecialPage extends React.Component {
 		}
 	}
 	
-    render(){
-        if(this.props.title == "Special:GDPVis"){ //if this is the starting page
-            return(
-                <div className="insertedPage SpecialPage">
-                    <h1>Welcome to GDPVis</h1>
-                    <p>
+	render(){
+		if(this.props.title == "Special:GDPVis"){ //if this is the starting page
+			return(
+				<div className="insertedPage SpecialPage">
+					<h1>Welcome to GDPVis</h1>
+					<p>
 						Hello and welcome to GDPVis. This is a visualization tool built to help you view the information found on the GameplayDesignPatterns.org wiki, with a major focus on allowing better understanding of the links found between patterns.
-                    </p>
-                    <h2>How do I use it?</h2>
+					</p>
+					<h2>How do I use it?</h2>
 						There are three main ways to use GDPVis...
         			<details title="Click to expand">
 						<summary><h3>Filtering</h3></summary>
@@ -201,18 +201,18 @@ export default class SpecialPage extends React.Component {
 						<summary><h3>Example Filters</h3></summary>
 						Why not check out some of these filters for insperation?
 						<ul>
-						<li><a href="javascript:void(0)" title="Category:Games">
+							<li><a href="javascript:void(0)" title="Category:Games">
 						All Games
-						</a></li>
-						<li><a href="javascript:void(0)" title="Game World Exploration">
+							</a></li>
+							<li><a href="javascript:void(0)" title="Game World Exploration">
 						All patterns relating to Game World Exploration
-						</a></li>
-						<li><a href="javascript:void(0)" title="Category:FPS Games">
+							</a></li>
+							<li><a href="javascript:void(0)" title="Category:FPS Games">
 						All games in the category "FPS Games"
-						</a></li>
-						<li><a id="ComplexExampleLink" className="ignore" href="javascript:void(0)" title="All patterns which instantiate from patterns that instantiate Thematic Consistency.">
+							</a></li>
+							<li><a id="ComplexExampleLink" className="ignore" href="javascript:void(0)" title="All patterns which instantiate from patterns that instantiate Thematic Consistency.">
 						Thematic Consistency, all patterns which instantiate from it, and the patterns that instantiate from those. (Warning: lots of patterns)
-						</a></li>
+							</a></li>
 						</ul>
 					</details>
         			<details title="Click to expand">
@@ -243,13 +243,13 @@ export default class SpecialPage extends React.Component {
 						<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 						<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 					</details>
-                </div>
-            );
-        }
-        else{
-            return(
-                <OtherPage title={this.props.title} prevtitle={this.props.prevtitle}/>
-            );
-        }
-    }
+				</div>
+			);
+		}
+		else{
+			return(
+				<OtherPage title={this.props.title} prevtitle={this.props.prevtitle}/>
+			);
+		}
+	}
 }

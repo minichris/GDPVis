@@ -19,7 +19,7 @@ class DropDownReactComponent extends React.Component {
 	handleChange(selectedOption) {
 		this.setState({ selectedOption });
 		this.props.emitter.processControlChange();
-	};
+	}
 	
 	render() {
 		const { selectedOption } = this.state;

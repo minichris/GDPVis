@@ -233,21 +233,21 @@ export class Graph extends React.Component{
 				.on("end", dragended));
 				
 		var circle = node.append("circle")
-		.attr("r", 5)
-		.attr("fill", function(d) {
-			return color(d.group);
-		});
+			.attr("r", 5)
+			.attr("fill", function(d) {
+				return color(d.group);
+			});
 			
 		node.append("text")
-		.attr("y", 3.5)
-		.attr("x", 7)
-		.attr("fill", function(d) {
-			return color(d.group);
-		})
-		.attr("text-anchor", "start")
-		.text(function(d) {
-			return d.id;
-		});
+			.attr("y", 3.5)
+			.attr("x", 7)
+			.attr("fill", function(d) {
+				return color(d.group);
+			})
+			.attr("text-anchor", "start")
+			.text(function(d) {
+				return d.id;
+			});
 		
 		$(this.svg.current).click(function(e) { //clicking the background
 			if(e.target.id == "MainNodeGraph" || (e.target.tagName == "text" && e.target.className.baseVal == "node")){
@@ -282,13 +282,13 @@ export class Graph extends React.Component{
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
-				showToolTip(false);
-			}
+				if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+					showToolTip(false);
+				}
 	    })
-		.on("click", function(d) { //Click to open the relevent article
-			ChangePatternSelection(d.id);
-		});
+			.on("click", function(d) { //Click to open the relevent article
+				ChangePatternSelection(d.id);
+			});
 
 		link.on("mouseover", function(d) {
 			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
@@ -298,21 +298,21 @@ export class Graph extends React.Component{
 				selfGraph.toolTipRef.current.setState({d: d, type: "Link"});
 			}
 		})
-		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
-			if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
-				showToolTip(false);
-			}
+			.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+				if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
+					showToolTip(false);
+				}
 	    })
-		.on("click", function(d) {
-			d3.event.stopPropagation();
-			if(selfGraph.state.tooltipEventsEnabled){
-				selfGraph.state.tooltipRequiresClickClose = true; //require click to close
-				showToolTip(true);
-				tooltip.style("left", (d3.event.pageX + 15) + "px")
-					.style("top", (d3.event.pageY - 28) + "px");
-				selfGraph.toolTipRef.current.setState({d: d, type: "LinkExpanded"});
-			}
-		});
+			.on("click", function(d) {
+				d3.event.stopPropagation();
+				if(selfGraph.state.tooltipEventsEnabled){
+					selfGraph.state.tooltipRequiresClickClose = true; //require click to close
+					showToolTip(true);
+					tooltip.style("left", (d3.event.pageX + 15) + "px")
+						.style("top", (d3.event.pageY - 28) + "px");
+					selfGraph.toolTipRef.current.setState({d: d, type: "LinkExpanded"});
+				}
+			});
 		
 		svg.on("click", function(d){
 			if(selfGraph.state.tooltipRequiresClickClose && selfGraph.state.tooltipEventsEnabled){
@@ -464,46 +464,46 @@ class RelationshipSelector extends React.Component{
 				<form>
 					<label style={{color: getRelationshipColor("Can Modulate")}}>
 						<input
-						name="modulates"
-						type="checkbox"
-						checked={this.state.modulates}
-						onChange={this.handleInputChange} />
+							name="modulates"
+							type="checkbox"
+							checked={this.state.modulates}
+							onChange={this.handleInputChange} />
 						Modulates / Modulated By
 					</label>
 					<br />
 					<label style={{color: getRelationshipColor("Can Instantiate")}}>
 						<input
-						name="instantiates"
-						type="checkbox"
-						checked={this.state.instantiates}
-						onChange={this.handleInputChange} />
+							name="instantiates"
+							type="checkbox"
+							checked={this.state.instantiates}
+							onChange={this.handleInputChange} />
 						Instantiates / Instantiated By
 					</label>
 					<br />
 					<label style={{color: getRelationshipColor("Potentially Conflicting With")}}>
 						<input
-						name="conflicts"
-						type="checkbox"
-						checked={this.state.conflicts}
-						onChange={this.handleInputChange} />
+							name="conflicts"
+							type="checkbox"
+							checked={this.state.conflicts}
+							onChange={this.handleInputChange} />
 						Potentially Conflicting
 					</label>
 					<br />
 					<label style={{color: getRelationshipColor("Possible Closure Effects")}}>
 						<input
-						name="closureeffects"
-						type="checkbox"
-						checked={this.state.closureeffects}
-						onChange={this.handleInputChange} />
+							name="closureeffects"
+							type="checkbox"
+							checked={this.state.closureeffects}
+							onChange={this.handleInputChange} />
 						Possible Closure Effects
 					</label>
 					<br />
 					<label style={{color: getRelationshipColor("Hyperlinks To")}}>
 						<input
-						name="hyperlinked"
-						type="checkbox"
-						checked={this.state.hyperlinked}
-						onChange={this.handleInputChange} />
+							name="hyperlinked"
+							type="checkbox"
+							checked={this.state.hyperlinked}
+							onChange={this.handleInputChange} />
 						Articles Hyperlinked
 					</label>
 				</form>

@@ -20,21 +20,21 @@ export default class Tooltip extends React.Component{
 		let subcomponent;
 		if(this.state.d){
 			switch(this.state.type){
-				case "Link":
-					subcomponent = (<LinkTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
-					break;
-				case "LinkExpanded":
-					subcomponent = (<LinkExpandedTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
-					break;
-				case "Games":
-					subcomponent = (<GameTooltip Game={this.state.d.id} />);
-					break;
-				case "Patterns":
-					subcomponent = (<PatternTooltip Pattern={this.state.d.id} />);
-					break;
-				default:
-					subcomponent = (<p>nothing to see here</p>);
-					break;
+			case "Link":
+				subcomponent = (<LinkTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
+				break;
+			case "LinkExpanded":
+				subcomponent = (<LinkExpandedTooltip SourcePattern={this.state.d.source.id} TargetPattern={this.state.d.target.id} />);
+				break;
+			case "Games":
+				subcomponent = (<GameTooltip Game={this.state.d.id} />);
+				break;
+			case "Patterns":
+				subcomponent = (<PatternTooltip Pattern={this.state.d.id} />);
+				break;
+			default:
+				subcomponent = (<p>nothing to see here</p>);
+				break;
 			}
 		}
 		else{

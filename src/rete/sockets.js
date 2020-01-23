@@ -11,9 +11,9 @@ games.combineWith(wildcard);
 //const gamesCats = new Socket('Game Categories Array');
 
 export default {
-    patterns,
-    games,
+	patterns,
+	games,
 	wildcard
-    //patternCats,
-    //gamesCats,
+	//patternCats,
+	//gamesCats,
 }

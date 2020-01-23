@@ -19,7 +19,7 @@ export default class CombinerBase extends Rete.Component {
 			});
 			self.update();
 		}
-	};
+	}
 	
 	disconnected(connection) {
 		let self;

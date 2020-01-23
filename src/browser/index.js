@@ -21,12 +21,12 @@ import SpecialPage from './pagetypes/SpecialPage.js';
 global.documentViewerOpenSize = "50%";
 
 export class DocumentViewer extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            title: null,
-            prevtitle: "Special:UnreachablePage"
-        };
+	constructor(props) {
+		super(props);
+		this.state = {
+			title: null,
+			prevtitle: "Special:UnreachablePage"
+		};
 		this.internalPageRef = React.createRef();
 		this.tableOfContentsRef = React.createRef();
 		
@@ -61,12 +61,12 @@ export class DocumentViewer extends React.Component{
 				logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
 			}
 		}
-    }
+	}
 	
-    componentDidUpdate(){		
+	componentDidUpdate(){		
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
-        if(scrollableElement){
+		if(scrollableElement){
 			scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
 		}
 		//setting up page links for in browser linking
@@ -129,50 +129,50 @@ export class DocumentViewer extends React.Component{
 		}
 		
 		this.tableOfContentsRef.current.forceUpdate();
-    }
+	}
 	
 	shouldComponentUpdate(nextProps, nextState){
 		return nextState.title != this.state.title;
 	}
 
-    getSnapshotBeforeUpdate(prevProps, prevState) {
-        if(prevState.title != this.state.prevtitle){
-            this.state.prevtitle = prevState.title;
-        }
-        return null;
-    }
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+		if(prevState.title != this.state.prevtitle){
+			this.state.prevtitle = prevState.title;
+		}
+		return null;
+	}
 	
-    render(){
-        let pageTitle = this.state.title;
-        if(pageTitle == null){
-            return(<div><h1>Error</h1><p>Null browser set up</p></div>);
-        }
-        console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
-        let pageToRender;
-        switch(getPageType(pageTitle)){
-            case "Pattern Category":
-            case "Game Category":
-                pageToRender = <CategoryPage ref={this.internalPageRef} title={pageTitle.replace('Category:', '')}/>;
-                break;
-            case "Game":
-                pageToRender = <GamePage ref={this.internalPageRef} title={pageTitle}/>;
-                break;
-            case "Pattern":
-                pageToRender = <PatternPage ref={this.internalPageRef} title={pageTitle}/>;
-                break;
-            case "Special":
-                pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle} prevtitle={this.state.prevtitle}/>;
-                break;
-            default:
-                pageToRender = (
-					<div ref={this.internalPageRef}>
-						<span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
-					</div>
-                );
-                break;
-        }
+	render(){
+		let pageTitle = this.state.title;
+		if(pageTitle == null){
+			return(<div><h1>Error</h1><p>Null browser set up</p></div>);
+		}
+		console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
+		let pageToRender;
+		switch(getPageType(pageTitle)){
+		case "Pattern Category":
+		case "Game Category":
+			pageToRender = <CategoryPage ref={this.internalPageRef} title={pageTitle.replace('Category:', '')}/>;
+			break;
+		case "Game":
+			pageToRender = <GamePage ref={this.internalPageRef} title={pageTitle}/>;
+			break;
+		case "Pattern":
+			pageToRender = <PatternPage ref={this.internalPageRef} title={pageTitle}/>;
+			break;
+		case "Special":
+			pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle} prevtitle={this.state.prevtitle}/>;
+			break;
+		default:
+			pageToRender = (
+				<div ref={this.internalPageRef}>
+					<span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+				</div>
+			);
+			break;
+		}
 
-        return(
+		return(
 			<div id="DocumentViewer">
 				<DocumentViewerToolbar pageTitle={this.state.title} />
 				<div id="DocumentContainer">
@@ -184,7 +184,7 @@ export class DocumentViewer extends React.Component{
 				</div>
 			</div>
 		);
-    }
+	}
 }
 
 
