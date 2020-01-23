@@ -114,10 +114,6 @@ a:hover {
 	min-height: 300px;
 }
 
-#Graph{
-	position: relative;
-}
-
 iframe{
 	width: 100%;
 	height: inherit;
@@ -336,7 +332,6 @@ summary > * {
 }
 
 #SearchBoxOuter {
-	display: inline-block;
 	float: right;
 	pointer-events: all;
 }

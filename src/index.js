@@ -7,8 +7,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import {Patterns, Games, PatternCategories, GameCategories, getAllData} from './loaddata.js';
-import WarningDialog from './warningdialog.js';
-import Tooltip from './tooltip.js';
 import {DocumentViewer, getPageType} from './browser';
 import DocumentViewerOpenButton from './browser/components/DocumentViewerOpenButton.js';
 import {Graph, ChangePatternSelection} from './graph.js';
@@ -19,48 +17,75 @@ import './style.css';
 import getExampleData from './rete/exampledata.js';
 import {BackButtonComponent, getURLasJSON, InternalHistory} from './history.js';
 
-var reteFilterComponent, currentlyFilteredData = [], prevFilteredData;
-var historyObj;
+var currentlyFilteredData = [], prevFilteredData;
 global.ignoreSettingHistoryOnce = true;
+
+class LoadedApp extends React.Component{
+	constructor(props){
+		super(props);
+		this.docViewerRef = React.createRef();
+		this.reteFilterRef = React.createRef();
+		this.graphRef = React.createRef();
+		global.historyObj  = React.createRef();
+	}
+	
+	updateGlobals(){
+		global.docViewerComponent = this.docViewerRef.current;
+		global.reteFilterComponent = this.reteFilterRef.current;
+		global.graphComponent = this.graphRef.current;
+	}
+
+	componentDidUpdate(){
+		this.updateGlobals();
+	}
+
+	componentDidMount(){
+		this.updateGlobals();
+	}
+
+	titleClick(){
+		var pageJson = [];
+		pageJson["filters"] = getExampleData();
+		pageJson["currentPage"] = "Special:GDPVis";
+		initializeFromStateObject(pageJson);
+	}
+	
+	render(){
+		return(
+			<>
+				<header>
+					<h1 onClick={this.titleClick}>GDPVis</h1>
+					<span id="VersionString">{"version: " + VERSION.slice(0,8) + " " + BRANCH + " " + COMMITHASH.slice(0,7)}</span>
+					<SearchBox />
+				</header>
+				<div id="Content">
+					<div id="GraphLayout">
+						<ReteFilterModule ref={this.reteFilterRef} />
+						<Graph ref={this.graphRef} />
+					</div>
+					<DocumentViewer ref={this.docViewerRef}/>
+					<DocumentViewerOpenButton />
+					<BackButtonComponent ref={global.historyObj} />
+				</div>
+			</>
+		);
+	}
+}
 
 $( document ).ready(function() {
 	startLogger();
 	$("body").removeClass("loading");
-	var requiredDataLoadedPromise = getAllData(); 
-	global.docViewerComponent = ReactDOM.render(<DocumentViewer />, document.getElementById("DocumentViewer"));
-	ReactDOM.render(<DocumentViewerOpenButton />, document.getElementById("DocumentViewerOpenButtonOuter"));
-	historyObj = ReactDOM.render(<BackButtonComponent />, document.getElementById("BackButtonOuter"));
-	var warningDialogComponent = ReactDOM.render(<WarningDialog />, document.getElementById("WarningDialog"));
-	var toolTipComponent = ReactDOM.render(<Tooltip />, document.getElementById("Tooltip"));
-	global.graphComponent = ReactDOM.render(<Graph ToolTipComponent={toolTipComponent} WarningDialogComponent={warningDialogComponent} />, document.getElementById("Graph"));
+	var requiredDataLoadedPromise = getAllData();
 	requiredDataLoadedPromise.then(function() {
-		$("#LoadingAjax").hide();
 		$("body").addClass("fullyloaded");
-		var seachBoxComponent = ReactDOM.render(<SearchBox />, document.getElementById("SearchBoxOuter"));
-		reteFilterComponent = ReactDOM.render(<ReteFilterModule />, document.getElementById("VisualFilterModule"));
-		global.rete = reteFilterComponent; //for debugging
+		ReactDOM.render(<LoadedApp />, document.getElementsByTagName("body")[0]);
 		loadFiltersorDefaults();
-		
-		$("body > header > h1").click(function(){
-			var pageJson = [];
-			pageJson["filters"] = getExampleData();
-			pageJson["currentPage"] = "Special:GDPVis";
-			initializeFromStateObject(pageJson);
-			
-		});
-		
-		$(window).on('popstate',function(event) {
-			historyObj.goBack();
-		});
-		
-		let versionString = "version: " + VERSION.slice(0,8) + " " + BRANCH + " " + COMMITHASH.slice(0,7);
-		$("#VersionString").text(versionString);
 	});
 });
 
 global.updateReteFiltersFromQuery = function(query){
 	let pageType = getPageType(query);
-	let template = updateReteComponentFromSearch(reteFilterComponent, pageType, query);
+	let template = updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
 	if(!query.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
 		setWindowHistory(false); //add the previous state to the history
 		global.docViewerComponent.setState({title: query});
@@ -110,19 +135,19 @@ export function setWindowHistory(replace, forceSaveData){
 		else{
 			saveData = {
 				currentPage: global.docViewerComponent.state.title, //current browser page
-				filters: reteFilterComponent.editor.toJSON() //current Filters
+				filters: global.reteFilterComponent.editor.toJSON() //current Filters
 			}
 		}
 		console.log("trying to setWindowHistory() with", saveData);
 		
 		if(Object.keys(saveData.filters.nodes).length > 0){
 			if(replace){
-				historyObj.replaceState(saveData);
+				global.historyObj.current.replaceState(saveData);
 			}
 			else{
-				historyObj.pushState(saveData);
+				global.historyObj.current.pushState(saveData);
 			}
-			console.log("Success in setWindowHistory()", historyObj.state.InternalHistory);
+			console.log("Success in setWindowHistory()", global.historyObj.current.state.InternalHistory);
 		}
 		else{
 			throw(new Error("Nodes length is not greater than 0"));
@@ -130,12 +155,12 @@ export function setWindowHistory(replace, forceSaveData){
 	}
 	catch(exception){
 		console.warn("Failed at saving in setWindowHistory", exception);
-		console.log(reteFilterComponent);
+		console.log(global.reteFilterComponent);
 	}
 }
 
 export function initializeFromStateObject(stateObject){
-	reteFilterComponent.initialize(stateObject["filters"]);
+	global.reteFilterComponent.initialize(stateObject["filters"]);
 	docViewerComponent.setState({title: stateObject["currentPage"]});
 	global.docViewerComponent.displayDocumentViewer(true);
 }

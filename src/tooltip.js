@@ -40,7 +40,11 @@ export default class Tooltip extends React.Component{
 		else{
 			subcomponent = (<span>No inner tooltip loaded.</span>);
 		}
-		return(subcomponent);
+		return(
+			<div id="Tooltip">
+				{subcomponent}
+			</div>
+		);
 	}
 }
 

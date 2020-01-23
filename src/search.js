@@ -80,12 +80,12 @@ export default class SearchBox extends React.Component {
 
     render(){
         return(
-            <>
+            <div id="SearchBoxOuter">
                 <select ref="SearchBox" id="SearchBox" className="SearchBox">
                     {this.getOptions()}
                 </select>
                 <button id="SearchButton" className="btn btn-light" onClick={this.searchButtonClicked.bind(this)}>Display</button>
-            </>
+            </div>
         );
     }
 }

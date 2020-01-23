@@ -8,6 +8,8 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 import {setWindowHistory} from './index.js';
 import {closeFiltersPanel} from './rete/index.js';
+import WarningDialog from './warningdialog.js';
+import Tooltip from './tooltip.js';
 
 export var RelationshipColors = {
 	//goes R, G, B
@@ -34,7 +36,11 @@ export class Graph extends React.Component{
 			tooltipEventsEnabled: true,
 			tooltipRequiresClickClose: false
 		}
+
 		this.svg = React.createRef();
+		this.warningDialogRef = React.createRef();
+		this.toolTipRef = React.createRef();
+
 		this.prevNodesCount = null;
 		this.prevLinksCount = null;
 		this.zoomLevel = 1;
@@ -142,9 +148,9 @@ export class Graph extends React.Component{
 		setWindowHistory(false); //add the previous state to the history
 		this.prevNodesCount = nodesData;
 		this.prevLinksCount = linksData;
-		
+	
 		if(nodesData.length > this.showWarningLevel || linksData.length > this.showWarningLevel && !force){
-			this.props.WarningDialogComponent.setState({
+			this.warningDialogRef.current.setState({
 				NodeCount: nodesData.length,
 				LinkCount: linksData.length,
 				display: true
@@ -153,7 +159,7 @@ export class Graph extends React.Component{
 			return;
 		}
 		else{
-			this.props.WarningDialogComponent.setState({
+			this.warningDialogRef.current.setState({
 				display: false
 			}); //make sure it is hidden if it is not needed
 		}
@@ -272,7 +278,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				selfGraph.props.ToolTipComponent.setState({d: d, type: selfGraph.state.dataType});
+				selfGraph.toolTipRef.current.setState({d: d, type: selfGraph.state.dataType});
 			}
 		})
 	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -289,7 +295,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				selfGraph.props.ToolTipComponent.setState({d: d, type: "Link"});
+				selfGraph.toolTipRef.current.setState({d: d, type: "Link"});
 			}
 		})
 		.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
@@ -304,7 +310,7 @@ export class Graph extends React.Component{
 				showToolTip(true);
 				tooltip.style("left", (d3.event.pageX + 15) + "px")
 					.style("top", (d3.event.pageY - 28) + "px");
-				selfGraph.props.ToolTipComponent.setState({d: d, type: "LinkExpanded"});
+				selfGraph.toolTipRef.current.setState({d: d, type: "LinkExpanded"});
 			}
 		});
 		
@@ -351,7 +357,7 @@ export class Graph extends React.Component{
 		}
 
 		function dragstarted(d) { //when the user start to drag the node with the mouse
-			if (!d3.event.active) this.simulation.alphaTarget(0.3).restart();
+			if (!d3.event.active) selfGraph.simulation.alphaTarget(0.3).restart();
 			d.fx = d.x;
 			d.fy = d.y;
 		}
@@ -362,7 +368,7 @@ export class Graph extends React.Component{
 		}
 
 		function dragended(d) { //when the user stops dragging the node with the mouse
-			if (!d3.event.active) this.simulation.alphaTarget(0);
+			if (!d3.event.active) selfGraph.simulation.alphaTarget(0);
 			d.fx = null;
 			d.fy = null;
 		}
@@ -406,16 +412,21 @@ export class Graph extends React.Component{
 
 	render(){		
 		return(
-			<div id="GraphOuter">
-				<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
-					<g id="stillHere"></g>
-				</svg>
-				<div id="EmergencyStopButtonContainer">
-					<button onClick={this.stopSim.bind(this)} title="Stops all graph physics" id="EmergencyStopButton" className="btn btn-danger">Stop graph physics</button>
+			<>
+				<div id="GraphOuter">
+					<svg ref={this.svg} id="MainNodeGraph" viewBox="0 0 300 300">
+						<g id="stillHere"></g>
+					</svg>
+					<div id="EmergencyStopButtonContainer">
+						<button onClick={this.stopSim.bind(this)} title="Stops all graph physics" id="EmergencyStopButton" className="btn btn-danger">Stop graph physics</button>
+					</div>
+					<span id="GraphItemCount"></span>
+					{this.state.dataType == "Patterns" ? <RelationshipSelector owner={this} ref="RelationshipSelector" /> : null}
 				</div>
-				<span id="GraphItemCount"></span>
-				{this.state.dataType == "Patterns" ? <RelationshipSelector owner={this} ref="RelationshipSelector" /> : null}
-			</div>
+				<WarningDialog ref={this.warningDialogRef} />
+				<Tooltip ref={this.toolTipRef} />
+				{this.props.children}
+			</>
 		);
 	}
 }

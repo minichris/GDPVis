@@ -4,6 +4,7 @@
 
 import React from "react";
 import {initializeFromStateObject} from './index.js';
+import $ from 'jquery';
 
 export class BackButtonComponent extends React.Component{
 	constructor(props){
@@ -77,6 +78,12 @@ export class BackButtonComponent extends React.Component{
 		
 		return stateObject;
 	}
+
+	componentDidMount(){
+		$(window).on('popstate',function(event) {
+			this.goBack();
+		});
+	}
 	
 	backButtonClick(event){
 		if(this.currentLastState()){
@@ -108,7 +115,9 @@ export class BackButtonComponent extends React.Component{
 			disabledClass = "enabled";
 		}
 		return(
-			<div onClick={this.backButtonClick.bind(this)} className={disabledClass} id="BackButton" title={this.backButtonTitle()} augmented-ui="tl-clip tr-clip b-clip exe">🢃</div>
+			<div id="BackButtonOuter">
+				<div onClick={this.backButtonClick.bind(this)} className={disabledClass} id="BackButton" title={this.backButtonTitle()} augmented-ui="tl-clip tr-clip b-clip exe">🢃</div>
+			</div>
 		);
 	}
 }

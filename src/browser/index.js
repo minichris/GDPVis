@@ -173,7 +173,7 @@ export class DocumentViewer extends React.Component{
         }
 
         return(
-			<>
+			<div id="DocumentViewer">
 				<DocumentViewerToolbar pageTitle={this.state.title} />
 				<div id="DocumentContainer">
 					<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
@@ -182,7 +182,7 @@ export class DocumentViewer extends React.Component{
 						{pageToRender}
 					</div>
 				</div>
-			</>
+			</div>
 		);
     }
 }

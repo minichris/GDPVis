@@ -146,7 +146,7 @@ export default class ReteFilterModule extends React.Component {
 	
 	render(){
 		return (
-		<>
+		<div id="VisualFilterModule">
 			<button onClick={this.filtersButtonClick.bind(this)} title="Open the filters panel" id="ShowFiltersButton" className="btn btn-light" data-toggle="toggle" data-target="#FilterPanel">Change Filters</button>
 			<div id="FilterPanel">
 				<div id="FilterPanelHeader">Filters Panel</div>
@@ -161,7 +161,7 @@ export default class ReteFilterModule extends React.Component {
 					The filters will only update if something is plugged into the output node.
 				</div>
 			</div>
-		</>
+		</div>
 		);
 	}
 }
