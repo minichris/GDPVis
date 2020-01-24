@@ -32,7 +32,7 @@ function loadViaAjax(inputURL){
 }
 
 function getAllData(){
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		Promise.all([loadPatterns(), loadGames()]).then(function() {
 			createGameToPatternRelations();
 			createPatternToGameRelation();

@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import {decodeJSONfromString} from './history.js';
 
 const logURL = "http://10.5.35.35:25564/logs";
 

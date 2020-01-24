@@ -1,5 +1,4 @@
 import React from "react";
-import $ from 'jquery';
 import {Patterns} from '../../loaddata.js';
 
 

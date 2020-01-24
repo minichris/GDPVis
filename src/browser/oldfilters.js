@@ -1,4 +1,4 @@
-import {Patterns, Games, PatternCategories, GameCategories} from '../loaddata.js';
+import {Patterns, Games} from '../loaddata.js';
 //------------------------------------------
 //OLD FILTERS FUNCTIONS FOR THE OLD FILTERING SYSTEM
 //------------------------------------------

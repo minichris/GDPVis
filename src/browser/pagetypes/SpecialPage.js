@@ -1,6 +1,5 @@
 import React from "react";
 import OtherPage from "./OtherPage.js";
-import $ from 'jquery';
 import {initializeFromStateObject} from '../../index.js';
 
 function complexExample(){
@@ -183,7 +182,7 @@ export default class SpecialPage extends React.Component {
 						There are three main ways to use GDPVis...
         			<details title="Click to expand">
 						<summary><h3>Filtering</h3></summary>
-						GDPVis has an experimental filtering system inspired by Unreal Engine 4's blueprint programming system. It uses the <a target="_blank" href="http://rete.js.org">rete.js</a> library to create the filtering graphs. <br />
+						GDPVis has an experimental filtering system inspired by Unreal Engine 4's blueprint programming system. It uses the <a target="_blank" rel="noopener noreferrer" href="http://rete.js.org">rete.js</a> library to create the filtering graphs. <br />
 						The reasoning for a somewhat more complex than usual filtering system is it is it allows the end-user (a.k.a you) a modular system of filtering for both the games and patterns found on the wiki, which allows a finer control of the output than a more standard filter setup. <br />
 						<ul>
 							<li>You can open the filtering system by clicking the "Change Filters" button in the bottom left, which only appears when the document viewer (this panel) is closed. </li>
@@ -240,8 +239,8 @@ export default class SpecialPage extends React.Component {
 							The game pages and category pages you find on this system are generated from the patterns in this system, rather then using the wiki’s own pages. Games which don't appear on any pattern page are not found in this system. Also, the pattern information in this system is only updated every so often, which means any recent changes on the wiki will take some time to propagate to this visualization. Don’t worry, edits to the wiki will get here eventually!
 						<br /><br />
 						<i>Where did you get the icons?</i>
-						<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-						<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+						<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" rel="noopener noreferrer" target="_blank">CC 3.0 BY</a></div>
+						<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/"                 title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" rel="noopener noreferrer" target="_blank">CC 3.0 BY</a></div>
 					</details>
 				</div>
 			);

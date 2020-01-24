@@ -1,7 +1,6 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
 import DropDownControl from '../../controls/DropDown.js';
-import SpinnerControl from '../../controls/Spinner.js';
 import {Patterns} from '../../../loaddata.js';
 
 export default class FilterPatternsByThoseWithoutRelationToPatternComponent extends Rete.Component {

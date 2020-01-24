@@ -6,16 +6,16 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {Patterns, Games, PatternCategories, GameCategories, getAllData} from './loaddata.js';
+import {getAllData} from './loaddata.js';
 import {DocumentViewer, getPageType} from './browser';
 import DocumentViewerOpenButton from './browser/components/DocumentViewerOpenButton.js';
-import {Graph, ChangePatternSelection} from './graph.js';
+import {Graph} from './graph.js';
 import SearchBox from './search.js';
 import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 import getExampleData from './rete/exampledata.js';
-import {BackButtonComponent, getURLasJSON, InternalHistory} from './history.js';
+import {BackButtonComponent, getURLasJSON} from './history.js';
 
 var currentlyFilteredData = [], prevFilteredData;
 global.ignoreSettingHistoryOnce = true;

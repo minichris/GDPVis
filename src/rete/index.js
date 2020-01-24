@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import $ from 'jquery';
 
 import Rete from "rete";
@@ -11,8 +10,6 @@ import ReactRenderPlugin from 'rete-react-render-plugin';
 import LifecyclePlugin from 'rete-lifecycle-plugin';
 
 import CustomNode from './nodetemplate.js';
-
-import {setWindowHistory} from '../index.js';
 
 import components from './nodes';
 import './style.css';

@@ -1,5 +1,4 @@
 import React from "react";
-import $ from 'jquery';
 import {patternCategoryFilter} from '../oldfilters.js';
 import {Patterns, Games} from '../../loaddata.js';
 import {getPageType} from '../index.js';

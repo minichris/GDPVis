@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import React from "react";
 
 export default class WarningDialog extends React.Component{
@@ -13,20 +12,20 @@ export default class WarningDialog extends React.Component{
 		this.selfRef = React.createRef();
   	}
 	
-	handleShowAnywayButtonClick(event){
+	handleShowAnywayButtonClick(){
 		this.setState({
 			display: false
 		});
 		global.graphComponent.generateGraph(true);
 	}
 	
-	handleAddLimiterButtonClick(event){
+	handleAddLimiterButtonClick(){
 		this.setState({
 			display: false
 		});
 	}
 	
-	handleCancelButtonClick(event){
+	handleCancelButtonClick(){
 		this.setState({
 			display: false
 		});

@@ -50,7 +50,7 @@ export default class DocumentViewerToolbar extends React.Component{
 		super(props);
 	}
 	
-	tocToggleButtonClick(event){
+	tocToggleButtonClick(){
 		if(document.getElementById("TableOfContents").style.display == "block"){ //if it was in the visable state, now going hidden
 			document.getElementById("TableOfContents").style.display = "";
 			document.getElementsByClassName("insertedPage")[0].style.marginLeft = "";	
@@ -62,23 +62,23 @@ export default class DocumentViewerToolbar extends React.Component{
 		}
 	}
 	
-	originalPageButtonClick(event){
+	originalPageButtonClick(){
 		window.open(getOrginalPageLocation(this.props.pageTitle));
 	}
 	
-	editPageButtonClick(event){
+	editPageButtonClick(){
 		window.open(getEditPageLocation(this.props.pageTitle));
 	}
 	
-	discussionPageButtonClick(event){
+	discussionPageButtonClick(){
 		window.open(getDiscussionPageLocation(this.props.pageTitle));
 	}
 	
-	historyPageButtonClick(event){
+	historyPageButtonClick(){
 		window.open(getHistoryPageLocation(this.props.pageTitle));
 	}
 	
-	closeButtonClick(event){
+	closeButtonClick(){
 		global.docViewerComponent.displayDocumentViewer(false);
 	}
 	

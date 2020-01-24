@@ -1,7 +1,6 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
 import TextBoxControl from '../../controls/TextBox.js';
-import {PatternCategories} from '../../../loaddata.js';
 
 export default class FilterPatternsByContentComponent extends Rete.Component {
 

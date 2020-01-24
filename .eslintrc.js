@@ -28,6 +28,11 @@ module.exports = {
 		"react/no-unescaped-entities": "off"
     },
 	"globals": {
-        "global": false
+        "global": false,
+        "logger": false,
+        "require": false,
+        "VERSION": false,
+        "BRANCH": false,
+        "COMMITHASH": false
     }
 };

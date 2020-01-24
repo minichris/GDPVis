@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import React from "react";
-import ReactDOM from "react-dom";
-import {Patterns, Games, PatternCategories, GameCategories} from '../loaddata.js';
+import {Patterns, Games} from '../loaddata.js';
 import {ChangePatternSelection} from '../graph.js';
 import {setWindowHistory} from '../index.js';
 
@@ -123,7 +122,7 @@ export class DocumentViewer extends React.Component{
 			$(".firstHeading").after( '<p id="HeadingFilterText">Filter to only patterns relating to ' + headingText + '...</p>' );
 			
 			//setting up page links for in browser linking
-			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(event){
+			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(){
 				eventLinkClicked(headingText, true);
 			});
 		}

@@ -1,8 +1,6 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
 import DropDownControl from '../../controls/DropDown.js';
-import SpinnerControl from '../../controls/Spinner.js';
-import {Patterns} from '../../../loaddata.js';
 
 export default class FilterPatternsByThoseWithRelationToPatternsComponent extends Rete.Component {
 
@@ -34,7 +32,6 @@ export default class FilterPatternsByThoseWithRelationToPatternsComponent extend
 	}
 	
 	async worker(node, inputs, outputs) {
-		const inputPatterns = inputs['patternsInput'][0];
 		const patternsToRelateTo = inputs['patternsRelateTo'][0];
 		const validRelations = node.data['RelationType'].map(type => type.value);
 		

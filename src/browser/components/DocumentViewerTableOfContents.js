@@ -6,7 +6,7 @@ export default class DocumentViewerTableOfContents extends React.Component{
 		document.getElementById("TableOfContents").style.display = "none";
 	}
 	
-	componentDidUpdate(prevProps) { //this has to be done in here because it works from what is put into the other component
+	componentDidUpdate() { //this has to be done in here because it works from what is put into the other component
 		$("#TableOfContents").empty();
 		$("#DocumentContainer").find(":header").each(function(i, heading){
 			let marginSize = (heading.tagName.replace('H','') - 1);

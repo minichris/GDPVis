@@ -1,20 +1,19 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import ReactRenderPlugin, { Node, Socket, Control } from 'rete-react-render-plugin';
+import { Node, Socket, Control } from 'rete-react-render-plugin';
 import {createNode} from 'rete-context-menu-plugin/src/utils';
 
 import './nodetemplate.css';
 
 export default class CustomNode extends Node {
 	deleteNodeButtonClicked(){
-		const { node, bindSocket, bindControl, editor } = this.props;
+		const { node, editor } = this.props;
 		if(!node.userimmutable){
 			editor.removeNode(node);
 		}
 	}
 	
 	cloneNodeButtonClicked(){
-		const { node, bindSocket, bindControl, editor } = this.props;
+		const { node, editor } = this.props;
 		const { name, position: [x, y], ...params } = node;
 		const component = editor.components.get(name);
 		if(!node.userimmutable){
@@ -25,7 +24,7 @@ export default class CustomNode extends Node {
 	}
 	
 	getButtonTitle(type, type2){
-		const { node, bindSocket, bindControl } = this.props;
+		const { node } = this.props;
 		if(!node.userimmutable){
 			return type + " this node";
 		}

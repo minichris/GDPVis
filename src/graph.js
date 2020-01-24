@@ -2,10 +2,9 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-import ReactDOM from "react-dom";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import {Patterns} from './loaddata.js';
 import {setWindowHistory} from './index.js';
 import {closeFiltersPanel} from './rete/index.js';
 import WarningDialog from './warningdialog.js';
@@ -281,7 +280,7 @@ export class Graph extends React.Component{
 				selfGraph.toolTipRef.current.setState({d: d, type: selfGraph.state.dataType});
 			}
 		})
-	    .on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+	    .on("mouseout", function() { //remove the tooltip when the user stops mousing over the node
 				if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
 					showToolTip(false);
 				}
@@ -298,11 +297,11 @@ export class Graph extends React.Component{
 				selfGraph.toolTipRef.current.setState({d: d, type: "Link"});
 			}
 		})
-			.on("mouseout", function(d) { //remove the tooltip when the user stops mousing over the node
+			.on("mouseout", function() { //remove the tooltip when the user stops mousing over the node
 				if(selfGraph.state.tooltipEventsEnabled && !selfGraph.state.tooltipRequiresClickClose){
 					showToolTip(false);
 				}
-	    })
+			})
 			.on("click", function(d) {
 				d3.event.stopPropagation();
 				if(selfGraph.state.tooltipEventsEnabled){
@@ -314,7 +313,7 @@ export class Graph extends React.Component{
 				}
 			});
 		
-		svg.on("click", function(d){
+		svg.on("click", function(){
 			if(selfGraph.state.tooltipRequiresClickClose && selfGraph.state.tooltipEventsEnabled){
 				selfGraph.state.tooltipRequiresClickClose = false;
 				showToolTip(false);
@@ -350,11 +349,11 @@ export class Graph extends React.Component{
 		this.simulation.force("link").links(linksData); //Start the simulation of the links
 		resizer();
 
-		function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
+		/*function validate(x, a, b) { //function to decide with a node is outside the bounds of the graph
 			if (x < a) x = a;
 			if (x > b) x = b;
 			return x;
-		}
+		}*/
 
 		function dragstarted(d) { //when the user start to drag the node with the mouse
 			if (!d3.event.active) selfGraph.simulation.alphaTarget(0.3).restart();
@@ -512,7 +511,7 @@ class RelationshipSelector extends React.Component{
 	}
 }
 
-var currentSelectionID, prevSelectionID;
+var prevSelectionID;
 
 //function which handles changing the currently selected pattern
 export function ChangePatternSelection(currentSelectionID){

@@ -80,12 +80,12 @@ export class BackButtonComponent extends React.Component{
 	}
 
 	componentDidMount(){
-		$(window).on('popstate',function(event) {
+		$(window).on('popstate',function() {
 			this.goBack();
 		});
 	}
 	
-	backButtonClick(event){
+	backButtonClick(){
 		if(this.currentLastState()){
 			this.goBack();
 		}

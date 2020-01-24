@@ -5,7 +5,7 @@ export default class DocumentResizer extends React.Component{
 		super(props);
 	}
 	
-	initResize(e) {
+	initResize() {
 		function disableSelect(event) {
 			event.preventDefault();
 		}
@@ -15,7 +15,7 @@ export default class DocumentResizer extends React.Component{
 			document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
 		}
 
-		function stopResize(e) {
+		function stopResize() {
 			window.removeEventListener('mousemove', Resize, false);
 			window.removeEventListener('mouseup', stopResize, false);
 			window.removeEventListener('selectstart', disableSelect);

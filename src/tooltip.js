@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import React from "react";
-import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import {Patterns, Games} from './loaddata.js';
 import {getPatternOneWayRelationTexts, RelationshipColors} from './graph.js';
 
 //-------------------------------------------------------------------------
@@ -45,33 +45,6 @@ export default class Tooltip extends React.Component{
 				{subcomponent}
 			</div>
 		);
-	}
-}
-
-function getRelationColorContribution(link){
-	let red = 0, green = 0, blue = 0;
-
-	if(checkForRelation("Potentially Conflicting With")){
-		red = 255;
-	}
-	
-	if(checkForRelation("Possible Closure Effects")){
-		red = 100;
-	}
-	
-	if(checkForRelation("Can Instantiate") || checkForRelation("Can Be Instantiated By")){
-		blue = 255;
-	}
-
-	if(checkForRelation("Can Modulate") || checkForRelation("Can Be Modulated By")){
-		green = 255;
-	}	
-	
-	if(red != 0 || green != 0 || blue != 0){
-		return ("rgb(" + red + ", " + green +", " + blue + ")");
-	}
-	else{
-		return "#999"; //regular gray if it doesn't
 	}
 }
 
