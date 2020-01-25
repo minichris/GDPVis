@@ -12,7 +12,7 @@ class TextBoxReactComponent extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 	}
 	
-	componentDidUpdate(prevProps, prevState, snapshot){
+	componentDidUpdate(){
 		this.props.putData(this.props.id, this.state.currentValue);
 	}
 	

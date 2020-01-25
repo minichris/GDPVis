@@ -12,7 +12,7 @@ class DropDownReactComponent extends React.Component {
 		};
 	}
 	
-	componentDidUpdate(prevProps, prevState, snapshot){
+	componentDidUpdate(){
 		this.props.putData(this.props.id, this.state.selectedOption);
 	}
 	

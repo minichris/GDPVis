@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-import {Patterns, Games, PatternCategories, GameCategories, loadPatterns, loadGames} from './loaddata.js';
+import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
 
 export default class SearchBox extends React.Component {
 	constructor(props){
@@ -50,7 +50,7 @@ export default class SearchBox extends React.Component {
 		let component = this;
 		let searchBoxRef = this.refs["SearchBox"];
 		
-		$(this.refs["SearchBox"]).on('select2:select', function (e) {
+		$(this.refs["SearchBox"]).on('select2:select', function() {
 			component.searchButtonClicked(null);
 			$(searchBoxRef).val([]).trigger('change');
 		});
@@ -72,7 +72,7 @@ export default class SearchBox extends React.Component {
 		return $('<span>' + option.element.dataset.type + ': ' + option.text + '</span>');
 	}
 
-	searchButtonClicked(event){
+	searchButtonClicked(){
 		let articleSelected = $("#SearchBox").val();
 		global.updateReteFiltersFromQuery(articleSelected);
 		logger.info("User used search bar to search for " + articleSelected + " @ " + Math.round((new Date()).getTime() / 1000));

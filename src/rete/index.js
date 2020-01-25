@@ -56,7 +56,7 @@ export default class ReteFilterModule extends React.Component {
 		return this.editor.toJSON();
 	}
 
-	filtersButtonClick(event){
+	filtersButtonClick(){
 		if($("#FilterPanel").hasClass('out')){
 			logger.info("User manually closed filter panel @ " + Math.round((new Date()).getTime() / 1000));
 		}
@@ -113,7 +113,7 @@ export default class ReteFilterModule extends React.Component {
 			}
 		});
 		
-		this.editor.on('nodetranslate', function(node, x, y){
+		this.editor.on('nodetranslate', function(){
 			if(document.activeElement.parentElement.className == "controlInner"){
 				return false;
 			}

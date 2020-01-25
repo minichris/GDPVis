@@ -25,7 +25,10 @@ module.exports = {
 		"indent": ["error", "tab"],
 		"no-mixed-spaces-and-tabs": "off",
 		"react/prop-types": "off",
-		"react/no-unescaped-entities": "off"
+		"react/no-unescaped-entities": "off",
+		"react/no-string-refs": "off",
+		"no-prototype-builtins": "off",
+		"no-unused-vars": ["error", {"argsIgnorePattern": "^_"}]
     },
 	"globals": {
         "global": false,

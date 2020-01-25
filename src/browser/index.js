@@ -136,7 +136,7 @@ export class DocumentViewer extends React.Component{
 
 	getSnapshotBeforeUpdate(prevProps, prevState) {
 		if(prevState.title != this.state.prevtitle){
-			this.state.prevtitle = prevState.title;
+			this.state.prevtitle = prevState.title; //eslint-disable-line  react/no-direct-mutation-state
 		}
 		return null;
 	}

@@ -85,7 +85,7 @@ $( document ).ready(function() {
 
 global.updateReteFiltersFromQuery = function(query){
 	let pageType = getPageType(query);
-	let template = updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
+	updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
 	if(!query.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
 		setWindowHistory(false); //add the previous state to the history
 		global.docViewerComponent.setState({title: query});
@@ -161,7 +161,7 @@ export function setWindowHistory(replace, forceSaveData){
 
 export function initializeFromStateObject(stateObject){
 	global.reteFilterComponent.initialize(stateObject["filters"]);
-	docViewerComponent.setState({title: stateObject["currentPage"]});
+	global.docViewerComponent.setState({title: stateObject["currentPage"]});
 	global.docViewerComponent.displayDocumentViewer(true);
 }
 
