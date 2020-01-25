@@ -13,6 +13,9 @@ import PatternPage from './pagetypes/PatternPage.js';
 import CategoryPage from './pagetypes/CategoryPage.js';
 import SpecialPage from './pagetypes/SpecialPage.js';
 
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
@@ -125,6 +128,22 @@ export class DocumentViewer extends React.Component{
 			$("#HeadingFilterText, .selflink").wrap( "<a href='javascript:;'></a>" ).click(function(){
 				eventLinkClicked(headingText, true);
 			});
+		}
+		
+		var links = document.getElementsByTagName('a');
+		for(var i = 0, len = links.length; i < len; i++) {
+			let pageType = getPageType(links[i].text);
+			if(pageType == "Pattern"){
+				let pattern = Patterns.find(pat => pat.Title == links[i].text);
+				if(pattern){
+					let title = $(pattern.Content).find("h1").first().text();
+					let shortDescription = $(pattern.Content).find("i").first().text();
+					let tooltipContent = title + ": " + shortDescription;
+					tippy(links[i], {
+						content: tooltipContent
+					});
+				}
+			}
 		}
 		
 		this.tableOfContentsRef.current.forceUpdate();
