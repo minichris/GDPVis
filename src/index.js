@@ -14,6 +14,7 @@ import SearchBox from './search.js';
 import ReteFilterModule from './rete';
 import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
+import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
 import {BackButtonComponent, getURLasJSON} from './history.js';
 

@@ -68,7 +68,6 @@ body {
 }
 
 header{
-	border-radius: 15px;
 	padding: 10px;
 	z-index: 10;
     pointer-events: none;
@@ -108,12 +107,6 @@ a:hover {
 	color: #808dcd;
 }
 
-#Content > div{
-	padding: 10px;
-	flex: 0 1 auto;
-	min-height: 300px;
-}
-
 iframe{
 	width: 100%;
 	height: inherit;
@@ -137,11 +130,11 @@ iframe{
 	top: -73px;
 }
 
-#Content > #GraphLayout{
+#GraphLayout{
 	padding: 0px;
 }
 
-#Content > #GraphLayout > div{
+#GraphLayout > div{
 	padding: 10px;
 	background: var(--bgColor);
 }
@@ -202,10 +195,10 @@ svg{
 }
 
 #FilterPanel{
-    transition: width 2s ease, background 0.5s ease, border 2s ease;
+    transition: width 2s ease, background-color 0.5s ease, border 2s ease;
     display: inline-block;
     overflow: hidden;
-    background: #38383800;
+    background-color: #38383800;
     border-radius: 8px;
     position: fixed;
     top: 60px;
@@ -251,7 +244,6 @@ svg{
 }
 
 #LoadingAjax{
-	min-width: 410px;
 	min-height: 690px;
 	text-align: center;
 	width: 100%;
@@ -296,7 +288,7 @@ svg{
     margin-left: 10px;
 }
 
-#Content > #GraphLayout {
+#GraphLayout {
 	height: 100%;
 	margin: 0px;
 	display: flex;
@@ -336,7 +328,7 @@ summary > * {
 	pointer-events: all;
 }
 
-#Content > #GraphLayout > #Search {
+#GraphLayout > #Search {
 	width: min-content;
 }
 
@@ -409,7 +401,7 @@ hr {
 
 /* Document Viewer Stuff */
 
-#Content > #DocumentViewer{
+#DocumentViewer{
 	position: absolute;
 	width: 0%;
 	transition: width 0.5s, border-width 0.5s, margin 0.5s;
@@ -427,6 +419,14 @@ hr {
 	padding: 0;
 	margin: 70px 10px 10px 0px;
 	box-shadow: #00000024 2px 2px 5px 7px;
+}
+
+#DocumentContainer.out > #TableOfContents{
+	display: block;
+}
+
+#DocumentContainer.out > #InsertedPageOuter > .insertedPage{
+	margin-left: 200px;
 }
 
 #DocumentContainer{
@@ -564,7 +564,7 @@ input[type=checkbox]{
 }
 
 
-body.fullyloaded #Content > #BackButtonOuter{
+body.fullyloaded #BackButtonOuter{
 	left: 0;
     position: absolute;
     top: 0;
@@ -574,7 +574,7 @@ body.fullyloaded #Content > #BackButtonOuter{
 	display: inline-block !important;
 }
 
-body.fullyloaded #Content > #DocumentViewerOpenButtonOuter{
+body.fullyloaded #DocumentViewerOpenButtonOuter{
 	right: 0;
     position: absolute;
     top: 0;
@@ -637,10 +637,10 @@ body.fullyloaded #Content > #DocumentViewerOpenButtonOuter{
 /*
 Items removed from the new design version
 */
-#Content > #GraphLayout > #Search {
+#GraphLayout > #Search {
 	display: none !important;
 }
-#Content > #DocumentViewer {
+#DocumentViewer {
 	display: none;
 }
 #SearchBoxOuter > #SearchButton {

@@ -51,14 +51,13 @@ export default class DocumentViewerToolbar extends React.Component{
 	}
 	
 	tocToggleButtonClick(){
-		if(document.getElementById("TableOfContents").style.display == "block"){ //if it was in the visable state, now going hidden
-			document.getElementById("TableOfContents").style.display = "";
-			document.getElementsByClassName("insertedPage")[0].style.marginLeft = "";	
+		let container = document.getElementById("DocumentContainer");
+		if(container.className == "out"){ //if it was in the visable state, now going hidden
+			container.classList.remove("out");	
 		}
 		else{ //if it was in the hidden state, now going visable
-			document.getElementById("TableOfContents").style.display = "block";
-			document.getElementsByClassName("insertedPage")[0].style.marginLeft = "200px";	
 			document.getElementById("TableOfContents").style.height = document.querySelector("#DocumentContainer").clientHeight + "px";
+			container.classList.add("out");
 		}
 	}
 	

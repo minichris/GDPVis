@@ -20,9 +20,13 @@
     padding-right: 15px;
     margin-bottom: 5px;
     overflow: hidden;
-    height: 6em;
+    display: flex;
     width: 100%;
 	color: #ffffff6b;
     z-index: -1;
 	font-size: 0.75em;
+}
+
+#FilterPanelInfo > span{
+	align-self: flex-end;
 }

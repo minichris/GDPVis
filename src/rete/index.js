@@ -149,13 +149,15 @@ export default class ReteFilterModule extends React.Component {
 					<div id="FilterPanelHeader">Filters Panel</div>
 					<div id="rete"></div>
 					<div id="FilterPanelInfo">
-					Left click and drag the background to pan. 
-					Left click and drag the filters to move. 
-					Right click the background to add new filter nodes.
-					Right click the filters to delete or clone the filter nodes.
-					Purple connections are pattern arrays and green connections are game arrays. Grey connections are wildcard arrays.
-					Filters connections need to be of the same type to be connected, unless its a grey wildcard connection which will accept any type.
-					The filters will only update if something is plugged into the output node.
+						<span>
+							Left click and drag the background to pan. 
+							Left click and drag the filters to move. 
+							Right click (or long press on mobile) the background to add new filter nodes.
+							Right click a filter (or use the buttons at the top right of each filter) to delete or clone the filter.
+							Purple connections are pattern arrays and green connections are game arrays. Grey connections are wildcard arrays.
+							Filters connections need to be of the same type to be connected, unless its a grey wildcard connection which will accept any type.
+							The filters will only update if something is plugged into the output node.
+						</span>
 					</div>
 				</div>
 			</div>
