@@ -13,6 +13,10 @@ import PatternPage from './pagetypes/PatternPage.js';
 import CategoryPage from './pagetypes/CategoryPage.js';
 import SpecialPage from './pagetypes/SpecialPage.js';
 
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import './tippy-gdpvis.css';
+
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
@@ -95,6 +99,31 @@ export class DocumentViewer extends React.Component{
 						if(event.target.attributes['title']){
 							eventLinkClicked(event.target.attributes['title'].value);
 						}
+					}
+				}
+			}
+
+			
+			if(elements[i].attributes['title']){
+				let linkTitle = elements[i].attributes['title'].value;
+				let pageType = getPageType(linkTitle);
+				if(pageType == "Pattern"){
+					let pattern = Patterns.find(pat => pat.Title == linkTitle);
+					if(pattern){
+						let title = "<b>" + $(pattern.Content).find("h1").first().text() + "</b>";
+						let shortDescription = $(pattern.Content).find("i").first().text();
+						let tooltipContent = title + ": " + shortDescription;
+						tippy(elements[i], {
+							content: tooltipContent,
+							theme: 'gdpvis',
+							popperOptions: {
+								modifiers: {
+								  	computeStyle: {
+										gpuAcceleration: false
+								  	}
+								}
+							}
+						});
 					}
 				}
 			}

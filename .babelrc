@@ -8,6 +8,7 @@
 		"@babel/plugin-transform-runtime",
 		"@babel/plugin-transform-react-jsx",
 		"@babel/plugin-transform-modules-commonjs",
+		"@babel/plugin-proposal-optional-chaining",
 		[ "js-logger", { "format": { "project": false, "level": -1 } } ]
     ]
 }
