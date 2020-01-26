@@ -1,0 +1,112 @@
+@media screen and (max-width: 500px), screen and (max-height: 500px){
+	#DocumentResizer{
+		display: none;
+	}
+
+	#DocumentViewer{
+		width: 100% !important;
+		max-width: 100%;
+		margin: 0;
+		bottom: 0px;
+		top: 40%;
+	}
+
+	#DocumentContainer{
+		background: #666666f2;
+	}
+
+	#MainNodeGraph{
+		transform: scale(4);
+	}
+
+	#DocumentViewerOpenButton, #BackButton.enabled{
+		background-color: var(--linkBlueSelf);
+		color: var(--linkBlueSelf);
+	}
+
+	#FilterPanel {
+		margin: 0;
+		top: 40%;
+		border-radius: 0px;
+	}
+
+	#FilterPanel.out {	
+		width: 100%;
+	}
+
+	#ShowFiltersButton.btn-danger {
+		margin-top: 15px;
+		right: 15px;
+		top: 40%;
+	}
+
+	#RelationshipSelector{
+		font-size: 0.9em;
+		padding: 5px;
+	}
+
+	#RelationshipSelector > span{
+		font-size: 1.2em;
+	}
+
+	#RelationshipSelector > form > label > input[type=checkbox]{
+		width: 1.2rem;
+		height: 1.2rem;
+	}
+
+	#TableOfContents{
+		padding: 2.5px 0px 2.5px 2.5px;
+		width: 120px;
+	}
+	
+	#DocumentContainer.out > #InsertedPageOuter > .insertedPage{
+		margin-left: 120px;
+	}	
+
+	#LoadingAjax {
+		min-height: 100%;
+	}
+
+	#ShowFiltersButton.btn-light {
+		bottom: 10px;
+	}
+}
+
+@media screen and (max-height: 500px){
+	#MainNodeGraph{
+		transform: scale(2);
+	}
+
+	#DocumentViewer{
+		width: 50% !important;
+		top: 45px;
+	}
+
+	#ShowFiltersButton.btn-danger {
+		top: 45px;
+	}
+
+	#FilterPanel {
+		top: 45px;
+	}
+
+	#FilterPanel.out {
+		width: 50%;
+	}
+
+	#BackButton{
+		top: 55px;
+	}
+
+	#DocumentViewerOpenButton{
+		top: 55px;
+	}
+
+	#DocumentViewerOpenButton{
+		width: 165px;
+	}
+
+	#DocumentViewerToolbar > #ExternalLinkGroup > button:not(:last-child){
+		margin-right: 3px;
+	}
+}

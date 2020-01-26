@@ -2,10 +2,6 @@ import React from "react";
 import $ from 'jquery';
 
 export default class DocumentViewerTableOfContents extends React.Component{
-	componentDidMount(){
-		document.getElementById("TableOfContents").style.display = "none";
-	}
-	
 	componentDidUpdate() { //this has to be done in here because it works from what is put into the other component
 		$("#TableOfContents").empty();
 		$("#DocumentContainer").find(":header").each(function(i, heading){
@@ -26,7 +22,7 @@ export default class DocumentViewerTableOfContents extends React.Component{
 	
 	render(){
 		return(
-			<div style={{display: "none"}} id="TableOfContents"></div>
+			<div id="TableOfContents"></div>
 		);
 	}
 }

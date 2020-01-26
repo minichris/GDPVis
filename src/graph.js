@@ -459,7 +459,7 @@ class RelationshipSelector extends React.Component{
 	render(){
 		return(
 			<div id="RelationshipSelector">
-				<span>Relationships to Show</span>
+				<span>Visible Relationship Lines</span>
 				<form>
 					<label style={{color: getRelationshipColor("Can Modulate")}}>
 						<input
