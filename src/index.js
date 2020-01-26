@@ -56,7 +56,7 @@ class LoadedApp extends React.Component{
 			<>
 				<header>
 					<h1 onClick={this.titleClick}>GDPVis</h1>
-					<span id="VersionString">{"version: " + VERSION.slice(0,8) + " " + BRANCH + " " + COMMITHASH.slice(0,7)}</span>
+					<span id="VersionString">{"version: " + BRANCH + " " + COMMITHASH.slice(0,7)}</span>
 					<SearchBox />
 				</header>
 				<div id="Content">
