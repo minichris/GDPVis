@@ -6,6 +6,7 @@ export default class CombinerBase extends Rete.Component {
 	constructor(title) {
 		super(title);
 		this.render = 'alight';
+		this.category = "Array Combiners";
 	}
 	
 	connected(connection){

@@ -8,6 +8,7 @@ export default class FilterPatternsByThoseWithoutRelationToPatternComponent exte
 	constructor() {
 		super('Filter Patterns By Those Without Relation To Pattern');
 		this.render = 'alight';
+		this.category = "Filter Patterns";
 	}
 
 	builder(node) {

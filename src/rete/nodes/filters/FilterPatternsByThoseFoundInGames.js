@@ -6,6 +6,7 @@ export default class FilterPatternsByThoseFoundInGamesComponent extends Rete.Com
 	constructor() {
 		super('Filter Patterns By Those Found In Games');
 		this.render = 'alight';
+		this.category = "Filter Patterns";
 	}
 
 	builder(node) {

@@ -7,6 +7,7 @@ export default class AllPatternsComponent extends Rete.Component {
 	constructor() {
 		super('All Patterns');
 		this.render = 'alight';
+		this.category = "Information Stores";
 	}
 
 	builder(node) {

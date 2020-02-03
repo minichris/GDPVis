@@ -88,7 +88,12 @@ export default class ReteFilterModule extends React.Component {
 				else{
 					return {};
 				}
-			}
+			},
+			allocate(component) {
+				console.log(component);
+				return [component.category];
+			},
+			delay: 500
 		});
 		this.editor.use(LifecyclePlugin);
 		this.editor.use(AreaPlugin, {

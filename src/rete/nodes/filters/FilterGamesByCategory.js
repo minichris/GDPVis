@@ -8,6 +8,7 @@ export default class FilterGamesByCategoryComponent extends Rete.Component {
 	constructor() {
 		super('Filter Games by Category');
 		this.render = 'alight';
+		this.category = "Filter Games";
 	}
 
 	builder(node) {
