@@ -5,10 +5,6 @@
 
 	#DocumentViewer{
 		width: 100% !important;
-		max-width: 100%;
-		margin: 0;
-		bottom: 0px;
-		top: 40%;
 	}
 
 	#DocumentContainer{
@@ -23,11 +19,14 @@
 		background-color: var(--linkBlueSelf);
 		color: var(--linkBlueSelf);
 	}
-
-	#FilterPanel {
+	
+	#DocumentViewer, #FilterPanel{
 		margin: 0;
 		top: 40%;
 		border-radius: 0px;
+		position: fixed;		
+		bottom: 0px;
+		max-width: 100%;
 	}
 
 	#FilterPanel.out {	
