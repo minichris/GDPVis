@@ -116,7 +116,11 @@ export class BackButtonComponent extends React.Component{
 		}
 		return(
 			<div id="BackButtonOuter">
-				<div onClick={this.backButtonClick.bind(this)} className={disabledClass} id="BackButton" title={this.backButtonTitle()} augmented-ui="tl-clip tr-clip b-clip exe">🢃</div>
+				<div onClick={this.backButtonClick.bind(this)} className={disabledClass} id="BackButton" title={this.backButtonTitle()} augmented-ui="tl-clip tr-clip b-clip exe">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+						<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/>
+					</svg>
+				</div>
 			</div>
 		);
 	}

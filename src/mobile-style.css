@@ -15,9 +15,13 @@
 		transform: scale(4);
 	}
 
-	#DocumentViewerOpenButton, #BackButton.enabled{
+	.aug-clickable:not(.disabled){
 		background-color: var(--linkBlueSelf);
 		color: var(--linkBlueSelf);
+	}
+
+	.aug-clickable:not(.disabled) > svg{
+		fill: var(--linkBlueSelf);
 	}
 	
 	#DocumentViewer, #FilterPanel{

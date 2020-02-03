@@ -566,6 +566,11 @@ button > img{
 	transition: background-color 0.5s ease, color 0.5s ease;
 }
 
+.aug > svg, .aug-clickable > svg{
+	fill: var(--augButtonStandard);
+	transition: fill 0.5s ease;
+}
+
 .aug-clickable{
 	cursor: pointer;
 }
@@ -575,9 +580,17 @@ button > img{
     color: var(--linkBlueSelf);
 }
 
+.aug-clickable:hover > svg{
+	fill: var(--linkBlueSelf);
+}
+
 .aug-clickable:active{
 	background-color: var(--augButtonActive);
     color: var(--augButtonActive);
+}
+
+.aug-clickable:active > svg{
+	fill: var(--augButtonActive);
 }
 
 .aug-clickable.disabled{
@@ -589,6 +602,10 @@ button > img{
 .aug-clickable.disabled:hover, .aug-clickable.disabled:active{
 	color: var(--augButtonStandard);
 	background-color: var(--augButtonStandard);
+}
+
+.aug-clickable.disabled:hover > svg, .aug-clickable.disabled:active > svg{
+	fill: var(--augButtonStandard);
 }
 
 #RelationshipSelector > span{
@@ -648,6 +665,10 @@ body.fullyloaded #DocumentViewerOpenButtonOuter{
 	transform: rotate(90.0deg);
 	transform-origin: left bottom 0;
 	margin-left: 10px;
+}
+
+#BackButton > svg{
+	margin-bottom: 2px;
 }
 
 /*
