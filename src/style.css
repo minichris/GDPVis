@@ -130,15 +130,6 @@ iframe{
 	top: -73px;
 }
 
-#GraphLayout{
-	padding: 0px;
-}
-
-#GraphLayout > div{
-	padding: 10px;
-	background: var(--bgColor);
-}
-
 #Search{
 	padding: 0 !important;
 }
@@ -185,7 +176,7 @@ svg{
 }
 
 #ShowFiltersButton.btn-light{
-	bottom: 20px;
+	bottom: 10px;
     right: 10px;
 }
 
@@ -286,6 +277,14 @@ svg{
 
 #SearchButton{
     margin-left: 10px;
+}
+
+#GraphOuter{
+	position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 #GraphLayout {
@@ -407,8 +406,8 @@ hr {
 	transition: width 0.5s, border-width 0.5s, margin 0.5s;
 	transition-timing-function: ease;
     right: 0;
-	bottom: 10px;
-    top: 0px;
+	bottom: 0;
+    top: 0;
 	user-select: text;
 	overflow: hidden;
 	display: flex;
@@ -541,7 +540,8 @@ button > img{
 /* Relationship Selector Stuff */
 #RelationshipSelector{
     position: fixed;
-    bottom: 10px;
+	bottom: 10px;
+	left: 10px;
     padding: 10px;
     background: #bebebe52;
 	color: black;

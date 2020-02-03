@@ -247,12 +247,10 @@ export class Graph extends React.Component{
 			.text(function(d) {
 				return d.id;
 			});
-		
-		$(this.svg.current).click(function(e) { //clicking the background
-			if(e.target.id == "MainNodeGraph" || (e.target.tagName == "text" && e.target.className.baseVal == "node")){
-				ChangePatternSelection(false); //clear pattern selection
-				closeFiltersPanel();
-			}
+
+		$("#GraphOuter").click(function(e) { //clicking the background
+			ChangePatternSelection(false); //clear pattern selection
+			closeFiltersPanel();
 		});
 		
 		
@@ -286,6 +284,7 @@ export class Graph extends React.Component{
 				}
 	    })
 			.on("click", function(d) { //Click to open the relevent article
+				d3.event.stopPropagation();
 				ChangePatternSelection(d.id);
 			});
 
@@ -314,6 +313,11 @@ export class Graph extends React.Component{
 			});
 		
 		svg.on("click", function(){
+			d3.event.stopPropagation();
+			if(d3.event.target.id == "MainNodeGraph" || (d3.event.target.tagName == "text" && d3.event.target.className.baseVal == "node")){
+				ChangePatternSelection(false); //clear pattern selection
+				closeFiltersPanel();
+			}
 			if(selfGraph.state.tooltipRequiresClickClose && selfGraph.state.tooltipEventsEnabled){
 				selfGraph.state.tooltipRequiresClickClose = false;
 				showToolTip(false);
