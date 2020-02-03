@@ -12,7 +12,7 @@ export default class AllGamesComponent extends Rete.Component {
 
 	builder(node) {
 		node.addOutput(new Rete.Output('games', 'Games (array)', sockets.games));
-		node.info = "A filter node that just outputs all of the games in the system.";
+		node.info = "A starting node that just outputs all of the games in the system.";
 		node.userimmutable = true;
 		return node;
 	}

@@ -8,7 +8,7 @@ export default class FilterPatternsByCategoryComponent extends Rete.Component {
 	constructor() {
 		super('Filter Patterns by Category');
 		this.render = 'alight';
-		this.category = "Filter Patterns";
+		this.category = "Pattern Filters";
 	}
 
 	builder(node) {

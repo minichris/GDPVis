@@ -12,7 +12,7 @@ export default class AllPatternsComponent extends Rete.Component {
 
 	builder(node) {
 		node.addOutput(new Rete.Output('patterns', 'Patterns (array)', sockets.patterns));
-		node.info = "A filter node that just outputs all of the patterns in the system.";
+		node.info = "A starting node that just outputs all of the patterns in the system.";
 		node.userimmutable = true;
 		return node;
 	}

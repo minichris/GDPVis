@@ -24,11 +24,15 @@ import ArrayIntersection from './combiners/ArrayIntersection.js';
 import ArrayDifference from './combiners/ArrayDifference.js';
 
 import DataOutput from './output/DataOutput.js';
+import SingularGame from './generators/SingularGame.js';
+import SingularPattern from './generators/SingularPattern.js';
 
 export default {
 	list : [
 		new AllPatterns,
 		new AllGames,
+		new SingularGame,
+		new SingularPattern,
 		new FilterPatternsByCategory,
 		new FilterGamesByCategory,
 		new FilterPatternsByLinkedToGame,

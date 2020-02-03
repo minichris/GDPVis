@@ -7,7 +7,7 @@ export default class FilterPatternsByThoseWithRelationToPatternsComponent extend
 	constructor() {
 		super('Filter Patterns By Those With Relation To Patterns');
 		this.render = 'alight';
-		this.category = "Filter Patterns";
+		this.category = "Pattern Filters";
 	}
 
 	builder(node) {
