@@ -462,7 +462,7 @@ class RelationshipSelector extends React.Component{
 	
 	render(){
 		return(
-			<div id="RelationshipSelector">
+			<div id="RelationshipSelector" className="aug" augmented-ui="bl-clip tr-clip b-clip exe">
 				<span>Visible Relationship Lines</span>
 				<form>
 					<label style={{color: getRelationshipColor("Can Modulate")}}>

@@ -52,6 +52,8 @@ form {
 	--textColor: #FFF8F0;
 	--linkBlue: #a6b5ff;
 	--linkBlueSelf: #adb6e1;
+	--augButtonStandard: #bababa;
+	--augButtonActive: #ffd92c;
 }
 
 body {
@@ -542,10 +544,51 @@ button > img{
     position: fixed;
 	bottom: 10px;
 	left: 10px;
-    padding: 10px;
-    background: #bebebe52;
-	color: black;
+	padding: 10px;
+	--aug-b: 10px;
+	--aug-b-offset: 30px;
+}
+
+.aug, .aug-clickable{
+	color: var(--augButtonStandard);
+	background-color: var(--augButtonStandard);
 	border-radius: 8px;
+	--aug-border: 2px;
+    --aug-inset: 2px;
+    --aug-border-bg: #666666;
+    --aug-inset-bg: #666666;
+    --aug-tl: 15px;
+    --aug-tr: 15px;
+    --aug-b: 5px;
+    --aug-bl: 15px;
+    --aug-br: 15px;
+	--aug-t: 5px;
+	transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.aug-clickable{
+	cursor: pointer;
+}
+
+.aug-clickable:hover{
+	background-color: var(--linkBlueSelf);
+    color: var(--linkBlueSelf);
+}
+
+.aug-clickable:active{
+	background-color: var(--augButtonActive);
+    color: var(--augButtonActive);
+}
+
+.aug-clickable.disabled{
+	background-image: url(/icons/diagonal.png);
+    background-size: cover;
+    cursor: not-allowed;
+}
+
+.aug-clickable.disabled:hover, .aug-clickable.disabled:active{
+	color: var(--augButtonStandard);
+	background-color: var(--augButtonStandard);
 }
 
 #RelationshipSelector > span{
@@ -553,14 +596,17 @@ button > img{
     display: block;
     font-weight: 500;
     font-size: 1.2rem;
-	color: white;
+}
+
+#RelationshipSelector > form > label, input[type=checkbox]{
+	cursor: pointer;
 }
 
 input[type=checkbox]{
 	margin-right: 5px;
 	width: 1rem;
     height: 1rem;
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 
@@ -585,46 +631,16 @@ body.fullyloaded #DocumentViewerOpenButtonOuter{
 }
 
 #DocumentViewerOpenButton, #BackButton{
-	transition: background-color 0.5s ease, color 0.5s ease;
-    background-color: #757575;
-    color: #757575;
     top: 35vh;
     width: 25vh;
     padding: 5px 0px 7.5px 0px;
     text-align: center;
-    --aug-border: 2px;
-    --aug-inset: 2px;
-    --aug-border-bg: #666666;
-    --aug-inset-bg: #666666;
-    --aug-tl: 15px;
-    --aug-tr: 15px;
-    --aug-b: 5px;
-    --aug-bl: 15px;
-    --aug-br: 15px;
-    --aug-t: 5px;
     font-weight: bold;
 	pointer-events: all;
 	transform: rotate(-90.0deg);
 	transform-origin: right bottom 0;
     margin-right: 10px;
     font-size: 0.75em;
-	cursor: pointer;
-}
-
-#BackButton.disabled{
-	background-image: url(/icons/diagonal.png);
-    background-size: cover;
-    cursor: not-allowed;
-}
-
-#DocumentViewerOpenButton:hover, #BackButton.enabled:hover{
-	background-color: var(--linkBlueSelf);
-	color: var(--linkBlueSelf);
-}
-
-#DocumentViewerOpenButton:active, #BackButton.enabled:active{
-	background-color: #ffd92c;
-	color: #ffd92c;
 }
 
 

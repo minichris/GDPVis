@@ -110,9 +110,9 @@ export class BackButtonComponent extends React.Component{
 	}
 	
 	render(){
-		var disabledClass = "disabled";
+		var disabledClass = "disabled aug-clickable";
 		if(this.state.InternalHistory.length > 0){
-			disabledClass = "enabled";
+			disabledClass = "enabled aug-clickable";
 		}
 		return(
 			<div id="BackButtonOuter">
