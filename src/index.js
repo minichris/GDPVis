@@ -18,7 +18,9 @@ import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
 import {BackButtonComponent, getURLasJSON} from './history.js';
 
-var currentlyFilteredData = [], prevFilteredData;
+import {difference} from 'lodash';
+
+var currentlyFilteredData = [];
 global.ignoreSettingHistoryOnce = true;
 
 class LoadedApp extends React.Component{
@@ -98,20 +100,24 @@ global.updateReteFiltersFromQuery = function(query){
 }
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
-global.refreshGraph = function(filteredData){
-	if(filteredData != prevFilteredData){ //don't bother updating unless its different
-		currentlyFilteredData = filteredData;
+global.refreshGraph = function(newFilteredData){
+	if(difference(newFilteredData,currentlyFilteredData).length !== 0){ //don't bother updating unless its different
+		console.log("New data, refreshing graph", newFilteredData, currentlyFilteredData);
+		currentlyFilteredData = newFilteredData;
 		let dataType;
-		if(filteredData[0] && filteredData[0].name){
+		if(currentlyFilteredData[0] && currentlyFilteredData[0].name){
 			dataType = "Games"
 		}
-		else if(filteredData[0] && filteredData[0].Title){
+		else if(currentlyFilteredData[0] && currentlyFilteredData[0].Title){
 			dataType = "Patterns"
 		}
 		else{
 			dataType = null;
 		}
-		global.graphComponent.setState({displayData: filteredData, dataType: dataType});
+		global.graphComponent.setState({displayData: currentlyFilteredData, dataType: dataType});
+	}
+	else{
+		console.warn("Something tried to call global.refreshGraph with the same data it already contains.");
 	}
 }
 

@@ -45,11 +45,16 @@ export default class ReteFilterModule extends React.Component {
 	}
 	
 	initialize(data){
-		this.engine.process(data);
-		this.editor.fromJSON(data).then(() => {
-			this.editor.view.resize();
-			this.editor.trigger('process');
-		});
+		if(this.engine.data != data){
+			this.engine.process(data);
+			this.editor.fromJSON(data).then(() => {
+				this.editor.view.resize();
+				this.editor.trigger('process');
+			});
+		}
+		else{
+			console.warn("Something tried to initialize ReteFilterModule with the data it already contains");
+		}
 	}
 	
 	getEditorAsJSON(){
@@ -124,16 +129,15 @@ export default class ReteFilterModule extends React.Component {
 			}
 		});
 		
-		let ourEditor = this.editor;
+		let selfEditor = this.editor;
 		//custom function for nodes to prevent them from wanting to process every control change even when not completely plugged in
 		Rete.Node.prototype.processControlChange = function(){
 			if(this.inputs.size + this.outputs.size == this.getConnections().length){
-				ourEditor.trigger("process");
+				selfEditor.trigger("process");
 			}
 		}
 		
 		//adds delete button to delete node support
-		let selfEditor = this.editor;
 		$(document).keyup(function (e) {
 			if(e.keyCode == 46 && $("#FilterPanel").hasClass("out")) {
 				selfEditor.nodes.forEach(function(node){
