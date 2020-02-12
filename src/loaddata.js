@@ -55,6 +55,13 @@ function createPatternSelfReference(){
 	Patterns.forEach(pattern => pattern.PatternsLinks.push({Type: ["Self Reference"], To: pattern.Title}));
 }
 
+//Function to pre-find all the "short descriptions" for the pattern tooltips
+function createShortDescriptions(){
+	Patterns.forEach((pattern) => {
+		pattern.ShortDescription = $(pattern.Content).find("i").first().text();
+	});
+}
+
 //Loads and transforms the patterns from the json format
 function loadPatterns(){
 	var request = loadViaAjax("AllPatterns.json");
@@ -62,6 +69,7 @@ function loadPatterns(){
 		Patterns = data;
 		createPatternCategories();
 		createPatternSelfReference();
+		createShortDescriptions();
 	});
 	return request;
 }

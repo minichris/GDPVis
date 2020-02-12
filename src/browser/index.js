@@ -110,11 +110,10 @@ export class DocumentViewer extends React.Component{
 				if(pageType == "Pattern"){
 					let pattern = Patterns.find(pat => pat.Title == linkTitle);
 					if(pattern){
-						let title = "<b>" + $(pattern.Content).find("h1").first().text() + "</b>";
-						let shortDescription = $(pattern.Content).find("i").first().text();
-						let tooltipContent = title + ": " + shortDescription;
 						tippy(elements[i], {
-							content: tooltipContent,
+							content: function(){
+								return "<b>" + pattern.Title + "</b>" + ": " + pattern.ShortDescription;
+							},
 							theme: 'gdpvis',
 							popperOptions: {
 								modifiers: {
