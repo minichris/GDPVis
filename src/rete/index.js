@@ -95,7 +95,6 @@ export default class ReteFilterModule extends React.Component {
 				}
 			},
 			allocate(component) {
-				console.log(component);
 				return [component.category];
 			},
 			delay: 500

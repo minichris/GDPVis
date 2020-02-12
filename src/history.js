@@ -17,9 +17,15 @@ export class BackButtonComponent extends React.Component{
 	getState(){
 		return(this.state.InternalHistory[this.state.InternalHistory.length - 1])
 	}
+
+	compareStates(stateA, stateB){ //true for same, false for different
+		let titleSame = stateA.currentPage == stateB.currentPage;
+		let nodesSame = JSON.stringify(stateA.nodes) == JSON.stringify(stateB.nodes);
+		return titleSame && nodesSame;
+	}
 	
 	pushState(stateObject){
-		if(this.currentLastState == stateObject){
+		if(this.compareStates(this.currentLastState,stateObject)){
 			console.warn("Tried to push state which is same as current state, ignored.");
 			return;
 		}
