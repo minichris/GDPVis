@@ -128,7 +128,9 @@ export class DocumentViewer extends React.Component{
 			}
 		}
 		
-		console.info("Detected broken links: ",brokenLinks);
+		if(brokenLinks.length > 0){
+			console.info("Detected broken links: ",brokenLinks);
+		}
 		
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
 			if(linkClickedTitle){ //if the title isn't undefined

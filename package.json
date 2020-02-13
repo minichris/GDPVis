@@ -52,7 +52,7 @@
     "popper.js": "^1.15.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-select": "^3.0.5",
+    "react-select": "^3.0.8",
     "rete": "^1.4.1",
     "rete-alight-render-plugin": "^0.1.5",
     "rete-area-plugin": "^0.2.1",
