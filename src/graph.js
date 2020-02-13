@@ -135,7 +135,7 @@ export class Graph extends React.Component{
 			$("#GraphItemCount").text("Nothing matches this filter setup.");
 			return;
 		}
-		
+		console.info("Generate graph called with " + nodesData.length + " nodes and " + linksData.length + " links.");
 		if(nodesData.length == this.prevNodesCount && linksData.length == this.prevLinksCount){
 			return;
 		}
@@ -540,15 +540,12 @@ export function ChangePatternSelection(currentSelectionID){
 //------------------------------
 
 
-//Given a pattern name, gets the pattern's data
-function getPatternData(patternName){
-	return Patterns.find(pattern => pattern.Title == patternName);
-}
+
 
 //Given a source pattern name and a target pattern name, find relation from the source to the target
 export function getPatternOneWayRelationTexts(sourcePatternName, targetPatternName){ //get the relation between a pattern
-	let sourcePattern = getPatternData(sourcePatternName);
-	let targetPattern = getPatternData(targetPatternName);
+	let sourcePattern = Patterns.find(pattern => pattern.Title == sourcePatternName);
+	let targetPattern = Patterns.find(pattern => pattern.Title == targetPatternName);
 	let relationsTexts = null;
 	if(sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title) != null){ //if a pLink actually exists
 		relationsTexts = sourcePattern.PatternsLinks.find(plink => plink.To == targetPattern.Title).Type;
