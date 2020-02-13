@@ -1,6 +1,7 @@
 import React from "react";
 import OtherPage from "./OtherPage.js";
 import {initializeFromStateObject} from '../../index.js';
+import $ from "jquery";
 
 function complexExample(){
 	return({
@@ -168,6 +169,8 @@ export default class SpecialPage extends React.Component {
 			event.stopPropagation();
 			self.goToComplexExample();
 		}
+
+		$(".insertedPage.SpecialPage li > a").attr("href", "javascript:void(0)");
 	}
 	
 	render(){
@@ -200,16 +203,16 @@ export default class SpecialPage extends React.Component {
 						<summary><h3>Example Filters</h3></summary>
 						Why not check out some of these filters for insperation?
 						<ul>
-							<li><a href="javascript:void(0)" title="Category:Games">
+							<li><a title="Category:Games">
 						All Games
 							</a></li>
-							<li><a href="javascript:void(0)" title="Game World Exploration">
+							<li><a title="Game World Exploration">
 						All patterns relating to Game World Exploration
 							</a></li>
-							<li><a href="javascript:void(0)" title="Category:FPS Games">
+							<li><a title="Category:FPS Games">
 						All games in the category "FPS Games"
 							</a></li>
-							<li><a id="ComplexExampleLink" className="ignore" href="javascript:void(0)" title="All patterns which instantiate from patterns that instantiate Thematic Consistency.">
+							<li><a id="ComplexExampleLink" className="ignore" title="All patterns which instantiate from patterns that instantiate Thematic Consistency.">
 						Thematic Consistency, all patterns which instantiate from it, and the patterns that instantiate from those. (Warning: lots of patterns)
 							</a></li>
 						</ul>
