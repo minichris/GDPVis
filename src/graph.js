@@ -53,8 +53,6 @@ export class Graph extends React.Component{
 		}
 
 		var nodesObject = [];  //array to store the output of the function
-		console.log("patterns");
-		console.log(patterns);
 		patterns.forEach(function(pattern){
 			nodesObject.push({
 				id: pattern.Title,
@@ -71,8 +69,6 @@ export class Graph extends React.Component{
 		}
 
 		var nodesObject = [];  //array to store the output of the function
-		console.log("games");
-		console.log(games);
 		games.forEach(function(game){
 			nodesObject.push({
 				id: game.name,

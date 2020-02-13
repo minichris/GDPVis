@@ -78,11 +78,12 @@ class LoadedApp extends React.Component{
 $( document ).ready(function() {
 	startLogger();
 	$("body").removeClass("loading");
-	var requiredDataLoadedPromise = getAllData();
-	requiredDataLoadedPromise.then(function() {
-		$("body").addClass("fullyloaded");
-		ReactDOM.render(<LoadedApp />, document.getElementsByTagName("body")[0]);
-		loadFiltersorDefaults();
+	getAllData().then(function() {
+		$("body").addClass("fullyloaded"); //hide the loading stuff and add some different css rules
+		$("body").empty(); //remove all the loading content from body
+		$("body").append("<div id='appContainer'></div>"); //add a container, rendering to the body causes react to throw an ugly error
+		ReactDOM.render(<LoadedApp />, document.getElementById("appContainer"));
+		loadFiltersorDefaults(); //load some data into the system
 	});
 });
 
@@ -145,13 +146,14 @@ export function setWindowHistory(replace, forceSaveData){
 				filters: global.reteFilterComponent.editor.toJSON() //current Filters
 			}
 		}
-		console.log("trying to setWindowHistory() with", saveData);
 		
 		if(Object.keys(saveData.filters.nodes).length > 0){
 			if(replace){
+				console.log("trying to replaceState from setWindowHistory() with", saveData);
 				global.historyObj.current.replaceState(saveData);
 			}
 			else{
+				console.log("trying to pushState from setWindowHistory() with", saveData);
 				global.historyObj.current.pushState(saveData);
 			}
 			console.log("Success in setWindowHistory()", global.historyObj.current.state.InternalHistory);
