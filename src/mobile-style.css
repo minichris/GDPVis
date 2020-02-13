@@ -26,21 +26,27 @@
 	
 	#DocumentViewer, #FilterPanel{
 		margin: 0;
-		top: 40%;
+		top: 50%;
 		border-radius: 0px;
 		position: fixed;		
 		bottom: 0px;
 		max-width: 100%;
 	}
 
-	#FilterPanel.out {	
-		width: 100%;
+	#FilterPanel{
+		transition: height 2s ease, background-color 0.5s ease, border 2s ease;
+		top: initial;
+		bottom: 0;
+	}
+
+	#FilterPanel.out {
+		height: 50%;
 	}
 
 	#ShowFiltersButton.btn-danger {
 		margin-top: 15px;
 		right: 15px;
-		top: 40%;
+		top: 50%;
 	}
 
 	#RelationshipSelector{
@@ -86,15 +92,7 @@
 	}
 
 	#ShowFiltersButton.btn-danger {
-		top: 45px;
-	}
-
-	#FilterPanel {
-		top: 45px;
-	}
-
-	#FilterPanel.out {
-		width: 50%;
+		top: 50%;
 	}
 
 	#BackButton{
