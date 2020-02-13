@@ -102,8 +102,18 @@ global.updateReteFiltersFromQuery = function(query){
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
 global.refreshGraph = function(newFilteredData){
-	if(difference(newFilteredData,currentlyFilteredData).length !== 0){ //don't bother updating unless its different
-		console.log("New data, refreshing graph", newFilteredData, currentlyFilteredData);
+	function checkSetDifferent(arrayA, arrayB){ //true if different
+		return (difference(arrayA,arrayB).length !== 0) && 
+			(arrayA.length != arrayB.length);
+	}
+
+	//don't bother updating unless its different
+	if(checkSetDifferent(newFilteredData,currentlyFilteredData).length !== 0){ 
+		if(newFilteredData.length > 0){
+			console.warn("Tried to call global.refreshGraph with an empty array.");
+			return;
+		}
+		console.log("New data, refreshing graph", currentlyFilteredData, newFilteredData);
 		currentlyFilteredData = newFilteredData;
 		let dataType;
 		if(currentlyFilteredData[0] && currentlyFilteredData[0].name){
@@ -118,7 +128,7 @@ global.refreshGraph = function(newFilteredData){
 		global.graphComponent.setState({displayData: currentlyFilteredData, dataType: dataType});
 	}
 	else{
-		console.warn("Something tried to call global.refreshGraph with the same data it already contains.");
+		console.warn("Something tried to call global.refreshGraph with the same data it already contains.", currentlyFilteredData, newFilteredData);
 	}
 }
 
