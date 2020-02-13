@@ -250,7 +250,7 @@ export default class SpecialPage extends React.Component {
 		}
 		else{
 			return(
-				<OtherPage title={this.props.title} prevtitle={this.props.prevtitle}/>
+				<OtherPage title={this.props.title}/>
 			);
 		}
 	}

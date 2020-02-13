@@ -131,9 +131,6 @@ export function getURLasJSON(){
 	if(urlParams.has('data')) { //if the url has Filters in the GET request
 		return decodeJSONfromString(urlParams.get('data'));
 	}
-	else{
-		return null;
-	}
 }
 
 

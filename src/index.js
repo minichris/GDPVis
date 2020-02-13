@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import {getAllData} from './loaddata.js';
-import {DocumentViewer, getPageType} from './browser';
-import DocumentViewerOpenButton from './browser/components/DocumentViewerOpenButton.js';
+import DocumentViewer, {getPageType} from './browser';
+
 import {Graph} from './graph.js';
 import SearchBox from './search.js';
 import ReteFilterModule from './rete';
@@ -20,22 +20,26 @@ import {BackButtonComponent, getURLasJSON} from './history.js';
 
 import {difference} from 'lodash';
 
+import { Provider } from 'react-redux';
+
+import store from './store.js';
+
 var currentlyFilteredData = [];
 global.ignoreSettingHistoryOnce = true;
 
 class LoadedApp extends React.Component{
 	constructor(props){
 		super(props);
-		this.docViewerRef = React.createRef();
-		this.reteFilterRef = React.createRef();
-		this.graphRef = React.createRef();
-		global.historyObj  = React.createRef();
+		//this.docViewerRef = React.createRef();
+		//this.reteFilterRef = React.createRef();
+		//this.graphRef = React.createRef();
+		//global.historyObj  = React.createRef();
 	}
 	
 	updateGlobals(){
-		global.docViewerComponent = this.docViewerRef.current;
-		global.reteFilterComponent = this.reteFilterRef.current;
-		global.graphComponent = this.graphRef.current;
+		//global.docViewerComponent = this.docViewerRef.current;
+		//global.reteFilterComponent = this.reteFilterRef.current;
+		//global.graphComponent = this.graphRef.current;
 	}
 
 	componentDidUpdate(){
@@ -55,7 +59,7 @@ class LoadedApp extends React.Component{
 	
 	render(){
 		return(
-			<>
+			<Provider store={store}>
 				<header>
 					<h1 onClick={this.titleClick}>GDPVis</h1>
 					<span id="VersionString">{"version: " + BRANCH + " " + COMMITHASH.slice(0,7)}</span>
@@ -67,10 +71,9 @@ class LoadedApp extends React.Component{
 						<Graph ref={this.graphRef} />
 					</div>
 					<DocumentViewer ref={this.docViewerRef}/>
-					<DocumentViewerOpenButton />
 					<BackButtonComponent ref={global.historyObj} />
 				</div>
-			</>
+			</Provider>
 		);
 	}
 }

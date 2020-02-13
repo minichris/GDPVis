@@ -7,6 +7,7 @@ import {setWindowHistory} from '../index.js';
 import DocumentViewerToolbar from './components/DocumentViewerToolbar.js';
 import DocumentViewerTableOfContents from './components/DocumentViewerTableOfContents.js';
 import DocumentResizer from './components/DocumentResizer.js';
+import DocumentViewerOpenButton from './components/DocumentViewerOpenButton.js';
 
 import GamePage from './pagetypes/GamePage.js';
 import PatternPage from './pagetypes/PatternPage.js';
@@ -17,19 +18,17 @@ import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import './tippy-gdpvis.css';
 
+import { connect } from "react-redux";
+
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
 
 global.documentViewerOpenSize = "50%";
 
-export class DocumentViewer extends React.Component{
+class DocumentViewer extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = {
-			title: null,
-			prevtitle: "Special:UnreachablePage"
-		};
 		this.internalPageRef = React.createRef();
 		this.tableOfContentsRef = React.createRef();
 		
@@ -66,7 +65,7 @@ export class DocumentViewer extends React.Component{
 		}
 	}
 	
-	componentDidUpdate(){		
+	componentDidMount(){		
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
 		if(scrollableElement){
@@ -140,7 +139,7 @@ export class DocumentViewer extends React.Component{
 					global.updateReteFiltersFromQuery(linkClickedTitle);
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
-					setWindowHistory(false); //add the previous state to the history
+					setWindowHistory(false); //add the state to the history
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 					global.docViewerComponent.setState({title: linkClickedTitle});
 				}
@@ -161,23 +160,12 @@ export class DocumentViewer extends React.Component{
 		this.tableOfContentsRef.current.forceUpdate();
 	}
 	
-	shouldComponentUpdate(nextProps, nextState){
-		return nextState.title != this.state.title;
-	}
-
-	getSnapshotBeforeUpdate(prevProps, prevState) {
-		if(prevState.title != this.state.prevtitle){
-			this.state.prevtitle = prevState.title; //eslint-disable-line  react/no-direct-mutation-state
-		}
-		return null;
-	}
-	
 	render(){
-		let pageTitle = this.state.title;
+		let pageTitle = this.props.title;
 		if(pageTitle == null){
 			return(<div><h1>Error</h1><p>Null browser set up</p></div>);
 		}
-		console.info("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
+		console.info("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle));
 		let pageToRender;
 		switch(getPageType(pageTitle)){
 		case "Pattern Category":
@@ -196,26 +184,35 @@ export class DocumentViewer extends React.Component{
 		default:
 			pageToRender = (
 				<div ref={this.internalPageRef}>
-					<span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+					<span>Debug page, Title {pageTitle}</span>
 				</div>
 			);
 			break;
 		}
 
 		return(
-			<div id="DocumentViewer">
-				<DocumentViewerToolbar pageTitle={this.state.title} />
-				<div id="DocumentContainer">
-					<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
-					<div id ="InsertedPageOuter">
-						<DocumentResizer Parent={this} />
-						{pageToRender}
+			<>
+				<div id="DocumentViewer">
+					<DocumentViewerToolbar pageTitle={pageTitle} />
+					<div id="DocumentContainer">
+						<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
+						<div id ="InsertedPageOuter">
+							<DocumentResizer Parent={this} />
+							{pageToRender}
+						</div>
 					</div>
 				</div>
-			</div>
+				<DocumentViewerOpenButton Parent={this} />
+			</>
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return ({title: state.present.page});
+};
+
+export default connect(mapStateToProps)(DocumentViewer);
 
 
 //Give a page title, find the type of the page

@@ -3,12 +3,6 @@ import React from "react";
 export default class OtherPage extends React.Component{
 	constructor(props) {
 		super(props);
-		this.handleGoToPrevPage = this.handleGoToPrevPage.bind(this);
-	}
-
-	handleGoToPrevPage(e){
-		e.preventDefault();
-		window.history.back();
 	}
 
 	render(){
@@ -16,7 +10,6 @@ export default class OtherPage extends React.Component{
 		return(
 			<div className="insertediframe">
 				<iframe src={url}></iframe>
-				<a id="iframebacktext" onClick={this.handleGoToPrevPage} href="javascript:void(0)">While browsing in an iframe, the pattern graph <b>will not</b> update. Click here to return to the last none iframe article you visited...</a>
 			</div>
 		);
 	}
