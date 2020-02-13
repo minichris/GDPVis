@@ -117,7 +117,7 @@ export class Graph extends React.Component{
 
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
-		console.log(this.state.displayData);
+		console.info(this.state.displayData);
 		this.generateGraph(false);
 	}
 

@@ -180,7 +180,10 @@ function loadFiltersorDefaults(){
 		pageJson = [];
 		pageJson["filters"] = getExampleData();
 		pageJson["currentPage"] = "Special:GDPVis";
+		console.info("Loading state from defaults", pageJson);
 	}
-	console.log("Loading state from url or defaults", pageJson);
+	else{
+		console.info("Loading state from url", pageJson);
+	}
 	initializeFromStateObject(pageJson);
 }

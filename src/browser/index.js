@@ -127,7 +127,8 @@ export class DocumentViewer extends React.Component{
 				}
 			}
 		}
-		console.log("Detected broken links: ",brokenLinks);
+		
+		console.info("Detected broken links: ",brokenLinks);
 		
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
 			if(linkClickedTitle){ //if the title isn't undefined
@@ -174,7 +175,7 @@ export class DocumentViewer extends React.Component{
 		if(pageTitle == null){
 			return(<div><h1>Error</h1><p>Null browser set up</p></div>);
 		}
-		console.log("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
+		console.info("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
 		let pageToRender;
 		switch(getPageType(pageTitle)){
 		case "Pattern Category":
