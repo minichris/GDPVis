@@ -683,9 +683,6 @@ Items removed from the new design version
 #SearchBoxOuter > #SearchButton {
 	display: none;
 }
-#ShowFiltersButton{
-	display: none;
-}
 
 #rete{
 	overflow: hidden; 

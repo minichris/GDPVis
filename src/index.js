@@ -12,7 +12,6 @@ import DocumentViewer, {getPageType} from './browser';
 import {Graph} from './graph.js';
 import SearchBox from './search.js';
 import ReteFilterModule from './rete';
-import updateReteComponentFromSearch from './rete/updateReteComponentFromSearch.js';
 import './style.css';
 import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
@@ -22,7 +21,7 @@ import {difference} from 'lodash';
 
 import { Provider } from 'react-redux';
 
-import store from './store.js';
+import store, {changeFilters, updateFromSearch} from './store.js';
 
 var currentlyFilteredData = [];
 global.ignoreSettingHistoryOnce = true;
@@ -32,14 +31,14 @@ class LoadedApp extends React.Component{
 		super(props);
 		//this.docViewerRef = React.createRef();
 		//this.reteFilterRef = React.createRef();
-		//this.graphRef = React.createRef();
+		this.graphRef = React.createRef();
 		//global.historyObj  = React.createRef();
 	}
 	
 	updateGlobals(){
 		//global.docViewerComponent = this.docViewerRef.current;
 		//global.reteFilterComponent = this.reteFilterRef.current;
-		//global.graphComponent = this.graphRef.current;
+		global.graphComponent = this.graphRef.current;
 	}
 
 	componentDidUpdate(){
@@ -58,6 +57,7 @@ class LoadedApp extends React.Component{
 	}
 	
 	render(){
+		//<BackButtonComponent ref={global.historyObj} />
 		return(
 			<Provider store={store}>
 				<header>
@@ -71,7 +71,7 @@ class LoadedApp extends React.Component{
 						<Graph ref={this.graphRef} />
 					</div>
 					<DocumentViewer ref={this.docViewerRef}/>
-					<BackButtonComponent ref={global.historyObj} />
+					
 				</div>
 			</Provider>
 		);
@@ -91,44 +91,32 @@ $( document ).ready(function() {
 });
 
 global.updateReteFiltersFromQuery = function(query){
-	let pageType = getPageType(query);
-	updateReteComponentFromSearch(global.reteFilterComponent, pageType, query);
-	if(!query.includes("GenericSearch:")){ //if it isn't a generic search which would have no real page
-		setWindowHistory(false); //add the previous state to the history
-		global.docViewerComponent.setState({title: query});
-		global.docViewerComponent.displayDocumentViewer(true);
-	}
-	else{
-		setWindowHistory(false); //add the previous state to the history
-	}
+	store.dispatch(updateFromSearch(query));
 }
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
-global.refreshGraph = function(newFilteredData){
+global.refreshGraph = function(newFilteredData, type){
 	function checkSetDifferent(arrayA, arrayB){ //true if different
 		return (difference(arrayA,arrayB).length !== 0) && 
 			(arrayA.length != arrayB.length);
 	}
 
+	function getGraphFriendlyDataType(type){
+		switch(type){
+			case "games":
+				return "Games";
+			case "patterns":
+				return "Patterns";
+			default:
+				return null;
+		}
+	}
+
 	//don't bother updating unless its different
 	if(checkSetDifferent(newFilteredData,currentlyFilteredData).length !== 0){ 
-		if(newFilteredData.length > 0){
-			console.warn("Tried to call global.refreshGraph with an empty array.");
-			return;
-		}
 		console.log("New data, refreshing graph", currentlyFilteredData, newFilteredData);
 		currentlyFilteredData = newFilteredData;
-		let dataType;
-		if(currentlyFilteredData[0] && currentlyFilteredData[0].name){
-			dataType = "Games"
-		}
-		else if(currentlyFilteredData[0] && currentlyFilteredData[0].Title){
-			dataType = "Patterns"
-		}
-		else{
-			dataType = null;
-		}
-		global.graphComponent.setState({displayData: currentlyFilteredData, dataType: dataType});
+		global.graphComponent.setState({displayData: currentlyFilteredData, dataType: getGraphFriendlyDataType(type)});
 	}
 	else{
 		console.warn("Something tried to call global.refreshGraph with the same data it already contains.", currentlyFilteredData, newFilteredData);
@@ -182,9 +170,9 @@ export function setWindowHistory(replace, forceSaveData){
 }
 
 export function initializeFromStateObject(stateObject){
-	global.reteFilterComponent.initialize(stateObject["filters"]);
-	global.docViewerComponent.setState({title: stateObject["currentPage"]});
-	global.docViewerComponent.displayDocumentViewer(true);
+	//global.reteFilterComponent.initialize(stateObject["filters"]);
+	//global.docViewerComponent.setState({title: stateObject["currentPage"]});
+	//global.docViewerComponent.displayDocumentViewer(true);
 }
 
 function loadFiltersorDefaults(){	

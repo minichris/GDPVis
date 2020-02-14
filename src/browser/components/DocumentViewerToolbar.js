@@ -78,7 +78,7 @@ export default class DocumentViewerToolbar extends React.Component{
 	}
 	
 	closeButtonClick(){
-		global.docViewerComponent.displayDocumentViewer(false);
+		this.props.Parent.displayDocumentViewer(false);
 	}
 	
 	getTableOfContentTitle(){

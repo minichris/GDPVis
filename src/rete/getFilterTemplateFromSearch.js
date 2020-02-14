@@ -4,7 +4,7 @@ import searchPatternCategoryTemplate from './searchtemplates/searchPatternCatego
 import searchGameCategoryTemplate from './searchtemplates/searchGameCategoryTemplate.js';
 import searchPatternContentTemplate from './searchtemplates/searchPatternContentTemplate.js';
 
-export default function updateReteComponentFromSearch(reteComponent, type, query){
+export default function getFilterTemplateFromSearch(type, query){
 	var template;
 	switch(type){
 	case "Pattern":
@@ -26,11 +26,6 @@ export default function updateReteComponentFromSearch(reteComponent, type, query
 		template = null;
 		break;
 	}
-	
-	reteComponent.editor.fromJSON(template).then(() => {
-		reteComponent.editor.view.resize();
-	});
-	reteComponent.editor.trigger('process');
 	
 	return template;
 }

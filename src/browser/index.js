@@ -64,8 +64,8 @@ class DocumentViewer extends React.Component{
 			}
 		}
 	}
-	
-	componentDidMount(){		
+
+	mountOrUpdate(){
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
 		if(scrollableElement){
@@ -159,6 +159,14 @@ class DocumentViewer extends React.Component{
 		
 		this.tableOfContentsRef.current.forceUpdate();
 	}
+
+	componentDidMount(){
+		this.mountOrUpdate();
+	}
+	
+	componentDidUpdate(){		
+		this.mountOrUpdate();
+	}
 	
 	render(){
 		let pageTitle = this.props.title;
@@ -193,7 +201,7 @@ class DocumentViewer extends React.Component{
 		return(
 			<>
 				<div id="DocumentViewer">
-					<DocumentViewerToolbar pageTitle={pageTitle} />
+					<DocumentViewerToolbar Parent={this} pageTitle={pageTitle} />
 					<div id="DocumentContainer">
 						<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
 						<div id ="InsertedPageOuter">

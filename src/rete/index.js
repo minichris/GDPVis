@@ -14,6 +14,9 @@ import CustomNode from './nodetemplate.js';
 import components from './nodes';
 import './style.css';
 
+import { connect } from "react-redux";
+import { changeFilters } from "../store.js";
+
 export function toggleFiltersPanel(){
 	$("#FilterPanel").toggleClass('out');
 	if($("#FilterPanel").hasClass('out')){
@@ -39,26 +42,9 @@ export function closeFiltersPanel(){
 	$("#ShowFiltersButton").text("Change Filters");
 }
 
-export default class ReteFilterModule extends React.Component {
+export class ReteFilterModule extends React.Component {
 	constructor(props){
 		super(props);
-	}
-	
-	initialize(data){
-		if(this.engine.data != data){
-			this.engine.process(data);
-			this.editor.fromJSON(data).then(() => {
-				this.editor.view.resize();
-				this.editor.trigger('process');
-			});
-		}
-		else{
-			console.warn("Something tried to initialize ReteFilterModule with the data it already contains");
-		}
-	}
-	
-	getEditorAsJSON(){
-		return this.editor.toJSON();
 	}
 
 	filtersButtonClick(){
@@ -70,14 +56,24 @@ export default class ReteFilterModule extends React.Component {
 		}
 		toggleFiltersPanel();
 	}
+
+	shouldComponentUpdate(nextProps, NextState){
+		if(JSON.stringify(this.props?.data?.nodes) == JSON.stringify(nextProps.data?.nodes)){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+
+	componentDidUpdate(){
+			this.editor.fromJSON(this.props.data).then(() => {
+			this.editor.view.resize();
+			this.editor.trigger('process');
+		});
+	}
 	
 	componentDidMount(){
-		this.engine = new Rete.Engine('tasksample@0.1.0');
-
-		components.list.map(c => {
-			this.engine.register(c);
-		});
-		
 		this.editor = new Rete.NodeEditor('tasksample@0.1.0', document.querySelector('#rete'));
 		this.editor.use(AlightRenderPlugin);
 		this.editor.use(ConnectionPlugin);
@@ -113,13 +109,34 @@ export default class ReteFilterModule extends React.Component {
 			this.editor.register(c);
 		});
 
-		this.editor.on('process connectioncreated', async () => {
-			//ignoring noderemoved, nodecreate, connectionremoved
-			await this.engine.abort();
-			this.currentEditorJSON = this.editor.toJSON();
-			if(this.currentEditorJSON != this.prevEditorJSON){
-				await this.engine.process(this.editor.toJSON());
+		this.editor.on('process', async () => {
+			this.ignoreEvents = true;
+			console.log("Running process");
+			if(engineObj){
+				await engineObj.abort();
 			}
+			let engineObj = new Rete.Engine('tasksample@0.1.0');
+			components.list.map(c => {
+				engineObj.register(c);
+			});
+			await engineObj.process(this.editor.toJSON(), null, function(data, type){
+				console.log("refreshing graph with data: ", data, type);
+				global.refreshGraph(data, type);
+			});
+			this.props.dispatch(changeFilters(this.editor.toJSON()));
+			this.ignoreEvents = false;
+		});
+
+		this.editor.fromJSON(this.props.data).then(() => {
+			this.editor.view.resize();
+			this.editor.trigger('process');
+		});
+
+		this.editor.on('connectioncreated', async () =>{
+			if(!this.ignoreEvents){
+				this.editor.trigger('process');
+			}	
+			return true;
 		});
 		
 		this.editor.on('nodetranslate', function(){
@@ -146,7 +163,6 @@ export default class ReteFilterModule extends React.Component {
 				});
 			}
 		});
-		
 	}
 	
 	render(){
@@ -172,3 +188,9 @@ export default class ReteFilterModule extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return ({data: state.present.filters});
+};
+
+export default connect(mapStateToProps)(ReteFilterModule);
