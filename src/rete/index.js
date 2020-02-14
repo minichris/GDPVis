@@ -57,7 +57,7 @@ export class ReteFilterModule extends React.Component {
 		toggleFiltersPanel();
 	}
 
-	shouldComponentUpdate(nextProps, NextState){
+	shouldComponentUpdate(nextProps, _nextState){
 		if(JSON.stringify(this.props?.data?.nodes) == JSON.stringify(nextProps.data?.nodes)){
 			return false;
 		}
@@ -67,7 +67,7 @@ export class ReteFilterModule extends React.Component {
 	}
 
 	componentDidUpdate(){
-			this.editor.fromJSON(this.props.data).then(() => {
+		this.editor.fromJSON(this.props.data).then(() => {
 			this.editor.view.resize();
 			this.editor.trigger('process');
 		});
@@ -111,7 +111,6 @@ export class ReteFilterModule extends React.Component {
 
 		this.editor.on('process', async () => {
 			this.ignoreEvents = true;
-			console.log("Running process");
 			if(engineObj){
 				await engineObj.abort();
 			}
@@ -120,7 +119,6 @@ export class ReteFilterModule extends React.Component {
 				engineObj.register(c);
 			});
 			await engineObj.process(this.editor.toJSON(), null, function(data, type){
-				console.log("refreshing graph with data: ", data, type);
 				global.refreshGraph(data, type);
 			});
 			this.props.dispatch(changeFilters(this.editor.toJSON()));

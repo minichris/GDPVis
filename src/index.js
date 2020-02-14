@@ -97,7 +97,7 @@ global.updateReteFiltersFromQuery = function(query){
 //Given a set of filtered patterns, refreshes the graph with these patterns
 global.refreshGraph = function(newFilteredData, type){
 	function checkSetDifferent(arrayA, arrayB){ //true if different
-		return (difference(arrayA,arrayB).length !== 0) && 
+		return (difference(arrayA,arrayB).length !== 0) || 
 			(arrayA.length != arrayB.length);
 	}
 

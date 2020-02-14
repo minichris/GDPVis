@@ -19,6 +19,7 @@ import 'tippy.js/dist/tippy.css';
 import './tippy-gdpvis.css';
 
 import { connect } from "react-redux";
+import { setBrowserVisibility } from "../store.js";
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
@@ -31,41 +32,44 @@ class DocumentViewer extends React.Component{
 		super(props);
 		this.internalPageRef = React.createRef();
 		this.tableOfContentsRef = React.createRef();
-		
-		this.displayDocumentViewer = function(show){
-			if(show){
-				document.getElementById("DocumentViewer").style.display = "flex";
-				document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
-				document.getElementById("DocumentViewer").style.minWidth = null;
-				document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
-				
-				let scrollableElement = document.querySelector("#DocumentContainer");
-				if(scrollableElement){
-					scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
-				}
-				$( "#ShowFiltersButton" ).ready(function() {
-					$("#ShowFiltersButton").hide();
-				});
-				$("#DocumentViewerOpenButton").ready(function (){
-					$("#DocumentViewerOpenButton").hide();
-				});
-				logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
-			}
-			else{
-				document.getElementById("DocumentViewer").style.width = "0"
-				document.getElementById("DocumentViewer").style.minWidth = "0"
-				document.getElementById("DocumentViewer").style.borderWidth = "0px"
-				setTimeout(function(){
-					document.getElementById("DocumentViewer").style.display = "none";			
-				}, 500);
-				$("#ShowFiltersButton").show();
-				$("#DocumentViewerOpenButton").show();
-				logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
-			}
-		}
+	}
+
+	displayDocumentViewer(show){
+		this.props.dispatch(setBrowserVisibility(show));
 	}
 
 	mountOrUpdate(){
+		if(this.props.open){
+			document.getElementById("DocumentViewer").style.display = "flex";
+			document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
+			document.getElementById("DocumentViewer").style.minWidth = null;
+			document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
+			
+			let scrollableElement = document.querySelector("#DocumentContainer");
+			if(scrollableElement){
+				scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
+			}
+			$( "#ShowFiltersButton" ).ready(function() {
+				$("#ShowFiltersButton").hide();
+			});
+			$("#DocumentViewerOpenButton").ready(function (){
+				$("#DocumentViewerOpenButton").hide();
+			});
+			logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
+		}
+		else{
+			document.getElementById("DocumentViewer").style.width = "0"
+			document.getElementById("DocumentViewer").style.minWidth = "0"
+			document.getElementById("DocumentViewer").style.borderWidth = "0px"
+			setTimeout(function(){
+				document.getElementById("DocumentViewer").style.display = "none";			
+			}, 500);
+			$("#ShowFiltersButton").show();
+			$("#DocumentViewerOpenButton").show();
+			logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
+		}
+
+
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
 		if(scrollableElement){
@@ -217,7 +221,7 @@ class DocumentViewer extends React.Component{
 }
 
 const mapStateToProps = state => {
-	return ({title: state.present.page});
+	return ({title: state.present.page, open: state.present.browserVisibility});
 };
 
 export default connect(mapStateToProps)(DocumentViewer);

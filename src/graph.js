@@ -9,6 +9,8 @@ import {setWindowHistory} from './index.js';
 import {closeFiltersPanel} from './rete/index.js';
 import WarningDialog from './warningdialog.js';
 import Tooltip from './tooltip.js';
+import {difference} from 'lodash';
+import store, { setBrowserVisibility, changeDisplayedBrowserPage } from "./store.js";
 
 export var RelationshipColors = {
 	//goes R, G, B
@@ -113,7 +115,13 @@ export class Graph extends React.Component{
 		return linksObject;
 	}
 	
-	
+	shouldComponentUpdate(nextProps, nextState){
+		function checkSetDifferent(arrayA, arrayB){ //true if different
+			return (difference(arrayA,arrayB).length !== 0) || 
+				(arrayA.length != arrayB.length);
+		}
+		return (checkSetDifferent(this.state.displayData, nextState.displayData))
+	}
 
 	componentDidUpdate(){
 		$(this.svg.current).find("g").empty();
@@ -516,7 +524,7 @@ var prevSelectionID;
 export function ChangePatternSelection(currentSelectionID){
 	if(currentSelectionID){
 		setWindowHistory(false); //add the previous state to the history
-		global.docViewerComponent.displayDocumentViewer(true);
+		store.dispatch(setBrowserVisibility(true));
 		
 		//handle the highlighted node
 		var nodeIDToHighlight = "#Node_" + currentSelectionID.replace(/[\W_]/g,'_');
@@ -526,11 +534,11 @@ export function ChangePatternSelection(currentSelectionID){
 		if(currentSelectionID != prevSelectionID){
 			prevSelectionID = currentSelectionID;
 			//handle the document DocumentViewer
-			global.docViewerComponent.setState({title: currentSelectionID});
+			store.dispatch(changeDisplayedBrowserPage(currentSelectionID));
 		}
 	}
 	else{
-		global.docViewerComponent.displayDocumentViewer(false);
+		store.dispatch(setBrowserVisibility(false));
 		$(".SelectedNode").removeClass('SelectedNode');
 	}
 }
