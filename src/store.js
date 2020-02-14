@@ -108,12 +108,25 @@ const undoableGdpReducer = undoable(
 		]),
 		function(action, currentState, previousHistory){
 			if(action.type == 'CHANGE_PAGE'){
+				Error("Changing page to the same page");
 				return currentState.page != previousHistory;
 			}
 			else{
 				return true;
 			}
-		}
+		}/*,
+		function(action, currentState, previousHistory){
+			return(
+				((JSON.stringify(Object.values(currentState.filters.nodes)
+					.map((node) => node.data)) != 
+				JSON.stringify(Object.values(currentState.filters.nodes)
+					.map((node) => node.data))) ||
+				(JSON.stringify(Object.values(currentState.filters.nodes)
+					.map((node) => node.name)) != 
+				JSON.stringify(Object.values(currentState.filters.nodes)
+					.map((node) => node.name)))) &&
+				currentState.page != previousHistory.page)
+		}*/
 	)
 });
 
@@ -121,7 +134,4 @@ const store = createStore(undoableGdpReducer, getURLasStoreData(initialState));
 console.log(store.getState());
 const loggerUnsubscribe = store.subscribe(() => console.log(store.getState()));
 const windowHistoryUnsubscribe = store.subscribe(() => setWindowHistory(store));
-//store.dispatch(UndoActionCreators.undo());
-//store.dispatch(UndoActionCreators.redo());
-//store.dispatch(changeDisplayedBrowserPage("World of Warcraft"));
 export default store;

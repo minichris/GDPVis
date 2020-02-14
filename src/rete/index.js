@@ -58,7 +58,16 @@ export class ReteFilterModule extends React.Component {
 	}
 
 	shouldComponentUpdate(nextProps, _nextState){
-		if(JSON.stringify(this.props?.data?.nodes) == JSON.stringify(nextProps.data?.nodes)){
+		if(
+			(JSON.stringify(Object.values(this.props?.data?.nodes)
+				.map((node) => node.data)) == 
+			JSON.stringify(Object.values(nextProps.data?.nodes)
+				.map((node) => node.data))) &&
+				(JSON.stringify(Object.values(this.props?.data?.nodes)
+				.map((node) => node.name)) == 
+			JSON.stringify(Object.values(nextProps.data?.nodes)
+				.map((node) => node.name)))
+		){
 			return false;
 		}
 		else{
@@ -109,7 +118,7 @@ export class ReteFilterModule extends React.Component {
 			this.editor.register(c);
 		});
 
-		global.test = this;
+		this.finishedProcessing = true;
 
 		this.editor.on('process', () => {
 			this.finishedProcessing = true;
@@ -130,10 +139,10 @@ export class ReteFilterModule extends React.Component {
 		});
 
 		this.editor.on('connectioncreated', async () =>{
-			this.editor.trigger('process');	
 			if(!this.finishedProcessing){
 				this.props.dispatch(changeFilters(this.editor.toJSON()));
 			}
+			this.editor.trigger('process');	
 		});
 		
 		this.editor.on('nodetranslate', function(){

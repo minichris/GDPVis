@@ -5,6 +5,7 @@
 import React from "react";
 import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import { connect } from "react-redux";
+import './mobile-style.css';
 
 class BackButtonComponent extends React.Component{
 	constructor(props){

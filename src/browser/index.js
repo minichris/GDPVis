@@ -156,7 +156,6 @@ class DocumentViewer extends React.Component{
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
 					ChangePatternSelection(linkClickedTitle); //select the pattern
-					selfBrowser.props.dispatch(changeDisplayedBrowserPage(linkClickedTitle));
 				}
 				logger.info("User clicked a link to " + linkClickedTitle + " @ " + Math.round((new Date()).getTime() / 1000));
 			}
