@@ -15,7 +15,7 @@ import components from './nodes';
 import './style.css';
 
 import { connect } from "react-redux";
-import { changeFilters } from "../store.js";
+import { changeFilters, internalChangeFilters } from "../store.js";
 
 export function toggleFiltersPanel(){
 	$("#FilterPanel").toggleClass('out');
@@ -109,32 +109,31 @@ export class ReteFilterModule extends React.Component {
 			this.editor.register(c);
 		});
 
-		this.editor.on('process', async () => {
-			this.ignoreEvents = true;
-			if(engineObj){
-				await engineObj.abort();
-			}
-			let engineObj = new Rete.Engine('tasksample@0.1.0');
-			components.list.map(c => {
-				engineObj.register(c);
-			});
-			await engineObj.process(this.editor.toJSON(), null, function(data, type){
-				global.refreshGraph(data, type);
-			});
-			this.props.dispatch(changeFilters(this.editor.toJSON()));
-			this.ignoreEvents = false;
-		});
+		global.test = this;
 
-		this.editor.fromJSON(this.props.data).then(() => {
-			this.editor.view.resize();
-			this.editor.trigger('process');
+		this.editor.on('process', () => {
+			this.finishedProcessing = true;
+			if(this.engineObj){
+				this.engineObj.abort();
+			}
+			this.engineObj = new Rete.Engine('tasksample@0.1.0');
+			components.list.map(c => {
+				this.engineObj.register(c);
+			});
+			
+			this.engineObj.process(this.editor.toJSON(), null, function(data, type){
+				global.refreshGraph(data, type);
+			}).then(() => {
+				this.props.dispatch(internalChangeFilters(this.editor.toJSON()));
+				this.finishedProcessing = false;
+			});
 		});
 
 		this.editor.on('connectioncreated', async () =>{
-			if(!this.ignoreEvents){
-				this.editor.trigger('process');
-			}	
-			return true;
+			this.editor.trigger('process');	
+			if(!this.finishedProcessing){
+				this.props.dispatch(changeFilters(this.editor.toJSON()));
+			}
 		});
 		
 		this.editor.on('nodetranslate', function(){
@@ -160,6 +159,12 @@ export class ReteFilterModule extends React.Component {
 					}
 				});
 			}
+		});
+
+		this.editor.fromJSON(this.props.data).then(() => {
+			this.editor.view.resize();
+			this.finishedProcessing = true;
+			this.editor.trigger('process');
 		});
 	}
 	

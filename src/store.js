@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 import getExampleData from './rete/exampledata.js';
-import undoable, { excludeAction } from 'redux-undo';
+import undoable, { excludeAction, combineFilters } from 'redux-undo';
 import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import {getPageType} from './browser';
 import getFilterTemplateFromSearch from './rete/getFilterTemplateFromSearch.js';
@@ -42,6 +42,13 @@ export function changeFilters(filters) {
 	}
 }
 
+export function internalChangeFilters(filters) {
+	return {
+		type: 'INTERNAL_CHANGE_SET',
+		filters
+	}
+}
+
 export function changeDisplayedBrowserPage(page) {
 	return {
 		type: 'CHANGE_PAGE',
@@ -69,6 +76,10 @@ function gdpReducer(state = initialState, action) {
 			return Object.assign({}, state, {
 				filters: action.filters
 			});
+		case 'INTERNAL_CHANGE_SET':
+			return Object.assign({}, state, {
+				filters: action.filters
+			});
 		case 'CHANGE_PAGE':
 			return Object.assign({}, state, {
 				page: action.page
@@ -90,7 +101,20 @@ function gdpReducer(state = initialState, action) {
 
 const undoableGdpReducer = undoable(
 	gdpReducer, 
-	{filter: excludeAction(['BROWSER_SET_VISIBILITY'])
+	{filter: combineFilters(
+		excludeAction([
+			'BROWSER_SET_VISIBILITY', 
+			'INTERNAL_CHANGE_SET'
+		]),
+		function(action, currentState, previousHistory){
+			if(action.type == 'CHANGE_PAGE'){
+				return currentState.page != previousHistory;
+			}
+			else{
+				return true;
+			}
+		}
+	)
 });
 
 const store = createStore(undoableGdpReducer, getURLasStoreData(initialState));
