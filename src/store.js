@@ -4,6 +4,7 @@ import undoable, { excludeAction } from 'redux-undo';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 import {getPageType} from './browser';
 import getFilterTemplateFromSearch from './rete/getFilterTemplateFromSearch.js';
+import {setWindowHistory, getURLasStoreData} from './windowHistoryUtil.js';
 
 export function updateFromSearch(searchTerm){
 	let pageType = getPageType(searchTerm);
@@ -70,16 +71,14 @@ function gdpReducer(state = initialState, action) {
 
 const undoableGdpReducer = undoable(
 	gdpReducer, 
-	{filter: excludeAction([
-		'BROWSER_SET_VISIBILITY'
-	])
+	{filter: excludeAction(['BROWSER_SET_VISIBILITY'])
 });
 
-const store = createStore(undoableGdpReducer);
+const store = createStore(undoableGdpReducer, getURLasStoreData(initialState));
 console.log(store.getState());
-const unsubscribe = store.subscribe(() => console.log(store.getState()));
-store.dispatch(UndoActionCreators.undo());
-store.dispatch(UndoActionCreators.redo());
-store.dispatch(changeDisplayedBrowserPage("World of Warcraft"));
-//unsubscribe();
+const loggerUnsubscribe = store.subscribe(() => console.log(store.getState()));
+const windowHistoryUnsubscribe = store.subscribe(() => setWindowHistory(store));
+//store.dispatch(UndoActionCreators.undo());
+//store.dispatch(UndoActionCreators.redo());
+//store.dispatch(changeDisplayedBrowserPage("World of Warcraft"));
 export default store;

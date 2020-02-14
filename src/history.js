@@ -6,7 +6,7 @@ import React from "react";
 import {initializeFromStateObject} from './index.js';
 import $ from 'jquery';
 
-export class BackButtonComponent extends React.Component{
+class BackButtonComponent extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -124,21 +124,4 @@ export class BackButtonComponent extends React.Component{
 			</div>
 		);
 	}
-}
-
-export function getURLasJSON(){
-	var urlParams = new URLSearchParams( new URL(window.location).search);
-	if(urlParams.has('data')) { //if the url has Filters in the GET request
-		return decodeJSONfromString(urlParams.get('data'));
-	}
-}
-
-
-//FUNCTIONS FOR ENCODING / DECODING JSON
-export function encodeJSONtoString(JSONData){
-	return btoa(unescape(encodeURIComponent(JSON.stringify(JSONData))));
-}
-
-export function decodeJSONfromString(string){
-	return JSON.parse(decodeURIComponent(escape(atob(string))));
 }

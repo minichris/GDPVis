@@ -2,7 +2,6 @@ import $ from 'jquery';
 import React from "react";
 import {Patterns, Games} from '../loaddata.js';
 import {ChangePatternSelection} from '../graph.js';
-import {setWindowHistory} from '../index.js';
 
 import DocumentViewerToolbar from './components/DocumentViewerToolbar.js';
 import DocumentViewerTableOfContents from './components/DocumentViewerTableOfContents.js';
@@ -143,7 +142,6 @@ class DocumentViewer extends React.Component{
 					global.updateReteFiltersFromQuery(linkClickedTitle);
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
-					setWindowHistory(false); //add the state to the history
 					ChangePatternSelection(linkClickedTitle); //select the pattern
 					global.docViewerComponent.setState({title: linkClickedTitle});
 				}

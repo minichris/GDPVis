@@ -15,7 +15,7 @@ import ReteFilterModule from './rete';
 import './style.css';
 import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
-import {BackButtonComponent, getURLasJSON} from './history.js';
+import {encodeJSONtoString, getURLasJSON} from './history.js';
 
 import {difference} from 'lodash';
 
@@ -131,41 +131,6 @@ global.isPatternCurrentlyFiltered = function(patternName){
 	}
 	else{
 		return false;
-	}
-}
-
-
-export function setWindowHistory(replace, forceSaveData){
-	try {
-		let saveData;
-		if(forceSaveData){
-			saveData = forceSaveData;
-		}
-		else{
-			saveData = {
-				currentPage: global.docViewerComponent.state.title, //current browser page
-				filters: global.reteFilterComponent.editor.toJSON() //current Filters
-			}
-		}
-		
-		if(Object.keys(saveData.filters.nodes).length > 0){
-			if(replace){
-				console.log("trying to replaceState from setWindowHistory() with", saveData);
-				global.historyObj.current.replaceState(saveData);
-			}
-			else{
-				console.log("trying to pushState from setWindowHistory() with", saveData);
-				global.historyObj.current.pushState(saveData);
-			}
-			console.log("Success in setWindowHistory()", global.historyObj.current.state.InternalHistory);
-		}
-		else{
-			throw(new Error("Nodes length is not greater than 0"));
-		}
-	}
-	catch(exception){
-		console.warn("Failed at saving in setWindowHistory", exception);
-		console.log(global.reteFilterComponent);
 	}
 }
 

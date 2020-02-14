@@ -5,7 +5,6 @@ import React from "react";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 import {Patterns} from './loaddata.js';
-import {setWindowHistory} from './index.js';
 import {closeFiltersPanel} from './rete/index.js';
 import WarningDialog from './warningdialog.js';
 import Tooltip from './tooltip.js';
@@ -147,7 +146,6 @@ export class Graph extends React.Component{
 		if(nodesData.length == this.prevNodesCount && linksData.length == this.prevLinksCount){
 			return;
 		}
-		setWindowHistory(false); //add the previous state to the history
 		this.prevNodesCount = nodesData;
 		this.prevLinksCount = linksData;
 	
@@ -523,7 +521,6 @@ var prevSelectionID;
 //function which handles changing the currently selected pattern
 export function ChangePatternSelection(currentSelectionID){
 	if(currentSelectionID){
-		setWindowHistory(false); //add the previous state to the history
 		store.dispatch(setBrowserVisibility(true));
 		
 		//handle the highlighted node
