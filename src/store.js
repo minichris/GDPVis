@@ -17,6 +17,15 @@ export function updateFromSearch(searchTerm){
 	}
 }
 
+export function goToSpecificBrowserFilterSetup(page, filters){
+	return{
+		type: 'SEARCH',
+		filters,
+		page,
+		browserVisibility: true
+	}
+}
+
 export function goHome(){
 	return{
 		type: 'SEARCH',
@@ -54,6 +63,7 @@ const initialState = {
 }
 
 function gdpReducer(state = initialState, action) {
+	console.error(action.type);
 	switch(action.type){
 		case 'CHANGE_SET':
 			return Object.assign({}, state, {

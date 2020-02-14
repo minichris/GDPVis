@@ -3,6 +3,7 @@ import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
 import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
+import store, {changeFilters, updateFromSearch, goHome} from './store.js';
 
 export default class SearchBox extends React.Component {
 	constructor(props){
@@ -51,7 +52,7 @@ export default class SearchBox extends React.Component {
 		let searchBoxRef = this.refs["SearchBox"];
 		
 		$(this.refs["SearchBox"]).on('select2:select', function() {
-			component.searchButtonClicked(null);
+			component.searchButtonClicked(store);
 			$(searchBoxRef).val([]).trigger('change');
 		});
 		
@@ -72,9 +73,9 @@ export default class SearchBox extends React.Component {
 		return $('<span>' + option.element.dataset.type + ': ' + option.text + '</span>');
 	}
 
-	searchButtonClicked(){
+	searchButtonClicked(store){
 		let articleSelected = $("#SearchBox").val();
-		global.updateReteFiltersFromQuery(articleSelected);
+		store.dispatch(updateFromSearch(articleSelected));
 		logger.info("User used search bar to search for " + articleSelected + " @ " + Math.round((new Date()).getTime() / 1000));
 	}
 

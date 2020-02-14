@@ -24,24 +24,19 @@ import { Provider } from 'react-redux';
 import store, {changeFilters, updateFromSearch, goHome} from './store.js';
 
 var currentlyFilteredData = [];
-global.ignoreSettingHistoryOnce = true;
 
 class LoadedApp extends React.Component{
 	constructor(props){
 		super(props);
 		this.graphRef = React.createRef();
 	}
-	
-	updateGlobals(){
+
+	componentDidUpdate(){
 		global.graphComponent = this.graphRef.current;
 	}
 
-	componentDidUpdate(){
-		this.updateGlobals();
-	}
-
 	componentDidMount(){
-		this.updateGlobals();
+		global.graphComponent = this.graphRef.current;
 	}
 
 	titleClick(){
@@ -58,11 +53,11 @@ class LoadedApp extends React.Component{
 				</header>
 				<div id="Content">
 					<div id="GraphLayout">
-						<ReteFilterModule ref={this.reteFilterRef} />
+						<ReteFilterModule/>
 						<Graph ref={this.graphRef} />
 					</div>
-					<DocumentViewer ref={this.docViewerRef}/>
-					<BackButtonComponent ref={global.historyObj} />
+					<DocumentViewer/>
+					<BackButtonComponent />
 				</div>
 			</Provider>
 		);
@@ -77,13 +72,8 @@ $( document ).ready(function() {
 		$("body").empty(); //remove all the loading content from body
 		$("body").append("<div id='appContainer'></div>"); //add a container, rendering to the body causes react to throw an ugly error
 		ReactDOM.render(<LoadedApp />, document.getElementById("appContainer"));
-		loadFiltersorDefaults(); //load some data into the system
 	});
 });
-
-global.updateReteFiltersFromQuery = function(query){
-	store.dispatch(updateFromSearch(query));
-}
 
 //Given a set of filtered patterns, refreshes the graph with these patterns
 global.refreshGraph = function(newFilteredData, type){
@@ -123,24 +113,4 @@ global.isPatternCurrentlyFiltered = function(patternName){
 	else{
 		return false;
 	}
-}
-
-export function initializeFromStateObject(stateObject){
-	//global.reteFilterComponent.initialize(stateObject["filters"]);
-	//global.docViewerComponent.setState({title: stateObject["currentPage"]});
-	//global.docViewerComponent.displayDocumentViewer(true);
-}
-
-function loadFiltersorDefaults(){	
-	let pageJson = getURLasJSON();
-	if(!pageJson){ //if can't get URL as JSON, use default filters
-		pageJson = [];
-		pageJson["filters"] = getExampleData();
-		pageJson["currentPage"] = "Special:GDPVis";
-		console.info("Loading state from defaults", pageJson);
-	}
-	else{
-		console.info("Loading state from url", pageJson);
-	}
-	initializeFromStateObject(pageJson);
 }

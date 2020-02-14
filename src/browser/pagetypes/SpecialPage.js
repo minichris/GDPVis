@@ -1,7 +1,7 @@
 import React from "react";
 import OtherPage from "./OtherPage.js";
-import {initializeFromStateObject} from '../../index.js';
 import $ from "jquery";
+import store, {goToSpecificBrowserFilterSetup} from "../../store.js";
 
 function complexExample(){
 	return({
@@ -157,10 +157,7 @@ function complexExample(){
 
 export default class SpecialPage extends React.Component {
 	goToComplexExample(){
-		let pageJson = [];
-		pageJson["filters"] = complexExample();
-		pageJson["currentPage"] = "Thematic Consistency";
-		initializeFromStateObject(pageJson);
+		store.dispatch(goToSpecificBrowserFilterSetup("Thematic Consistency", complexExample()));
 	}
 	
 	componentDidMount(){

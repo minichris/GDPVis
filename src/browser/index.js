@@ -18,7 +18,7 @@ import 'tippy.js/dist/tippy.css';
 import './tippy-gdpvis.css';
 
 import { connect } from "react-redux";
-import { setBrowserVisibility } from "../store.js";
+import { setBrowserVisibility, changeDisplayedBrowserPage, updateFromSearch } from "../store.js";
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
@@ -37,6 +37,7 @@ class DocumentViewer extends React.Component{
 	}
 
 	mountOrUpdate(){
+		let selfBrowser = this;
 		if(this.props.open){
 			document.getElementById("DocumentViewer").style.display = "flex";
 			document.getElementById("DocumentViewer").style.width = this.openSize;
@@ -134,15 +135,28 @@ class DocumentViewer extends React.Component{
 		}
 		
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
+			function isPageCurrentlyFiltered(pageName){
+				let data = global.graphComponent.state.displayData;
+				if(data[0] && data[0].Title){
+					return (data.find(fPattern => fPattern.Title == pageName) != null);
+				}
+				if(data[0] && data[0].name){
+					return (data.find(fGame => fGame.name == pageName) != null);
+				}
+				else{
+					return false;
+				}
+			}
+			
 			if(linkClickedTitle){ //if the title isn't undefined
 
 				//if the pattern isn't in the graph, or we are force updating the graph
-				if(!global.isPatternCurrentlyFiltered(linkClickedTitle) || forceUpdateFilters){
-					global.updateReteFiltersFromQuery(linkClickedTitle);
+				if(!isPatternCurrentlyFiltered(linkClickedTitle) || forceUpdateFilters){
+					selfBrowser.props.dispatch(updateFromSearch(linkClickedTitle));
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
 					ChangePatternSelection(linkClickedTitle); //select the pattern
-					global.docViewerComponent.setState({title: linkClickedTitle});
+					selfBrowser.props.dispatch(changeDisplayedBrowserPage(linkClickedTitle));
 				}
 				logger.info("User clicked a link to " + linkClickedTitle + " @ " + Math.round((new Date()).getTime() / 1000));
 			}
