@@ -24,13 +24,12 @@ import { setBrowserVisibility } from "../store.js";
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
 
-global.documentViewerOpenSize = "50%";
-
 class DocumentViewer extends React.Component{
 	constructor(props) {
 		super(props);
 		this.internalPageRef = React.createRef();
 		this.tableOfContentsRef = React.createRef();
+		this.openSize = "50%";
 	}
 
 	displayDocumentViewer(show){
@@ -40,7 +39,7 @@ class DocumentViewer extends React.Component{
 	mountOrUpdate(){
 		if(this.props.open){
 			document.getElementById("DocumentViewer").style.display = "flex";
-			document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
+			document.getElementById("DocumentViewer").style.width = this.openSize;
 			document.getElementById("DocumentViewer").style.minWidth = null;
 			document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
 			
@@ -189,7 +188,7 @@ class DocumentViewer extends React.Component{
 			pageToRender = <PatternPage ref={this.internalPageRef} title={pageTitle}/>;
 			break;
 		case "Special":
-			pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle} prevtitle={this.state.prevtitle}/>;
+			pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle}/>;
 			break;
 		default:
 			pageToRender = (

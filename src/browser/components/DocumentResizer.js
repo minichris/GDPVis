@@ -6,13 +6,15 @@ export default class DocumentResizer extends React.Component{
 	}
 	
 	initResize() {
+		let Parent = this.props.Parent;
+
 		function disableSelect(event) {
 			event.preventDefault();
 		}
 
 		function Resize(e) {
-			global.documentViewerOpenSize = Math.max((window.innerWidth - e.clientX), 330) + 'px';
-			document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
+			Parent.openSize = Math.max((window.innerWidth - e.clientX), 330) + 'px';
+			document.getElementById("DocumentViewer").style.width = Parent.openSize;
 		}
 
 		function stopResize() {
@@ -34,7 +36,7 @@ export default class DocumentResizer extends React.Component{
 	
 	render(){
 		return(
-			<div onMouseDown={this.initResize.bind()} id="DocumentResizer"></div>
+			<div onMouseDown={this.initResize.bind(this)} id="DocumentResizer"></div>
 		);
 	}
 }

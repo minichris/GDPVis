@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 import getExampleData from './rete/exampledata.js';
 import undoable, { excludeAction } from 'redux-undo';
-import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import {getPageType} from './browser';
 import getFilterTemplateFromSearch from './rete/getFilterTemplateFromSearch.js';
 import {setWindowHistory, getURLasStoreData} from './windowHistoryUtil.js';
@@ -14,6 +14,15 @@ export function updateFromSearch(searchTerm){
 		filters: getFilterTemplateFromSearch(pageType, searchTerm),
 		page: searchTerm,
 		browserVisibility: !searchTerm.includes("GenericSearch:")
+	}
+}
+
+export function goHome(){
+	return{
+		type: 'SEARCH',
+		filters: getExampleData(),
+		page: "Special:GDPVis",
+		browserVisibility: true
 	}
 }
 

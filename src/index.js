@@ -15,13 +15,13 @@ import ReteFilterModule from './rete';
 import './style.css';
 import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
-import {encodeJSONtoString, getURLasJSON} from './history.js';
+import BackButtonComponent from './BackButton.js';
 
 import {difference} from 'lodash';
 
 import { Provider } from 'react-redux';
 
-import store, {changeFilters, updateFromSearch} from './store.js';
+import store, {changeFilters, updateFromSearch, goHome} from './store.js';
 
 var currentlyFilteredData = [];
 global.ignoreSettingHistoryOnce = true;
@@ -29,15 +29,10 @@ global.ignoreSettingHistoryOnce = true;
 class LoadedApp extends React.Component{
 	constructor(props){
 		super(props);
-		//this.docViewerRef = React.createRef();
-		//this.reteFilterRef = React.createRef();
 		this.graphRef = React.createRef();
-		//global.historyObj  = React.createRef();
 	}
 	
 	updateGlobals(){
-		//global.docViewerComponent = this.docViewerRef.current;
-		//global.reteFilterComponent = this.reteFilterRef.current;
 		global.graphComponent = this.graphRef.current;
 	}
 
@@ -50,14 +45,10 @@ class LoadedApp extends React.Component{
 	}
 
 	titleClick(){
-		var pageJson = [];
-		pageJson["filters"] = getExampleData();
-		pageJson["currentPage"] = "Special:GDPVis";
-		initializeFromStateObject(pageJson);
+		store.dispatch(goHome());
 	}
 	
 	render(){
-		//<BackButtonComponent ref={global.historyObj} />
 		return(
 			<Provider store={store}>
 				<header>
@@ -71,7 +62,7 @@ class LoadedApp extends React.Component{
 						<Graph ref={this.graphRef} />
 					</div>
 					<DocumentViewer ref={this.docViewerRef}/>
-					
+					<BackButtonComponent ref={global.historyObj} />
 				</div>
 			</Provider>
 		);
