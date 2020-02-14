@@ -5,6 +5,7 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import {getPageType} from './browser';
 import getFilterTemplateFromSearch from './rete/getFilterTemplateFromSearch.js';
 import {setWindowHistory, getURLasStoreData} from './windowHistoryUtil.js';
+import _ from 'lodash';
 
 export function updateFromSearch(searchTerm){
 	let pageType = getPageType(searchTerm);
@@ -99,6 +100,16 @@ function gdpReducer(state = initialState, action) {
 	}
 }
 
+let samestateRemover = function(action, currentState, previousHistory){
+	let currentNodes = Object.values(currentState?.filters?.nodes || []);
+	let previousNodes = Object.values(previousHistory?.past[previousHistory?.past.lastIndexOf()]?.filters.nodes || []);
+	console.error(currentNodes, previousNodes);
+	return (
+		!_.isEqual(currentNodes, previousNodes) &&
+		currentState.page != previousHistory?.past[previousHistory?.past.lastIndexOf()]?.page
+	)
+}
+
 const undoableGdpReducer = undoable(
 	gdpReducer, 
 	{filter: combineFilters(
@@ -114,21 +125,12 @@ const undoableGdpReducer = undoable(
 			else{
 				return true;
 			}
-		}/*,
-		function(action, currentState, previousHistory){
-			return(
-				((JSON.stringify(Object.values(currentState.filters.nodes)
-					.map((node) => node.data)) != 
-				JSON.stringify(Object.values(currentState.filters.nodes)
-					.map((node) => node.data))) ||
-				(JSON.stringify(Object.values(currentState.filters.nodes)
-					.map((node) => node.name)) != 
-				JSON.stringify(Object.values(currentState.filters.nodes)
-					.map((node) => node.name)))) &&
-				currentState.page != previousHistory.page)
-		}*/
+		},
+		samestateRemover
 	)
 });
+
+
 
 const store = createStore(undoableGdpReducer, getURLasStoreData(initialState));
 console.log(store.getState());
