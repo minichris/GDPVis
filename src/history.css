@@ -26,9 +26,18 @@ body.fullyloaded #Content > #BackButtonOuter{
 }
 
 #ForwardButton{
-	top: 47.5vh;
+	padding: 7.5px 0px 5px 0px;
+	top: calc(50vh - (25vh / 4) + (12.5vh / 2));
+}
+
+#ForwardButton > svg{
+	transform-origin: center;
+    transform: rotate(180.0deg);
+    position: relative;
+    top: -2px;
 }
 
 #BackButton{
 	padding: 7.5px 0px 5px 0px;
+	top: calc(50vh - (25vh / 4) - (12.5vh / 2));
 }

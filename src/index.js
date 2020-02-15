@@ -16,12 +16,14 @@ import './style.css';
 import './mobile-style.css';
 import getExampleData from './rete/exampledata.js';
 import BackButtonComponent from './BackButton.js';
+import ForwardButtonComponent from './ForwardButton.js';
 
 import {difference} from 'lodash';
 
 import { Provider } from 'react-redux';
 
 import store, {changeFilters, updateFromSearch, goHome} from './store.js';
+import ForwardButton from './ForwardButton.js';
 
 var currentlyFilteredData = [];
 
@@ -57,7 +59,10 @@ class LoadedApp extends React.Component{
 						<Graph ref={this.graphRef} />
 					</div>
 					<DocumentViewer/>
-					<BackButtonComponent />
+					<div id="BackButtonOuter">
+						<BackButtonComponent />
+						<ForwardButtonComponent />
+					</div>
 				</div>
 			</Provider>
 		);

@@ -7,14 +7,14 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo';
 import { connect } from "react-redux";
 import './history.css';
 
-class BackButtonComponent extends React.Component{
+class ForwardButtonComponent extends React.Component{
 	constructor(props){
 		super(props);
 	}
 	
 	handleClick(){
 		if(this.props.history.length > 0){
-			this.props.dispatch(UndoActionCreators.undo());
+			this.props.dispatch(UndoActionCreators.redo());
 		}
 	}
 
@@ -29,10 +29,10 @@ class BackButtonComponent extends React.Component{
 			previousStateTexts.push("\n...");
 		}
 		if(this.props.history.length > 0){
-			return "Click to go back. There is " + this.props.history.length + " states in history. The last 5 are: " + previousStateTexts;
+			return "Click to go forward. There is " + this.props.history.length + " states to redo. The last 5 are: " + previousStateTexts;
 		}
 		else{
-			return "Click to go back. There is nothing in the history."
+			return "Click to go forward. There is nothing to redo."
 		}
 	}
 
@@ -47,7 +47,7 @@ class BackButtonComponent extends React.Component{
 	render(){
 
 		return(
-			<div onClick={this.handleClick.bind(this)} className={this.getClassname()} id="BackButton" title={this.getTitle()} augmented-ui="tl-clip br-clip exe">
+			<div onClick={this.handleClick.bind(this)} className={this.getClassname()} id="ForwardButton" title={this.getTitle()} augmented-ui="bl-clip tr-clip exe">
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
 					<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/>
 				</svg>
@@ -57,7 +57,7 @@ class BackButtonComponent extends React.Component{
 }
 
 const mapStateToProps = state => {
-	return ({history: state.past});
+	return ({history: state.future});
 };
 
-export default connect(mapStateToProps)(BackButtonComponent);
+export default connect(mapStateToProps)(ForwardButtonComponent);

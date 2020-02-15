@@ -647,8 +647,8 @@ body.fullyloaded #DocumentViewerOpenButtonOuter{
 	display: inline-block !important;
 }
 
-#DocumentViewerOpenButton, #BackButton{
-    top: 35vh;
+#DocumentViewerOpenButton, #BackButton, #ForwardButton{
+	top: calc(50vh - (25vh / 2));
     width: 25vh;
     padding: 5px 0px 7.5px 0px;
     text-align: center;
