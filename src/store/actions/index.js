@@ -1,4 +1,5 @@
 import {getPageType} from '../../browser';
+import getExampleData from '../../rete/exampledata.js';
 import getFilterTemplateFromSearch from '../../rete/getFilterTemplateFromSearch.js';
 
 //when the user performs a search or clicks a link, update both the browser location and the filters, open the browser

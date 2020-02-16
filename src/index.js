@@ -20,7 +20,8 @@ import {difference} from 'lodash';
 
 import { Provider } from 'react-redux';
 
-import store, {goHome} from './store';
+import store from './store';
+import {goHome} from './store/actions';
 
 var currentlyFilteredData = [];
 
@@ -46,7 +47,7 @@ class LoadedApp extends React.Component{
 		return(
 			<Provider store={store}>
 				<header>
-					<h1 onClick={this.titleClick}>GDPVis</h1>
+					<h1 onClick={this.titleClick.bind(this)}>GDPVis</h1>
 					<span id="VersionString">{"version: " + BRANCH + " " + COMMITHASH.slice(0,7)}</span>
 					<SearchBox />
 				</header>
