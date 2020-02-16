@@ -1,7 +1,8 @@
 import React from "react";
 import OtherPage from "./OtherPage.js";
 import $ from "jquery";
-import store, {goToSpecificBrowserFilterSetup} from "../../store.js";
+import store from "../../store/index.js";
+import { goToSpecificBrowserFilterSetup } from "../../store/actions";
 
 function complexExample(){
 	return({

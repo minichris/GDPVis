@@ -2,8 +2,9 @@ import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
 import React from "react";
-import {Patterns, Games, PatternCategories, GameCategories} from './loaddata.js';
-import store, {changeFilters, updateFromSearch, goHome} from './store.js';
+import {Patterns, Games, PatternCategories, GameCategories} from '../loadDataUtil.js';
+import store from '../store';
+import {updateFromSearch} from '../store/actions';
 
 export default class SearchBox extends React.Component {
 	constructor(props){

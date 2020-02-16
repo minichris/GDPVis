@@ -1,6 +1,6 @@
 import React from "react";
 import {patternCategoryFilter} from '../oldfilters.js';
-import {Patterns, Games} from '../../loaddata.js';
+import {Patterns, Games} from '../../loadDataUtil.js';
 import {getPageType} from '../index.js';
 
 export default class CategoryPage extends React.Component{

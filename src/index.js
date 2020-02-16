@@ -1,4 +1,4 @@
-import {startLogger} from './logger.js';
+import startLogger from './logger.js';
 import 'augmented-ui/augmented.css'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,24 +6,21 @@ import $ from 'jquery';
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {getAllData} from './loaddata.js';
-import DocumentViewer, {getPageType} from './browser';
+import {getAllData} from './loadDataUtil.js';
+import DocumentViewer from './browser';
 
-import {Graph} from './graph.js';
-import SearchBox from './search.js';
+import {Graph} from './graph';
+import SearchBox from './search';
 import ReteFilterModule from './rete';
 import './style.css';
 import './mobile-style.css';
-import getExampleData from './rete/exampledata.js';
-import BackButtonComponent from './BackButton.js';
-import ForwardButtonComponent from './ForwardButton.js';
+import HistoryButtonsComponent from './history';
 
 import {difference} from 'lodash';
 
 import { Provider } from 'react-redux';
 
-import store, {changeFilters, updateFromSearch, goHome} from './store.js';
-import ForwardButton from './ForwardButton.js';
+import store, {goHome} from './store';
 
 var currentlyFilteredData = [];
 
@@ -56,13 +53,10 @@ class LoadedApp extends React.Component{
 				<div id="Content">
 					<div id="GraphLayout">
 						<ReteFilterModule/>
-						<Graph ref={this.graphRef} />
+						<Graph ref={this.graphRef}/>
 					</div>
 					<DocumentViewer/>
-					<div id="BackButtonOuter">
-						<BackButtonComponent />
-						<ForwardButtonComponent />
-					</div>
+					<HistoryButtonsComponent/>
 				</div>
 			</Provider>
 		);

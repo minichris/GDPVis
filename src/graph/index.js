@@ -4,12 +4,13 @@ import 'select2/dist/css/select2.css';
 import React from "react";
 import * as d3 from 'd3';
 import { schemeCategory10 } from 'd3-scale-chromatic';
-import {Patterns} from './loaddata.js';
-import {closeFiltersPanel} from './rete/index.js';
-import WarningDialog from './warningdialog.js';
-import Tooltip from './tooltip.js';
+import {Patterns} from '../loadDataUtil.js';
+import {closeFiltersPanel} from '../rete/index.js';
+import WarningDialog from './components/warningdialog.js';
+import Tooltip from './components/tooltip.js';
 import {difference} from 'lodash';
-import store, { setBrowserVisibility, changeDisplayedBrowserPage } from "./store.js";
+import store from "../store";
+import { setBrowserVisibility, changeDisplayedBrowserPage } from "../store/actions";
 
 export var RelationshipColors = {
 	//goes R, G, B

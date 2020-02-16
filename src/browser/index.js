@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import React from "react";
-import {Patterns, Games} from '../loaddata.js';
-import {ChangePatternSelection} from '../graph.js';
+import {Patterns, Games} from '../loadDataUtil.js';
+import {ChangePatternSelection} from '../graph';
 
 import DocumentViewerToolbar from './components/DocumentViewerToolbar.js';
 import DocumentViewerTableOfContents from './components/DocumentViewerTableOfContents.js';
@@ -18,7 +18,7 @@ import 'tippy.js/dist/tippy.css';
 import './tippy-gdpvis.css';
 
 import { connect } from "react-redux";
-import { setBrowserVisibility, changeDisplayedBrowserPage, updateFromSearch } from "../store.js";
+import { setBrowserVisibility, updateFromSearch } from "../store/actions";
 
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components

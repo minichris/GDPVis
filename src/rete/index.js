@@ -15,7 +15,7 @@ import components from './nodes';
 import './style.css';
 
 import { connect } from "react-redux";
-import { changeFilters, internalChangeFilters } from "../store.js";
+import { changeFilters, internalChangeFilters } from "../store/actions";
 
 export function toggleFiltersPanel(){
 	$("#FilterPanel").toggleClass('out');
