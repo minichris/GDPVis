@@ -29,7 +29,7 @@ export function getRelationshipColor(relationshipText){
 	return ("rgb(" + color[0] + ", " + color[1] +", " + color[2] + ")");
 }
 
-export class Graph extends React.Component{
+export default class Graph extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {

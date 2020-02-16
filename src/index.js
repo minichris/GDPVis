@@ -9,7 +9,7 @@ import ReactDOM from "react-dom";
 import {getAllData} from './loadDataUtil.js';
 import DocumentViewer from './browser';
 
-import {Graph} from './graph';
+import Graph from './graph';
 import SearchBox from './search';
 import ReteFilterModule from './rete';
 import './style.css';
