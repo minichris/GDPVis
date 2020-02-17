@@ -13,7 +13,7 @@ const initialState = {
 
 //handle all actions
 function gdpReducer(state = initialState, action) {
-	console.info("Recived action: " + action.type);
+	console.warn("Recived action: " + action.type);
 	switch(action.type){
 		case 'CHANGE_SET':
 			return Object.assign({}, state, {

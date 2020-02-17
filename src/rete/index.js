@@ -76,6 +76,7 @@ export class ReteFilterModule extends React.Component {
 	}
 
 	componentDidUpdate(){
+		this.isProcessing = true;
 		this.editor.fromJSON(this.props.data).then(() => {
 			this.editor.view.resize();
 			this.editor.trigger('process');
@@ -118,10 +119,10 @@ export class ReteFilterModule extends React.Component {
 			this.editor.register(c);
 		});
 
-		this.finishedProcessing = true;
+		this.isProcessing = true;
 
 		this.editor.on('process', () => {
-			this.finishedProcessing = true;
+			this.isProcessing = true;
 			if(this.engineObj){
 				this.engineObj.abort();
 			}
@@ -134,15 +135,15 @@ export class ReteFilterModule extends React.Component {
 				global.refreshGraph(data, type);
 			}).then(() => {
 				this.props.dispatch(internalChangeFilters(this.editor.toJSON()));
-				this.finishedProcessing = false;
+				this.isProcessing = false;
 			});
 		});
 
 		this.editor.on('connectioncreated', async () =>{
-			if(!this.finishedProcessing){
+			if(!this.isProcessing){
+				this.editor.trigger('process');	
 				this.props.dispatch(changeFilters(this.editor.toJSON()));
 			}
-			this.editor.trigger('process');	
 		});
 		
 		this.editor.on('nodetranslate', function(){
@@ -172,7 +173,6 @@ export class ReteFilterModule extends React.Component {
 
 		this.editor.fromJSON(this.props.data).then(() => {
 			this.editor.view.resize();
-			this.finishedProcessing = true;
 			this.editor.trigger('process');
 		});
 	}
