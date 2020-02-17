@@ -57,6 +57,15 @@ export class ReteFilterModule extends React.Component {
 		toggleFiltersPanel();
 	}
 
+	getOutputNodeID(data){
+		if(data){
+			return Object.values(data.nodes).find(node => node.name == "Output Data").id;
+		}
+		else{
+			throw Error("Tried to get engine data when none is set.");
+		}
+	}
+
 	shouldComponentUpdate(nextProps, _nextState){
 		if(
 			(JSON.stringify(Object.values(this.props?.data?.nodes)
@@ -131,7 +140,7 @@ export class ReteFilterModule extends React.Component {
 				this.engineObj.register(c);
 			});
 			
-			this.engineObj.process(this.editor.toJSON(), null, function(data, type){
+			this.engineObj.process(this.editor.toJSON(), this.getOutputNodeID(this.editor.toJSON()), function(data, type){
 				global.refreshGraph(data, type);
 			}).then(() => {
 				this.props.dispatch(internalChangeFilters(this.editor.toJSON()));
