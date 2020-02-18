@@ -1,6 +1,6 @@
 import React from "react";
 import $ from 'jquery';
-import {Patterns, Games} from '../../loaddata.js';
+import {Patterns, Games} from '../../loadDataUtil.js';
 
 
 export default class GamePage extends React.Component {

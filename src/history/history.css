@@ -1,0 +1,43 @@
+body.fullyloaded #Content > #BackButtonOuter{
+	left: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    padding: 0;
+	display: inline-block !important;
+}
+
+.historybutton.disabled{
+	background-image: url(/icons/diagonal.png);
+    background-size: cover;
+    cursor: not-allowed;
+}
+
+
+#BackButton, #ForwardButton{
+	transform: rotate(90.0deg);
+	transform-origin: left bottom 0;
+	margin-left: 10px;
+	width: 12.5vh;
+	--aug-bl: 5px;
+    --aug-br: 5px;
+	position: absolute;
+}
+
+#ForwardButton{
+	padding: 7.5px 0px 5px 0px;
+	top: calc(50vh - (25vh / 4) + (12.5vh / 2));
+}
+
+#ForwardButton > svg{
+	transform-origin: center;
+    transform: rotate(180.0deg);
+    position: relative;
+    top: -2px;
+}
+
+#BackButton{
+	padding: 7.5px 0px 5px 0px;
+	top: calc(50vh - (25vh / 4) - (12.5vh / 2));
+}

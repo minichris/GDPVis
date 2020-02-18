@@ -1,6 +1,6 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
-import {Games} from '../../../loaddata.js';
+import {Games} from '../../../loadDataUtil.js';
 
 export default class AllGamesComponent extends Rete.Component {
 

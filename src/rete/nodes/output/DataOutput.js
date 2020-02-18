@@ -16,9 +16,12 @@ export default class DataOutputComponent extends Rete.Component {
 		return node;
 	}
 	
-	async worker(_node, inputs, _outputs) {
+	async worker(node, inputs, _outputs, returnerFunction) {
 		if(inputs['patternsInput'] && inputs['patternsInput'][0]){ //we have an output
-			global.refreshGraph(inputs['patternsInput'][0]);
+			let inputType = node.inputs.patternsInput.connections[0].output;
+			if(returnerFunction){
+				returnerFunction(inputs['patternsInput'][0], inputType);
+			}
 			return (inputs['patternsInput'][0]);
 		}
 	}

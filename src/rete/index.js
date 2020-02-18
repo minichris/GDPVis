@@ -14,6 +14,9 @@ import CustomNode from './nodetemplate.js';
 import components from './nodes';
 import './style.css';
 
+import { connect } from "react-redux";
+import { changeFilters, internalChangeFilters } from "../store/actions";
+
 export function toggleFiltersPanel(){
 	$("#FilterPanel").toggleClass('out');
 	if($("#FilterPanel").hasClass('out')){
@@ -39,26 +42,9 @@ export function closeFiltersPanel(){
 	$("#ShowFiltersButton").text("Change Filters");
 }
 
-export default class ReteFilterModule extends React.Component {
+export class ReteFilterModule extends React.Component {
 	constructor(props){
 		super(props);
-	}
-	
-	initialize(data){
-		if(this.engine.data != data){
-			this.engine.process(data);
-			this.editor.fromJSON(data).then(() => {
-				this.editor.view.resize();
-				this.editor.trigger('process');
-			});
-		}
-		else{
-			console.warn("Something tried to initialize ReteFilterModule with the data it already contains");
-		}
-	}
-	
-	getEditorAsJSON(){
-		return this.editor.toJSON();
 	}
 
 	filtersButtonClick(){
@@ -70,14 +56,43 @@ export default class ReteFilterModule extends React.Component {
 		}
 		toggleFiltersPanel();
 	}
+
+	getOutputNodeID(data){
+		if(data){
+			return Object.values(data.nodes).find(node => node.name == "Output Data").id;
+		}
+		else{
+			throw Error("Tried to get engine data when none is set.");
+		}
+	}
+
+	shouldComponentUpdate(nextProps, _nextState){
+		if(
+			(JSON.stringify(Object.values(this.props?.data?.nodes)
+				.map((node) => node.data)) == 
+			JSON.stringify(Object.values(nextProps.data?.nodes)
+				.map((node) => node.data))) &&
+				(JSON.stringify(Object.values(this.props?.data?.nodes)
+				.map((node) => node.name)) == 
+			JSON.stringify(Object.values(nextProps.data?.nodes)
+				.map((node) => node.name)))
+		){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+
+	componentDidUpdate(){
+		this.isProcessing = true;
+		this.editor.fromJSON(this.props.data).then(() => {
+			this.editor.view.resize();
+			this.editor.trigger('process');
+		});
+	}
 	
 	componentDidMount(){
-		this.engine = new Rete.Engine('tasksample@0.1.0');
-
-		components.list.map(c => {
-			this.engine.register(c);
-		});
-		
 		this.editor = new Rete.NodeEditor('tasksample@0.1.0', document.querySelector('#rete'));
 		this.editor.use(AlightRenderPlugin);
 		this.editor.use(ConnectionPlugin);
@@ -113,12 +128,30 @@ export default class ReteFilterModule extends React.Component {
 			this.editor.register(c);
 		});
 
-		this.editor.on('process connectioncreated', async () => {
-			//ignoring noderemoved, nodecreate, connectionremoved
-			await this.engine.abort();
-			this.currentEditorJSON = this.editor.toJSON();
-			if(this.currentEditorJSON != this.prevEditorJSON){
-				await this.engine.process(this.editor.toJSON());
+		this.isProcessing = true;
+
+		this.editor.on('process', () => {
+			this.isProcessing = true;
+			if(this.engineObj){
+				this.engineObj.abort();
+			}
+			this.engineObj = new Rete.Engine('tasksample@0.1.0');
+			components.list.map(c => {
+				this.engineObj.register(c);
+			});
+			
+			this.engineObj.process(this.editor.toJSON(), this.getOutputNodeID(this.editor.toJSON()), function(data, type){
+				global.refreshGraph(data, type);
+			}).then(() => {
+				this.props.dispatch(internalChangeFilters(this.editor.toJSON()));
+				this.isProcessing = false;
+			});
+		});
+
+		this.editor.on('connectioncreated', async () =>{
+			if(!this.isProcessing){
+				this.editor.trigger('process');	
+				this.props.dispatch(changeFilters(this.editor.toJSON()));
 			}
 		});
 		
@@ -146,7 +179,11 @@ export default class ReteFilterModule extends React.Component {
 				});
 			}
 		});
-		
+
+		this.editor.fromJSON(this.props.data).then(() => {
+			this.editor.view.resize();
+			this.editor.trigger('process');
+		});
 	}
 	
 	render(){
@@ -172,3 +209,9 @@ export default class ReteFilterModule extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return ({data: state.present.filters});
+};
+
+export default connect(mapStateToProps)(ReteFilterModule);

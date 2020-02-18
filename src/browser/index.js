@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import React from "react";
-import {Patterns, Games} from '../loaddata.js';
-import {ChangePatternSelection} from '../graph.js';
-import {setWindowHistory} from '../index.js';
+import {Patterns, Games} from '../loadDataUtil.js';
+import {ChangePatternSelection} from '../graph';
 
 import DocumentViewerToolbar from './components/DocumentViewerToolbar.js';
 import DocumentViewerTableOfContents from './components/DocumentViewerTableOfContents.js';
 import DocumentResizer from './components/DocumentResizer.js';
+import DocumentViewerOpenButton from './components/DocumentViewerOpenButton.js';
 
 import GamePage from './pagetypes/GamePage.js';
 import PatternPage from './pagetypes/PatternPage.js';
@@ -17,56 +17,58 @@ import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import './tippy-gdpvis.css';
 
+import { connect } from "react-redux";
+import { setBrowserVisibility, updateFromSearch } from "../store/actions";
+
 //-------------------------------------------------------------------------
 //The following section contains the Browser react components
 //-------------------------------------------------------------------------
 
-global.documentViewerOpenSize = "50%";
-
-export class DocumentViewer extends React.Component{
+class DocumentViewer extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = {
-			title: null,
-			prevtitle: "Special:UnreachablePage"
-		};
 		this.internalPageRef = React.createRef();
 		this.tableOfContentsRef = React.createRef();
-		
-		this.displayDocumentViewer = function(show){
-			if(show){
-				document.getElementById("DocumentViewer").style.display = "flex";
-				document.getElementById("DocumentViewer").style.width = global.documentViewerOpenSize;
-				document.getElementById("DocumentViewer").style.minWidth = null;
-				document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
-				
-				let scrollableElement = document.querySelector("#DocumentContainer");
-				if(scrollableElement){
-					scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
-				}
-				$( "#ShowFiltersButton" ).ready(function() {
-					$("#ShowFiltersButton").hide();
-				});
-				$("#DocumentViewerOpenButton").ready(function (){
-					$("#DocumentViewerOpenButton").hide();
-				});
-				logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
-			}
-			else{
-				document.getElementById("DocumentViewer").style.width = "0"
-				document.getElementById("DocumentViewer").style.minWidth = "0"
-				document.getElementById("DocumentViewer").style.borderWidth = "0px"
-				setTimeout(function(){
-					document.getElementById("DocumentViewer").style.display = "none";			
-				}, 500);
-				$("#ShowFiltersButton").show();
-				$("#DocumentViewerOpenButton").show();
-				logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
-			}
-		}
+		this.openSize = "50%";
 	}
-	
-	componentDidUpdate(){		
+
+	displayDocumentViewer(show){
+		this.props.dispatch(setBrowserVisibility(show));
+	}
+
+	mountOrUpdate(){
+		let selfBrowser = this;
+		if(this.props.open){
+			document.getElementById("DocumentViewer").style.display = "flex";
+			document.getElementById("DocumentViewer").style.width = this.openSize;
+			document.getElementById("DocumentViewer").style.minWidth = null;
+			document.getElementById("DocumentViewer").style.borderWidth = "2px 2px 2px 0px";
+			
+			let scrollableElement = document.querySelector("#DocumentContainer");
+			if(scrollableElement){
+				scrollableElement.scrollTop = 0; //scroll the inner back to the top on page change
+			}
+			$( "#ShowFiltersButton" ).ready(function() {
+				$("#ShowFiltersButton").hide();
+			});
+			$("#DocumentViewerOpenButton").ready(function (){
+				$("#DocumentViewerOpenButton").hide();
+			});
+			logger.info("Document viewer panel was opened (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
+		}
+		else{
+			document.getElementById("DocumentViewer").style.width = "0"
+			document.getElementById("DocumentViewer").style.minWidth = "0"
+			document.getElementById("DocumentViewer").style.borderWidth = "0px"
+			setTimeout(function(){
+				document.getElementById("DocumentViewer").style.display = "none";			
+			}, 500);
+			$("#ShowFiltersButton").show();
+			$("#DocumentViewerOpenButton").show();
+			logger.info("Document viewer panel was closed (possibly automatic) @ " + Math.round((new Date()).getTime() / 1000));
+		}
+
+
 		//setting scrollbar back to top
 		let scrollableElement = document.querySelector("#DocumentContainer");
 		if(scrollableElement){
@@ -133,16 +135,27 @@ export class DocumentViewer extends React.Component{
 		}
 		
 		function eventLinkClicked(linkClickedTitle, forceUpdateFilters = false){
+			function isPageCurrentlyFiltered(pageName){
+				let data = global.graphComponent.state.displayData;
+				if(data[0] && data[0].Title){
+					return (data.find(fPattern => fPattern.Title == pageName) != null);
+				}
+				if(data[0] && data[0].name){
+					return (data.find(fGame => fGame.name == pageName) != null);
+				}
+				else{
+					return false;
+				}
+			}
+			
 			if(linkClickedTitle){ //if the title isn't undefined
 
 				//if the pattern isn't in the graph, or we are force updating the graph
-				if(!global.isPatternCurrentlyFiltered(linkClickedTitle) || forceUpdateFilters){
-					global.updateReteFiltersFromQuery(linkClickedTitle);
+				if(!isPatternCurrentlyFiltered(linkClickedTitle) || forceUpdateFilters){
+					selfBrowser.props.dispatch(updateFromSearch(linkClickedTitle));
 				}
 				else{ //if it was in the graph and we aren't force updating the graph
-					setWindowHistory(false); //add the previous state to the history
 					ChangePatternSelection(linkClickedTitle); //select the pattern
-					global.docViewerComponent.setState({title: linkClickedTitle});
 				}
 				logger.info("User clicked a link to " + linkClickedTitle + " @ " + Math.round((new Date()).getTime() / 1000));
 			}
@@ -160,24 +173,21 @@ export class DocumentViewer extends React.Component{
 		
 		this.tableOfContentsRef.current.forceUpdate();
 	}
-	
-	shouldComponentUpdate(nextProps, nextState){
-		return nextState.title != this.state.title;
-	}
 
-	getSnapshotBeforeUpdate(prevProps, prevState) {
-		if(prevState.title != this.state.prevtitle){
-			this.state.prevtitle = prevState.title; //eslint-disable-line  react/no-direct-mutation-state
-		}
-		return null;
+	componentDidMount(){
+		this.mountOrUpdate();
+	}
+	
+	componentDidUpdate(){		
+		this.mountOrUpdate();
 	}
 	
 	render(){
-		let pageTitle = this.state.title;
+		let pageTitle = this.props.title;
 		if(pageTitle == null){
 			return(<div><h1>Error</h1><p>Null browser set up</p></div>);
 		}
-		console.info("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle) + ". prevtitle: " + this.state.prevtitle);
+		console.info("Creating a document viewer for page '" + pageTitle + "', it is of type: " + getPageType(pageTitle));
 		let pageToRender;
 		switch(getPageType(pageTitle)){
 		case "Pattern Category":
@@ -191,31 +201,40 @@ export class DocumentViewer extends React.Component{
 			pageToRender = <PatternPage ref={this.internalPageRef} title={pageTitle}/>;
 			break;
 		case "Special":
-			pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle} prevtitle={this.state.prevtitle}/>;
+			pageToRender = <SpecialPage ref={this.internalPageRef} title={pageTitle}/>;
 			break;
 		default:
 			pageToRender = (
 				<div ref={this.internalPageRef}>
-					<span>Debug page, Title {this.state.title}, prevTitle {this.state.prevtitle}</span>
+					<span>Debug page, Title {pageTitle}</span>
 				</div>
 			);
 			break;
 		}
 
 		return(
-			<div id="DocumentViewer">
-				<DocumentViewerToolbar pageTitle={this.state.title} />
-				<div id="DocumentContainer">
-					<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
-					<div id ="InsertedPageOuter">
-						<DocumentResizer Parent={this} />
-						{pageToRender}
+			<>
+				<div id="DocumentViewer">
+					<DocumentViewerToolbar Parent={this} pageTitle={pageTitle} />
+					<div id="DocumentContainer">
+						<DocumentViewerTableOfContents ref={this.tableOfContentsRef} internalPage={this.internalPageRef} />
+						<div id ="InsertedPageOuter">
+							<DocumentResizer Parent={this} />
+							{pageToRender}
+						</div>
 					</div>
 				</div>
-			</div>
+				<DocumentViewerOpenButton Parent={this} />
+			</>
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return ({title: state.present.page, open: state.present.browserVisibility});
+};
+
+export default connect(mapStateToProps)(DocumentViewer);
 
 
 //Give a page title, find the type of the page

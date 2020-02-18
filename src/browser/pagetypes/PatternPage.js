@@ -1,5 +1,5 @@
 import React from "react";
-import {Patterns} from '../../loaddata.js';
+import {Patterns} from '../../loadDataUtil.js';
 
 
 export default class PatternPage extends React.Component {

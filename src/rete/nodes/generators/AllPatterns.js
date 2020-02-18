@@ -1,6 +1,6 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
-import {Patterns} from '../../../loaddata.js';
+import {Patterns} from '../../../loadDataUtil.js';
 
 export default class AllPatternsComponent extends Rete.Component {
 

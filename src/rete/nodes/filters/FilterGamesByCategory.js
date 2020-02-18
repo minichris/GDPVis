@@ -1,7 +1,7 @@
 import Rete from "rete";
 import sockets from '../../sockets.js';
 import DropDownControl from '../../controls/DropDown.js';
-import {GameCategories} from '../../../loaddata.js';
+import {GameCategories} from '../../../loadDataUtil.js';
 
 export default class FilterGamesByCategoryComponent extends Rete.Component {
 
