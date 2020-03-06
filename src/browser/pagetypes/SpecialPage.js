@@ -199,7 +199,7 @@ export default class SpecialPage extends React.Component {
 					</details>	
 					<details title="Click to expand" open>
 						<summary><h3>Example Filters</h3></summary>
-						Why not check out some of these filters for insperation?
+						Why not check out some of these filters for inspiration?
 						<ul>
 							<li><a title="Category:Games">
 						All Games
