@@ -5,23 +5,23 @@
 
 .nodes .SelectedNode > circle{
 	stroke-width: 2px;
-	stroke: var(--acColor2);
+	stroke: var(--textColor);
 }
 
 .node circle {
 	cursor: pointer;
-	stroke: var(--bgColor2);
+	stroke: var(--mgColor);
 	stroke-width: 1.5px;
 }
 
 .nodes .SelectedNode > text{
 	font-weight: bold;
-	fill: var(--acColor2);
+	fill: var(--textColor);
 }
 
 .node text {
 	font-size: 10px;
-	text-shadow: #000000 0px 0px 3px;
+	text-shadow: var(--shadowColor) 0px 0px 3px;
 	cursor: default;
 	pointer-events: none;
 }
@@ -46,14 +46,20 @@ form {
 
 :root {
 	--bgColor: #434343;
-	--bgColor2: #666666;
-	--acColor: #4F0147;
-	--acColor2: #FFE2E2;
+	--mgColor: #666666;
+	--mgColorTrans: #666666ab;
+	--fgColor: #757575;
+	--fgColor2: #888888;
 	--textColor: #FFF8F0;
 	--linkBlue: #a6b5ff;
 	--linkBlueSelf: #adb6e1;
 	--augButtonStandard: #bababa;
 	--augButtonActive: #ffd92c;
+
+	--linkhover: #808dcd;
+	--filterPanelbg: #383838bd;
+	--shadowColor: #00000026;
+	--modalbg: #0b0212c4;
 }
 
 body {
@@ -106,7 +112,7 @@ a{
 }
 
 a:hover {
-	color: #808dcd;
+	color: var(--linkhover);
 }
 
 iframe{
@@ -191,7 +197,7 @@ svg{
     transition: width 2s ease, background-color 0.5s ease, border 2s ease;
     display: inline-block;
     overflow: hidden;
-    background-color: #38383800;
+    background-color: transparent;
     border-radius: 8px;
     position: fixed;
     top: 60px;
@@ -200,13 +206,13 @@ svg{
     right: 0px;
     width: 0%;
     z-index: 100;
-	border: #38383800 2px solid;
+	border: transparent 2px solid;
 }
 
 #FilterPanel.out {
     width: 65%;
 	border: black 2px solid;
-    background: #383838bd;
+    background: var(--filterPanelbg);
 }
 
 #FiltersList{
@@ -255,13 +261,13 @@ svg{
 }
 
 .modal{
-	background: #0b0212c4;
+	background: var(--modalbg);
 }
 
 .CategoryPage > #CatListBox > a{
 	width: 100px;
 	height: 100px;
-	background: var(--bgColor2);
+	background: var(--mgColor);
 	border: 2px solid white;
 	margin: 8px;
 	border-radius: 8px;
@@ -352,7 +358,7 @@ summary > * {
 #Tooltip {
     position: absolute;
     padding: 5px;
-    background: var(--bgColor2);
+    background: var(--mgColor);
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
@@ -372,11 +378,11 @@ summary > * {
 }
 
 .TooltipTitle > .TooltipHighlighted, .TooltipTitle > .selflink{
-	color: white !important;
+	color: var(--textColor) !important;
 }
 
 .TooltipBrief.Relation > .TooltipHighlighted, .TooltipBrief.Relation > .selflink{
-	color: white !important;
+	color: var(--textColor) !important;
 }
 
 hr {
@@ -419,7 +425,7 @@ hr {
 	z-index: 200;
 	padding: 0;
 	margin: 70px 10px 10px 0px;
-	box-shadow: #00000024 2px 2px 5px 7px;
+	box-shadow: var(--shadowColor) 2px 2px 5px 7px;
 }
 
 #DocumentContainer.out > #TableOfContents{
@@ -431,13 +437,13 @@ hr {
 }
 
 #DocumentContainer{
-	background: #666666ab;
-    border: #757575 solid 2px;
+	background: var(--mgColorTrans);
+    border: var(--fgColor) solid 2px;
     display: flex;
     flex: 1 0 90%;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	box-shadow: #00000026 5px 5px 4px 0px;
+	box-shadow: var(--shadowColor) 5px 5px 4px 0px;
 }
 
 .insertedPage{
@@ -465,7 +471,7 @@ hr {
 
 #DocumentResizer{
 	display: inline-block;
-    border-left-color: #757575;
+    border-left-color: var(--fgColor);
     border-left-style: solid;
     border-left-width: 6px;
     cursor: ew-resize;
@@ -493,8 +499,9 @@ hr {
 
 #TableOfContents > div{
 	cursor: pointer;
-    background: #909090;
-    border: black solid 1px;
+    background: var(--fgColor2);
+	border: var(--bgColor) solid 1px;
+	color: var(--textColor);
     margin-top: 5px;
     padding: 5px;
     text-overflow: ellipsis;
@@ -511,7 +518,7 @@ hr {
 	pointer-events: none;
 	flex: 0 1 45px;
 	z-index: 10;    
-	background: #666666ab;
+	background: var(--mgColorTrans);
 	height: 45px;
 }
 
@@ -555,8 +562,8 @@ button > img{
 	border-radius: 8px;
 	--aug-border: 2px;
     --aug-inset: 2px;
-    --aug-border-bg: #666666;
-    --aug-inset-bg: #666666;
+    --aug-border-bg: var(--mgColor);
+    --aug-inset-bg: var(--mgColor);
     --aug-tl: 15px;
     --aug-tr: 15px;
     --aug-b: 5px;
