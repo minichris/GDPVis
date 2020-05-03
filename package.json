@@ -59,7 +59,6 @@
     "redux": "^4.0.5",
     "redux-undo": "^1.0.0",
     "rete": "^1.4.1",
-    "rete-alight-render-plugin": "^0.1.5",
     "rete-area-plugin": "^0.2.1",
     "rete-connection-plugin": "^0.8.3",
     "rete-context-menu-plugin": "^0.5.2",

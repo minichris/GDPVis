@@ -7,7 +7,7 @@ export default class SingularPattern extends Rete.Component {
 
 	constructor() {
 		super('Singular Pattern');
-		this.render = 'alight';
+
 		this.category = "Information Stores";
 	}
 

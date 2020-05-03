@@ -6,7 +6,7 @@ export default class AllGamesComponent extends Rete.Component {
 
 	constructor() {
 		super('All Games');
-		this.render = 'alight';
+
 		this.category = "Information Stores";
 	}
 

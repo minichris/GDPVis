@@ -3,7 +3,6 @@ import $ from 'jquery';
 
 import Rete from "rete";
 import ConnectionPlugin from 'rete-connection-plugin';
-import AlightRenderPlugin from 'rete-alight-render-plugin';
 import ContextMenuPlugin from 'rete-context-menu-plugin';
 import AreaPlugin from 'rete-area-plugin';
 import ReactRenderPlugin from 'rete-react-render-plugin';
@@ -94,7 +93,6 @@ export class ReteFilterModule extends React.Component {
 	
 	componentDidMount(){
 		this.editor = new Rete.NodeEditor('tasksample@0.1.0', document.querySelector('#rete'));
-		this.editor.use(AlightRenderPlugin);
 		this.editor.use(ConnectionPlugin);
 		this.editor.use(ContextMenuPlugin, {
 			nodeItems: node => {

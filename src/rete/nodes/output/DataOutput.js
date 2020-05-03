@@ -5,7 +5,7 @@ export default class DataOutputComponent extends Rete.Component {
 
 	constructor() {
 		super('Output Data');
-		this.render = 'alight';
+
 		this.category = "Outputs";
 	}
 

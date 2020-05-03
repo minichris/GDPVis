@@ -8,7 +8,7 @@ export default class FilterGamesToThoseWhichSharePatternsWithAGameComponent exte
 
 	constructor() {
 		super('Filter Games To Those Which Share An Amount Of Patterns With A Game');
-		this.render = 'alight';
+
 		this.category = "Game Filters";
 	}
 

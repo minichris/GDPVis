@@ -7,7 +7,7 @@ export default class SingularGame extends Rete.Component {
 
 	constructor() {
 		super('Singular Game');
-		this.render = 'alight';
+
 		this.category = "Information Stores";
 	}
 
