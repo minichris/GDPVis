@@ -20,6 +20,10 @@ export default class FilterGamesByThoseWhichUsePatternsComponent extends Rete.Co
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['games'] = inputs['gamesInput'][0].filter(game => game.LinkedPatterns.some(pattern => inputs['patternsInput'][0].indexOf(pattern) > 0));
+		let games = inputs['gamesInput'][0].data.filter(game => game.LinkedPatterns.some(pattern => inputs['patternsInput'][0].data.indexOf(pattern) > 0));
+		outputs['games'] = {
+			data: games,
+			text: inputs['gamesInput'][0].text + " filtered by those which use the patterns " + inputs['patternsInput'][0].text
+		}
 	}
 }

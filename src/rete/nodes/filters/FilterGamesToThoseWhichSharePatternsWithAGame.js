@@ -27,13 +27,14 @@ export default class FilterGamesToThoseWhichSharePatternsWithAGameComponent exte
 	}
 	
 	async worker(node, inputs, outputs) {	
-		let minimumArray = inputs['gamesInput'][0].filter(game => 
+		let minimumArray = inputs['gamesInput'][0].data.filter(game => 
 			game.LinkedPatterns.filter(pattern => 
 				pattern.PatternsLinks.some(pLink => 
 					pLink.To == node.data['Game'].value)).length >= node.data['SharedAmount'].value);
 		
-		
-		outputs['games'] = minimumArray;
-		
+		outputs['games'] = {
+			data: minimumArray,
+			text: inputs['gamesInput'][0].text + " filtered by those which share " + node.data['SharedAmount'].value + " patterns with the game " + node.data['Game'].value
+		}
 	}
 }

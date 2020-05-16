@@ -24,6 +24,10 @@ export default class FilterGamesByCategoryComponent extends Rete.Component {
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['games'] = inputs['gamesInput'][0].filter(game => game.categories.some(cate => cate == node.data['GameCategory'].value));
+		let games = inputs['gamesInput'][0].data.filter(game => game.categories.some(cate => cate == node.data['GameCategory'].value));
+		outputs['games'] = {
+			data: games,
+			text: inputs['gamesInput'][0].text + " filtered by the game category " + node.data['GameCategory'].value
+		}
 	}
 }

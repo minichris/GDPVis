@@ -20,8 +20,10 @@ export default class DataOutputComponent extends Rete.Component {
 		if(inputs['patternsInput'] && inputs['patternsInput'][0]){ //we have an output
 			let inputType = node.inputs.patternsInput.connections[0].output;
 			if(returnerFunction){
-				returnerFunction(inputs['patternsInput'][0], inputType);
+				returnerFunction(inputs['patternsInput'][0].data, inputType);
 			}
+			console.log("__________________________");
+			console.log("test text:" + inputs['patternsInput'][0].text);
 			return (inputs['patternsInput'][0]);
 		}
 	}

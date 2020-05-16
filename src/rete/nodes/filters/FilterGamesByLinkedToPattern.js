@@ -24,6 +24,10 @@ export default class FilterGamesByLinkedToPatternComponent extends Rete.Componen
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['games'] = inputs['gamesInput'][0].filter(game => (game.LinkedPatterns.some(pattern => pattern.Title == node.data['Pattern'].value)));
+		let games = inputs['gamesInput'][0].data.filter(game => (game.LinkedPatterns.some(pattern => pattern.Title == node.data['Pattern'].value)));
+		outputs['games'] = {
+			data: games,
+			text: inputs['gamesInput'][0].text + " filtered by those linked to the pattern " + node.data["Pattern"].value
+		}
 	}
 }

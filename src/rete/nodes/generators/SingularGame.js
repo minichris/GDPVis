@@ -23,6 +23,6 @@ export default class SingularGame extends Rete.Component {
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['games'] = Games.filter(game => (game.name == node.data['Game'].value));
+		outputs['games'] = {data: Games.filter(game => (game.name == node.data['Game'].value)), text: node.data['Game'].value};
 	}
 }

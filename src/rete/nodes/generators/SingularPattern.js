@@ -23,6 +23,6 @@ export default class SingularPattern extends Rete.Component {
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['patterns'] = Patterns.filter(pattern => pattern.Title == node.data['Pattern'].value);
+		outputs['patterns'] = {data: Patterns.filter(pattern => pattern.Title == node.data['Pattern'].value), text: node.data['Pattern'].value};
 	}
 }

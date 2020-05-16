@@ -18,6 +18,6 @@ export default class AllGamesComponent extends Rete.Component {
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['games'] = Games;
+		outputs['games'] = {data: Games, text: "All Games"};
 	}
 }

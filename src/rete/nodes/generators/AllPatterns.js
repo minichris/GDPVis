@@ -18,6 +18,6 @@ export default class AllPatternsComponent extends Rete.Component {
 	}
 	
 	async worker(node, inputs, outputs) {
-		outputs['patterns'] = Patterns;
+		outputs['patterns'] = {data: Patterns, text: "All Patterns"};
 	}
 }
