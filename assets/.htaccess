@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^s\.gdpv\.is [NC]
+RewriteCond %{REQUEST_URI} ^(.*)$
+RewriteCond %{REQUEST_URI} !^/redirect\.php 
+RewriteRule ^(.*)$ /redirect.php?url=$0 [L]
