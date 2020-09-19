@@ -716,3 +716,23 @@ Visual filter node ports
     margin: 5px;
 	cursor: pointer;
 }
+
+#ShortenerButton{
+	pointer-events: all;
+	z-index: 1000;
+	width: 50px;
+	height: 35px;
+	top: 10px;
+	left: calc(50% - (50px / 2));
+	position: fixed;
+}
+
+#ShortenerInput{
+	pointer-events: all;
+    z-index: 1000;
+    width: 160px;
+    height: 35px;
+    top: 10px;
+    left: calc(50% - (160px / 2));
+    position: fixed;
+}
