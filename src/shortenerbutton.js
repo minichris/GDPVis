@@ -1,40 +1,41 @@
 import React from "react";
 import $ from "jquery";
 
-import tippy from 'tippy.js';
+import { connect } from "react-redux";
 
-export default class ShortenerButton extends React.Component{
+export class ShortenerButton extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			url: null,
-			copyMode: false
+			url: null
 		};
 	}
 
 	shortenerButtonClick(){
 		var thisButton = this;
-		if(!this.state.copyMode){
-			$.ajax({
-				url: "https://gdpv.is/createshorturl.php",
-				type: "POST",
-				data: {
-					url: window.location.href
-				},
-				dataType: "json"
-			}).then(function(data){
-				thisButton.setState({
-					url: data.success,
-					copyMode: true
-				});
+		$.ajax({
+			url: "https://gdpv.is/createshorturl.php",
+			type: "POST",
+			data: {
+				url: window.location.href
+			},
+			dataType: "json"
+		}).then(function(data){
+			thisButton.setState({
+				url: data.success
 			});
+		});
+	}
+
+	componentDidUpdate(prevProps, prevState){
+		if((this.filtersJson !== JSON.stringify(this.props.filters)) ||
+			this.page !== this.props.page){
+			if(this.props !== prevProps){
+				this.setState({
+					url: null
+				});
+			}
 		}
-		else{
-			var copyText = document.querySelector("#ShortenerInput");
-			copyText.select();
-			document.execCommand("copy");
-		}
-		
 	}
 	
 	render(){
@@ -48,3 +49,12 @@ export default class ShortenerButton extends React.Component{
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return ({
+		page: state.present.page, 
+		filters: state.present.filters
+	});
+};
+
+export default connect(mapStateToProps)(ShortenerButton);

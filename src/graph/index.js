@@ -12,7 +12,6 @@ import RelationshipSelector from './components/relationshipselector.js';
 import {difference} from 'lodash';
 import store from "../store";
 import { setBrowserVisibility, changeDisplayedBrowserPage } from "../store/actions";
-import ShortenerButton from '../shortenerbutton.js';
 
 export var RelationshipColors = {
 	//goes R, G, B
@@ -43,7 +42,6 @@ export default class Graph extends React.Component{
 		this.svg = React.createRef();
 		this.warningDialogRef = React.createRef();
 		this.toolTipRef = React.createRef();
-		this.shortenerRef = React.createRef();
 
 		this.prevNodesCount = null;
 		this.prevLinksCount = null;
@@ -136,11 +134,6 @@ export default class Graph extends React.Component{
 
 
 	generateGraph(force) {
-		this.shortenerRef.current.setState({
-			url: null,
-			copyMode: false
-		});
-
 		let nodesData, linksData;
 		if(this.state.dataType == "Patterns"){
 			nodesData = this.createPatternNodes(this.state.displayData);
@@ -442,7 +435,6 @@ export default class Graph extends React.Component{
 				<WarningDialog ref={this.warningDialogRef} />
 				<Tooltip ref={this.toolTipRef} />
 				{this.props.children}
-				<ShortenerButton ref={this.shortenerRef} />
 			</>
 		);
 	}
@@ -470,10 +462,6 @@ export function ChangePatternSelection(currentSelectionID){
 		store.dispatch(setBrowserVisibility(false));
 		$(".SelectedNode").removeClass('SelectedNode');
 	}
-	this.shortenerRef.current.setState({
-		url: null,
-		copyMode: false
-	});
 }
 
 //------------------------------
