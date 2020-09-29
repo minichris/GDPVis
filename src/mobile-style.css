@@ -73,6 +73,11 @@
 	#ShowFiltersButton.btn-light {
 		bottom: 10px;
 	}
+
+	#ShortenerButton{
+		left: calc(35% - (50px / 2));
+		z-index: 10000;
+	}
 }
 
 @media screen and (max-height: 500px){

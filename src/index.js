@@ -23,6 +23,8 @@ import { Provider } from 'react-redux';
 import store from './store';
 import {goHome} from './store/actions';
 
+import ShortenerButton from './shortenerbutton.js';
+
 var currentlyFilteredData = [];
 
 class LoadedApp extends React.Component{
@@ -54,7 +56,9 @@ class LoadedApp extends React.Component{
 				<div id="Content">
 					<div id="GraphLayout">
 						<ReteFilterModule/>
-						<Graph ref={this.graphRef}/>
+						<Graph ref={this.graphRef}>
+							<ShortenerButton/>
+						</Graph>
 					</div>
 					<DocumentViewer/>
 					<HistoryButtonsComponent/>
